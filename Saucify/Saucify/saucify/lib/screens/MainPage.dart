@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:saucify/screens/LibraryScreen.dart';
+import 'package:saucify/screens/StatsPage.dart';
 import 'package:saucify/services/spotifyService.dart';
 import 'package:saucify/widgets/bottomPlayer.dart';
 import 'package:tuple/tuple.dart';
@@ -25,18 +26,19 @@ class MainPageState extends State<MainPage> {
 
   Container container = Container(color:Color.fromARGB(255, 41, 41, 41));
   LibraryScreen libScreen = LibraryScreen();
+  StatsPage statsPage = StatsPage();
   dynamic activeScreen;
 
   @override
   void initState() {
     super.initState();
-    activeScreen = container;
+    activeScreen = statsPage;
   }
 
   void setPage(int index) {
     if (index == 0) {
       setState(() {
-        activeScreen = container;
+        activeScreen = statsPage;
         isStatsActive =  true;
         isLibraryActive = false;
         isProfileActive = false;
@@ -87,16 +89,19 @@ class MainPageState extends State<MainPage> {
             IconButton(
               color: isStatsActive ? Colors.green : Colors.grey,
               icon: Icon(Icons.query_stats), 
+              iconSize: isStatsActive ? 32 : 27,
               onPressed: (() => {setPage(0)})
             ), 
             IconButton(
               color: isLibraryActive ? Colors.green : Colors.grey,
               icon: Icon(Icons.library_books), 
+              iconSize: isLibraryActive ? 32 : 27,
               onPressed: (() => {setPage(1)})
             ), 
             IconButton(
               color: isProfileActive ? Colors.green : Colors.grey,
               icon: Icon(Icons.search), 
+              iconSize: isProfileActive ? 32 : 27,
               onPressed: (() => {setPage(2)})
             ), 
           ],

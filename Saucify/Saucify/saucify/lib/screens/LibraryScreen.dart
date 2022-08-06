@@ -13,6 +13,7 @@ class LibraryScreen extends StatefulWidget {
 class _LibraryScreenState extends State<LibraryScreen> {
   List<Widget> list = [];
   spotifyService service = locator<spotifyService>();
+  double opacityLevel = 0.0;
 
   void getPlaylists() async {
     List myPlaylists = await service.getPlaylists();
@@ -39,6 +40,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
     setState(() {
       list = newList;
+      opacityLevel = 1.0;
     });
   }
 
@@ -54,9 +56,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
       body: Container(
        color: Color.fromARGB(255, 41, 41, 41),
         padding: const EdgeInsets.all(10.0),
-        child: ListView(
-          children: list
-        ) 
+        child: AnimatedOpacity(
+          opacity: opacityLevel,
+          duration: const Duration(milliseconds: 300),
+          child: ListView(
+            children: list
+            ) 
+          )
       )
     );
   }

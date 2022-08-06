@@ -26,6 +26,7 @@ class TopTracksScreenState extends State<TopTracksScreen> {
   bool isPlayerShown = false;
   dynamic bottomAppBar = BottomAppBar();
   List topTracks = [];
+  double opacityLevel = 0.0;
 
   void shuffle(){
     int randomIndex = Random().nextInt(topTracks.length);
@@ -113,6 +114,7 @@ class TopTracksScreenState extends State<TopTracksScreen> {
 
     setState(() {
       list = generateWidget();
+      opacityLevel = 1.0;
     });
 
     while (nextUri != null){
@@ -171,9 +173,13 @@ class TopTracksScreenState extends State<TopTracksScreen> {
       body: Container(
         color: Color.fromARGB(255, 41, 41, 41),
         padding: const EdgeInsets.all(10.0),
-        child: ListView(
-          children: list
-        )
+        child: AnimatedOpacity(
+          opacity: opacityLevel,
+          duration: const Duration(milliseconds: 300),
+          child: ListView(
+            children: list
+            ) 
+          )
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.shuffle, color: Colors.black), onPressed: () {shuffle();}
