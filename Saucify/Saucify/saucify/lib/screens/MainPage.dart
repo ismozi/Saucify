@@ -1,0 +1,109 @@
+import 'dart:async';
+import 'dart:math';
+
+import 'package:external_app_launcher/external_app_launcher.dart';
+import 'package:flutter/material.dart';
+import 'package:saucify/screens/LibraryScreen.dart';
+import 'package:saucify/services/spotifyService.dart';
+import 'package:saucify/widgets/bottomPlayer.dart';
+import 'package:tuple/tuple.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../app/app.locator.dart';
+
+class MainPage extends StatefulWidget {
+
+  @override
+  State<MainPage> createState() => MainPageState();
+}
+
+class MainPageState extends State<MainPage> {
+  spotifyService service = locator<spotifyService>();
+  bool isStatsActive = true;
+  bool isLibraryActive = false;
+  bool isProfileActive = false;
+
+  Container container = Container(color:Color.fromARGB(255, 41, 41, 41));
+  LibraryScreen libScreen = LibraryScreen();
+  dynamic activeScreen;
+
+  @override
+  void initState() {
+    super.initState();
+    activeScreen = container;
+  }
+
+  void setPage(int index) {
+    if (index == 0) {
+      setState(() {
+        activeScreen = container;
+        isStatsActive =  true;
+        isLibraryActive = false;
+        isProfileActive = false;
+      });
+    } else if (index == 1) {
+      setState(() {
+        activeScreen = libScreen;
+        isStatsActive =  false;
+        isLibraryActive = true;
+        isProfileActive = false;
+      });
+    } else if (index == 2) {
+      setState(() {
+        activeScreen = container;
+        isStatsActive =  false;
+        isLibraryActive = false;
+        isProfileActive = true;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 20, 20, 20),
+          foregroundColor: Colors.green,
+          automaticallyImplyLeading: false,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Text(
+                    'Saucify', 
+                    style: GoogleFonts.getFont('Montserrat', fontWeight: FontWeight.w700, fontStyle: FontStyle.italic)
+                  ),
+                ]
+              )
+            ]
+          )
+      ),
+      body: activeScreen,
+      bottomNavigationBar: BottomAppBar(child: 
+        Row(
+          children: [
+            IconButton(
+              color: isStatsActive ? Colors.green : Colors.grey,
+              icon: Icon(Icons.query_stats), 
+              onPressed: (() => {setPage(0)})
+            ), 
+            IconButton(
+              color: isLibraryActive ? Colors.green : Colors.grey,
+              icon: Icon(Icons.library_books), 
+              onPressed: (() => {setPage(1)})
+            ), 
+            IconButton(
+              color: isProfileActive ? Colors.green : Colors.grey,
+              icon: Icon(Icons.search), 
+              onPressed: (() => {setPage(2)})
+            ), 
+          ],
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        ),
+        color: Color.fromARGB(255, 20, 20, 20)
+      ),
+    );
+  }
+}

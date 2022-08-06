@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:saucify/screens/MainPage.dart';
 import 'package:saucify/screens/TopTracksScreen.dart';
 import 'package:saucify/services/spotifyService.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
@@ -30,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 spotifyService service = locator<spotifyService>();
                 await service.logIn();
                 if (service.isLoggedIn()){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => LibraryScreen()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => MainPage()));
                 }
               },
               child: Text('Login'),

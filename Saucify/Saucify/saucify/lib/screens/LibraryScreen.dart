@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:saucify/screens/TopTracksScreen.dart';
 import 'package:saucify/services/spotifyService.dart';
 
@@ -27,7 +28,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               borderRadius: BorderRadius.circular(15) 
             ),
             title: Text(playlist['name'], 
-                        style: TextStyle(color: Colors.white)),
+                        style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => TopTracksScreen(playlistId: playlist['id'], name: playlist['name'])))
             },
@@ -50,26 +51,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 20, 20, 20),
-          foregroundColor: Colors.green,
-          automaticallyImplyLeading: false,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  Text('Saucify'),
-                  Opacity(
-                    opacity: 0.5,
-                    child: Text('My playlists')
-                  )
-                ]
-              )
-            ]
-          )
-      ),
       body: Container(
        color: Color.fromARGB(255, 41, 41, 41),
         padding: const EdgeInsets.all(10.0),

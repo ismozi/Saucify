@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:saucify/services/spotifyService.dart';
 import 'package:saucify/widgets/bottomPlayer.dart';
 import 'package:tuple/tuple.dart';
@@ -52,9 +53,9 @@ class TopTracksScreenState extends State<TopTracksScreen> {
             ),
             leading: Image(image: NetworkImage(item['track']['album']['images'][0]['url']), width: 40, height: 40),
             title: Text(item['track']['name'], 
-                        style: TextStyle(color: Colors.white)),
+                        style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
             subtitle: Text(item['track']['artists'][0]['name'], 
-                        style: TextStyle(color: Colors.white)),
+                        style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
             onTap: () => {
               playMusic(item['track']['uri'], 
                         item['track']['album']['images'][0]['url'], 
@@ -77,7 +78,7 @@ class TopTracksScreenState extends State<TopTracksScreen> {
       newList.add(
       SimpleDialogOption(
             child: Text(device['name'], 
-                        style: TextStyle(color: Colors.black)),
+                        style: GoogleFonts.getFont('Montserrat', color: Colors.black)),
             onPressed: () => {
               service.deviceId = device['id']
             },
@@ -162,11 +163,7 @@ class TopTracksScreenState extends State<TopTracksScreen> {
           title: 
               Column(
                 children: [
-                  Text('Saucify'),
-                  Opacity(
-                    opacity: 0.5,
-                    child: Text(widget.name)
-                  )
+                  Text('Saucify', style: GoogleFonts.getFont('Montserrat', fontWeight: FontWeight.w700, fontStyle: FontStyle.italic)),
                 ]
               )
            
