@@ -11,7 +11,7 @@ class StatsAppBar extends StatefulWidget implements PreferredSizeWidget{
 
   ///width doesnt matter
   @override
-  Size get preferredSize => Size(250, 30);
+  Size get preferredSize => Size(275, 30);
 }
 
 class _StatsAppBarState extends State<StatsAppBar> {
@@ -23,7 +23,7 @@ class _StatsAppBarState extends State<StatsAppBar> {
       alignment: Alignment.center,
       child: Container(
         alignment: Alignment.center,
-        width: 250,
+        width: 275,
         height: 30,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
