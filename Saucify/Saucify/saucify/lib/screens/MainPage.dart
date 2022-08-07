@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:saucify/screens/LibraryScreen.dart';
+import 'package:saucify/screens/SearchPage.dart';
 import 'package:saucify/screens/StatsPage.dart';
 import 'package:saucify/services/spotifyService.dart';
 import 'package:saucify/widgets/bottomPlayer.dart';
@@ -27,6 +28,7 @@ class MainPageState extends State<MainPage> {
   Container container = Container(color:Color.fromARGB(255, 41, 41, 41));
   LibraryScreen libScreen = LibraryScreen();
   StatsPage statsPage = StatsPage();
+  SearchPage searchPage = SearchPage();
   dynamic activeScreen;
 
   @override
@@ -52,11 +54,18 @@ class MainPageState extends State<MainPage> {
       });
     } else if (index == 2) {
       setState(() {
-        activeScreen = container;
+        activeScreen = searchPage;
         isStatsActive =  false;
         isLibraryActive = false;
         isProfileActive = true;
       });
+    }
+  }
+
+  @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
     }
   }
 
@@ -88,19 +97,19 @@ class MainPageState extends State<MainPage> {
           children: [
             IconButton(
               color: isStatsActive ? Colors.green : Colors.grey,
-              icon: Icon(Icons.query_stats), 
+              icon: Icon(Icons.query_stats_rounded), 
               iconSize: isStatsActive ? 32 : 27,
               onPressed: (() => {setPage(0)})
             ), 
             IconButton(
               color: isLibraryActive ? Colors.green : Colors.grey,
-              icon: Icon(Icons.library_books), 
+              icon: Icon(Icons.library_books_rounded), 
               iconSize: isLibraryActive ? 32 : 27,
               onPressed: (() => {setPage(1)})
             ), 
             IconButton(
               color: isProfileActive ? Colors.green : Colors.grey,
-              icon: Icon(Icons.search), 
+              icon: Icon(Icons.search_rounded), 
               iconSize: isProfileActive ? 32 : 27,
               onPressed: (() => {setPage(2)})
             ), 

@@ -81,23 +81,27 @@ class StatsPageState extends State<StatsPage> {
     getTopItems();
   }
 
-
   void getTopItems() async {
     List myItems = isTracksActive ? await service.getTopItems('tracks', timeRange) : 
                   await service.getTopItems('artists', timeRange);
     List<Widget> newList = [];
+    int itemPosition = 1;
 
     myItems.forEach((item) { 
       newList.add(
         Container(
-          color: Color.fromARGB(255, 29, 29, 29),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 29, 29, 29),
+            borderRadius: BorderRadius.circular(12)
+          ),
           margin: const EdgeInsets.all(3.0),
           child: ListTile(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15) 
+            leading: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: isTracksActive ? Image(image: NetworkImage(item['album']['images'][0]['url']), width: 45, height: 45) :
+                                      Image(image: NetworkImage(item['images'][0]['url']), width: 45, height: 45)
             ),
-            leading: isTracksActive ? Image(image: NetworkImage(item['album']['images'][0]['url']), width: 40, height: 40) :
-                                      Image(image: NetworkImage(item['images'][0]['url']), width: 40, height: 40),
+            trailing: Text('#$itemPosition', style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontWeight: FontWeight.w700)),
             title: Text(item['name'], 
                         style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
             subtitle: isTracksActive ? Text(item['artists'][0]['name'], 
@@ -107,6 +111,7 @@ class StatsPageState extends State<StatsPage> {
             },
         )
       ));
+      itemPosition++;
     });
 
     setState(() {
@@ -122,13 +127,20 @@ class StatsPageState extends State<StatsPage> {
   }
 
   @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context){
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: StatsAppBar(setItemType, getOptionsState),
       body: Container(
        color: Color.fromARGB(255, 41, 41, 41),
-        padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
+        padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),
         child: AnimatedOpacity(
           opacity: opacityLevel,
           duration: const Duration(milliseconds: 300),

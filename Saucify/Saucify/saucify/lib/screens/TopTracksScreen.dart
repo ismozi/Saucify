@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saucify/services/spotifyService.dart';
@@ -38,21 +37,29 @@ class TopTracksScreenState extends State<TopTracksScreen> {
               randomTrack['track']['artists'][0]['name']);
   }
 
-  
-
   List<Widget> generateWidget() {
     List<Widget> newList = [];
 
     topTracks.forEach((item) => {
       newList.add(
         Container(
-          color: Color.fromARGB(255, 29, 29, 29),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 29, 29, 29),
+            borderRadius: BorderRadius.all(Radius.circular(12))
+          ),
           margin: const EdgeInsets.all(1.0),
           child: ListTile(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15) 
             ),
-            leading: Image(image: NetworkImage(item['track']['album']['images'][0]['url']), width: 40, height: 40),
+            leading: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image(
+                image: NetworkImage(item['track']['album']['images'][0]['url']), 
+                width: 45, 
+                height: 45
+              )
+            ),
             title: Text(item['track']['name'], 
                         style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
             subtitle: Text(item['track']['artists'][0]['name'], 
@@ -91,12 +98,6 @@ class TopTracksScreenState extends State<TopTracksScreen> {
       SimpleDialogOption(
         child: Text('Open Spotify'),
         onPressed: () async {
-          await LaunchApp.openApp(
-            androidPackageName: 'com.spotify.music'
-          );
-          LaunchApp.openApp(
-            androidPackageName: 'com.example.saucify'
-          );
         },
       )
     );
@@ -143,6 +144,13 @@ class TopTracksScreenState extends State<TopTracksScreen> {
     super.initState();
     getTracks();
     getDevices();
+  }
+
+  @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
   }
 
   @override

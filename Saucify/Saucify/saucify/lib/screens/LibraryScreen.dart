@@ -22,12 +22,20 @@ class _LibraryScreenState extends State<LibraryScreen> {
     myPlaylists.forEach((playlist) { 
       newList.add(
         Container(
-          color: Color.fromARGB(255, 29, 29, 29),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 29, 29, 29),
+            borderRadius: BorderRadius.all(Radius.circular(12))
+          ),
           margin: const EdgeInsets.all(3.0),
           child: ListTile(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15) 
-            ),
+            leading: !playlist['images'].isEmpty ? ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image(
+                image: NetworkImage(playlist['images'][0]['url']), 
+                width: 40, 
+                height: 40
+              )
+            ) : null,
             title: Text(playlist['name'], 
                         style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
             onTap: () => {
@@ -36,6 +44,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
           ),
         )
       );
+      print(playlist['images']);
     });
 
     setState(() {
@@ -51,11 +60,18 @@ class _LibraryScreenState extends State<LibraryScreen> {
   }
 
   @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context){
     return Scaffold(
       body: Container(
        color: Color.fromARGB(255, 41, 41, 41),
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
         child: AnimatedOpacity(
           opacity: opacityLevel,
           duration: const Duration(milliseconds: 300),

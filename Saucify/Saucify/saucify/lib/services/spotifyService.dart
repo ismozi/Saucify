@@ -189,9 +189,23 @@ class spotifyService {
     isPlaying = !isPlaying;
   }
 
-  
+  Future<List> searchItems(String searchString) async {
+    final response = await http.get(
+      Uri.parse('https://api.spotify.com/v1/search?q=$searchString&type=track'),
+      headers: {
+        'Authorization': 'Bearer $access_token',
+        'Content-Type': 'application/json'
+      }
+    );
 
+    if (response.body.isNotEmpty){
+      final body = json.decode(response.body);
+      if (body['tracks'] != null) {
+        return body['tracks']['items'];
+      }
+    }
 
-
+    return [];
+  }
 }
 
