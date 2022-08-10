@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saucify/services/spotifyService.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
+import 'package:saucify/widgets/FeedAppBar.dart';
 import 'package:saucify/widgets/SongPost.dart';
+import 'package:saucify/widgets/StatsAppBar.dart';
 import '../app/app.locator.dart';
 
 class FeedPage extends StatefulWidget {
@@ -34,17 +36,19 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: FeedAppBar(),
       body: 
         Container(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-          color: Color.fromARGB(255, 41, 41, 41),
+          color: Color.fromARGB(255, 37, 37, 37),
           child: AnimatedOpacity(
             opacity: opacityLevel,
             duration: const Duration(milliseconds: 300),
             child: 
               ListView(
                 children: <Widget>[
-                  Container(padding: EdgeInsets.fromLTRB(0, 6, 0, 0)),
+                  Container(padding: EdgeInsets.fromLTRB(0, 7, 0, 0)),
                   SongPost(profileImgUrl: 'https://www.mtlblog.com/media-library/mike-ward-offered-mayor-plante-25-shelters-for-unhoused-montrealers-she-responded.jpg?id=28884878&width=600&coordinates=318%2C0%2C252%2C0&height=600',
                     profileName: 'Mike Ward',
                     description: "C'est insane écoutes ça mon chum!",

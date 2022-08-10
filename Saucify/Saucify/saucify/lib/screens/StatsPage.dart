@@ -141,7 +141,7 @@ class StatsPageState extends State<StatsPage> {
       extendBodyBehindAppBar: true,
       appBar: StatsAppBar(setItemType, getOptionsState),
       body: Container(
-       color: Color.fromARGB(255, 41, 41, 41),
+       color: Color.fromARGB(255, 37, 37, 37),
         padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),
         child: AnimatedOpacity(
           opacity: opacityLevel,

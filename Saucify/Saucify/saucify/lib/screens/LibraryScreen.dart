@@ -70,7 +70,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
   Widget build(BuildContext context){
     return Scaffold(
       body: Container(
-       color: Color.fromARGB(255, 41, 41, 41),
+       color: Color.fromARGB(255, 37, 37, 37),
         padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
         child: AnimatedOpacity(
           opacity: opacityLevel,

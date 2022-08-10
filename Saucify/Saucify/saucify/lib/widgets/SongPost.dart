@@ -28,7 +28,7 @@ class _SongPostState extends State<SongPost> {
   @override
   Widget build(BuildContext context){
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 8, 0, 10),
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       decoration: BoxDecoration(
         color: Color.fromARGB(255, 29, 29, 29),
         borderRadius: BorderRadius.all(Radius.circular(12))

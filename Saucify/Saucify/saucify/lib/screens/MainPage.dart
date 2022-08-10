@@ -8,6 +8,7 @@ import 'package:saucify/screens/LibraryScreen.dart';
 import 'package:saucify/screens/SearchPage.dart';
 import 'package:saucify/screens/StatsPage.dart';
 import 'package:saucify/services/spotifyService.dart';
+import 'package:saucify/widgets/PostForm.dart';
 import 'package:saucify/widgets/bottomPlayer.dart';
 import 'package:tuple/tuple.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -94,19 +95,28 @@ class MainPageState extends State<MainPage> {
           foregroundColor: Colors.green,
           automaticallyImplyLeading: false,
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: Text(
+                  'Saucify', 
+                  style: GoogleFonts.getFont('Montserrat', 
+                  fontWeight: FontWeight.w700, 
+                  fontStyle: FontStyle.italic,
+                  fontSize: 25)
+                ),
+              ),
+              Row(
                 children: [
-                  Text(
-                    'Saucify', 
-                    style: GoogleFonts.getFont('Montserrat', fontWeight: FontWeight.w700, fontStyle: FontStyle.italic)
-                  ),
+                  Icon(Icons.search, color: Colors.grey),
+                  Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0)),
+                  Icon(Icons.person, color: Colors.grey)
                 ]
               )
             ]
-          )
+          ),
       ),
       body: activeScreen,
       bottomNavigationBar: BottomAppBar(child: 
@@ -142,17 +152,28 @@ class MainPageState extends State<MainPage> {
         color: Color.fromARGB(255, 20, 20, 20)
       ),
       floatingActionButton: isFeedActive ? Container(
-        height: 50.0,
-        width: 50.0,
+        height: 55.0,
+        width: 55.0,
+        decoration: BoxDecoration(
+          border: Border.all(color: Color.fromARGB(255, 20, 20, 20), width: 8),
+          shape: BoxShape.circle,
+        ),
         child: FittedBox(
           child: FloatingActionButton(
             child: Icon(Icons.add, color: Colors.black),
-            onPressed: () {}),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return PostForm();
+                }
+              );
+            }),
         ),
       ) : null,
       floatingActionButtonLocation: CustomFloatingActionButtonLocation(
               168,
-              725
+              735
       )
     );
   }
