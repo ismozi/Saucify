@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.saucify">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="saucify"
         android:name="${applicationName}"

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:saucify/services/spotifyService.dart';
 import 'package:saucify/widgets/bottomPlayer.dart';
 import 'package:tuple/tuple.dart';
@@ -25,6 +25,7 @@ class TopTracksScreenState extends State<TopTracksScreen> {
   bool isPlayerShown = false;
   dynamic bottomAppBar = BottomAppBar();
   List topTracks = [];
+  double opacityLevel = 0.0;
 
   void shuffle(){
     int randomIndex = Random().nextInt(topTracks.length);
@@ -36,25 +37,33 @@ class TopTracksScreenState extends State<TopTracksScreen> {
               randomTrack['track']['artists'][0]['name']);
   }
 
-  
-
   List<Widget> generateWidget() {
     List<Widget> newList = [];
 
     topTracks.forEach((item) => {
       newList.add(
         Container(
-          color: Color.fromARGB(255, 29, 29, 29),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 29, 29, 29),
+            borderRadius: BorderRadius.all(Radius.circular(12))
+          ),
           margin: const EdgeInsets.all(1.0),
           child: ListTile(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15) 
             ),
-            leading: Image(image: NetworkImage(item['track']['album']['images'][0]['url']), width: 40, height: 40),
+            leading: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image(
+                image: NetworkImage(item['track']['album']['images'][0]['url']), 
+                width: 45, 
+                height: 45
+              )
+            ),
             title: Text(item['track']['name'], 
-                        style: TextStyle(color: Colors.white)),
+                        style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
             subtitle: Text(item['track']['artists'][0]['name'], 
-                        style: TextStyle(color: Colors.white)),
+                        style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
             onTap: () => {
               playMusic(item['track']['uri'], 
                         item['track']['album']['images'][0]['url'], 
@@ -77,7 +86,7 @@ class TopTracksScreenState extends State<TopTracksScreen> {
       newList.add(
       SimpleDialogOption(
             child: Text(device['name'], 
-                        style: TextStyle(color: Colors.black)),
+                        style: GoogleFonts.getFont('Montserrat', color: Colors.black)),
             onPressed: () => {
               service.deviceId = device['id']
             },
@@ -89,12 +98,6 @@ class TopTracksScreenState extends State<TopTracksScreen> {
       SimpleDialogOption(
         child: Text('Open Spotify'),
         onPressed: () async {
-          await LaunchApp.openApp(
-            androidPackageName: 'com.spotify.music'
-          );
-          LaunchApp.openApp(
-            androidPackageName: 'com.example.saucify'
-          );
         },
       )
     );
@@ -112,6 +115,7 @@ class TopTracksScreenState extends State<TopTracksScreen> {
 
     setState(() {
       list = generateWidget();
+      opacityLevel = 1.0;
     });
 
     while (nextUri != null){
@@ -143,6 +147,13 @@ class TopTracksScreenState extends State<TopTracksScreen> {
   }
 
   @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
@@ -162,11 +173,7 @@ class TopTracksScreenState extends State<TopTracksScreen> {
           title: 
               Column(
                 children: [
-                  Text('Saucify'),
-                  Opacity(
-                    opacity: 0.5,
-                    child: Text(widget.name)
-                  )
+                  Text('Saucify', style: GoogleFonts.getFont('Montserrat', fontWeight: FontWeight.w700, fontStyle: FontStyle.italic)),
                 ]
               )
            
@@ -174,9 +181,13 @@ class TopTracksScreenState extends State<TopTracksScreen> {
       body: Container(
         color: Color.fromARGB(255, 41, 41, 41),
         padding: const EdgeInsets.all(10.0),
-        child: ListView(
-          children: list
-        )
+        child: AnimatedOpacity(
+          opacity: opacityLevel,
+          duration: const Duration(milliseconds: 300),
+          child: ListView(
+            children: list
+            ) 
+          )
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.shuffle, color: Colors.black), onPressed: () {shuffle();}

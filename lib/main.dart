@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:saucify/app/app.locator.dart';
 import 'package:saucify/screens/loginScreen.dart';
 
@@ -6,6 +7,9 @@ import 'package:saucify/screens/loginScreen.dart';
 void main() {
   setupLocator();
   runApp(const MyApp());
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: Color.fromARGB(255, 20, 20, 20),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,13 +24,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 20, 20, 20),
-          foregroundColor: Colors.green,
-          title: const Center(
-            child: Text('Saucify'),
-          ),
-        ),
         body: 
           Center(
             child: LoginScreen(),

@@ -65,9 +65,6 @@ class spotifyService {
 
     final body = json.decode(response.body);
     access_token = body['access_token'];
-
-    await getTopItems('tracks');
-    getDevices();
   }
 
   String generateRandomString(int length){
@@ -84,13 +81,13 @@ class spotifyService {
     return access_token != "";
   }
 
-  Future<List> getTopItems(String itemType) async{
+  Future<List> getTopItems(String itemType, String timeRange) async{
     if (itemType != 'artists' && itemType != 'tracks') {
       return [];
     }
 
     final response = await http.get(
-      Uri.parse('https://api.spotify.com/v1/me/top/$itemType'),
+      Uri.parse('https://api.spotify.com/v1/me/top/$itemType?time_range=$timeRange'),
       headers: {
         'Authorization': 'Bearer $access_token',
         'Content-Type': 'application/json'
@@ -192,7 +189,23 @@ class spotifyService {
     isPlaying = !isPlaying;
   }
 
+  Future<List> searchItems(String searchString, String itemType) async {
+    final response = await http.get(
+      Uri.parse('https://api.spotify.com/v1/search?q=$searchString&type=$itemType&limit=5'),
+      headers: {
+        'Authorization': 'Bearer $access_token',
+        'Content-Type': 'application/json'
+      }
+    );
 
+    if (response.body.isNotEmpty){
+      final body = json.decode(response.body);
+      if (body[itemType+'s'] != null) {
+        return body[itemType+'s']['items'];
+      }
+    }
 
+    return [];
+  }
 }
 
