@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,7 +12,9 @@ class SongPost extends StatefulWidget {
             required this.description,
             required this.songImgUrl, 
             required this.songName, 
-            required this.artistName});
+            required this.artistName,
+            required this.previewUrl,
+            required this.player});
 
   String profileImgUrl;
   String profileName;
@@ -19,12 +22,44 @@ class SongPost extends StatefulWidget {
   String songImgUrl;
   String songName;
   String artistName;
+  String previewUrl;
+  final player;
 
   @override
   State<SongPost> createState() => _SongPostState();
 }
 
 class _SongPostState extends State<SongPost> {
+  bool isPlaying = false;
+
+  // TODO : manage listeners to remove
+  void play() async {
+    widget.player.pause();
+    await widget.player.setSourceUrl(widget.previewUrl);
+    widget.player.resume();
+    
+    setState(() {
+      isPlaying = true;
+    });
+
+    widget.player.onPlayerStateChanged.listen((PlayerState s) {
+      if (s == PlayerState.paused || s == PlayerState.stopped){
+        setState(() {
+          isPlaying = false;
+        });
+      }
+    });
+    widget.player.onPlayerComplete.listen((event) {
+      setState(() {
+        isPlaying = false;
+      });
+    });
+  }
+
+  void pause(){
+    widget.player.pause();
+  }
+
   @override
   Widget build(BuildContext context){
     return Container(
@@ -66,7 +101,13 @@ class _SongPostState extends State<SongPost> {
                   borderRadius: BorderRadius.circular(10),
                   child: Image(image: NetworkImage(widget.songImgUrl), width: 45, height: 45)
                 ),
-                trailing: Icon(Icons.play_circle, color: Colors.white),
+                trailing: IconButton(
+                  icon:Icon(!isPlaying ? Icons.play_circle : Icons.pause_circle), 
+                  color: Colors.white,
+                  onPressed: (() {
+                    isPlaying ? pause() : play();
+                  })
+                ),
                 title: Text(widget.songName, 
                             style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
                 subtitle: Text(widget.artistName, 

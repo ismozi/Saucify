@@ -88,6 +88,8 @@ class StatsPageState extends State<StatsPage> {
     int itemPosition = 1;
 
     myItems.forEach((item) { 
+      print(item['name']);
+      print(item['album']['images'][0]['url']);
       newList.add(
         Container(
           decoration: BoxDecoration(
