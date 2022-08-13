@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saucify/widgets/ChooseOption.dart';
 
 import '../app/app.locator.dart';
 import '../services/spotifyService.dart';
@@ -102,10 +105,25 @@ class _SongPostState extends State<SongPost> {
                   child: Image(image: NetworkImage(widget.songImgUrl), width: 45, height: 45)
                 ),
                 trailing: IconButton(
-                  icon:Icon(!isPlaying ? Icons.play_circle : Icons.pause_circle), 
+                  icon:Icon(!isPlaying ? Icons.more_horiz : Icons.pause_circle), 
                   color: Colors.white,
                   onPressed: (() {
-                    isPlaying ? pause() : play();
+                    isPlaying ? pause() : 
+                    showGeneralDialog(
+                      barrierDismissible: true,
+                      barrierLabel:
+                        MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                      transitionDuration: Duration(milliseconds: 100),
+                      context: context,
+                      pageBuilder: (ctx, anim1, anim2) => ChooseOption(play),
+                      transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
+                        child: FadeTransition(
+                          child: child,
+                          opacity: anim1,
+                        ),
+                      ),
+                    );
                   })
                 ),
                 title: Text(widget.songName, 

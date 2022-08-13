@@ -166,6 +166,9 @@ class MainPageState extends State<MainPage> {
             child: Icon(Icons.add, color: Colors.black),
             onPressed: () {
               showGeneralDialog(
+                barrierDismissible: true,
+                barrierLabel:
+                    MaterialLocalizations.of(context).modalBarrierDismissLabel,
                 transitionDuration: Duration(milliseconds: 200),
                 context: context,
                 pageBuilder: (ctx, anim1, anim2) => PostForm(),
