@@ -15,10 +15,11 @@ class _ChooseOptionState extends State<ChooseOption> {
 
 @override
   Widget build(BuildContext context){
-    return AlertDialog(
+    return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
       backgroundColor: Color.fromARGB(255, 31, 31, 31),
-      content: Container(
+      child: Container(
+        width: 0,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,7 +37,7 @@ class _ChooseOptionState extends State<ChooseOption> {
                   style: GoogleFonts.getFont(
                     'Montserrat',
                     color: Colors.green,
-                    fontWeight: FontWeight.w700
+                    fontWeight: FontWeight.w400
                   )
                 ),
                 onTap:() {
@@ -58,7 +59,7 @@ class _ChooseOptionState extends State<ChooseOption> {
                   style: GoogleFonts.getFont(
                     'Montserrat',
                     color: Colors.green,
-                    fontWeight: FontWeight.w700
+                    fontWeight: FontWeight.w400
                   )
                 ),
                 onTap:() {
@@ -79,7 +80,7 @@ class _ChooseOptionState extends State<ChooseOption> {
                   style: GoogleFonts.getFont(
                     'Montserrat',
                     color: Colors.green,
-                    fontWeight: FontWeight.w700
+                    fontWeight: FontWeight.w400
                   )
                 ),
                 onTap:() {

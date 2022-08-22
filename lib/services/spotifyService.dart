@@ -207,5 +207,52 @@ class spotifyService {
 
     return [];
   }
+
+  Future<void> createPlaylist(String timeRange) async {
+    final response1 = await http.get(
+      Uri.parse('https://api.spotify.com/v1/me'),
+      headers: {
+        'Authorization': 'Bearer $access_token',
+        'Content-Type': 'application/json'
+      }
+    );
+
+    String name = '';
+    if (timeRange == 'short_term'){
+      name = 'Top Songs Last Month';
+    } else if (timeRange == 'medium_term'){
+      name = 'Top Songs Last 6 Months';
+    } else if (timeRange == 'long_term'){
+      name = 'Top Songs All Time';
+    }
+
+    if (response1.body.isNotEmpty){
+      final body = json.decode(response1.body);
+      final response2 = await http.post(
+        Uri.parse('https://api.spotify.com/v1/users/${body['id']}/playlists'),
+        body: jsonEncode({'name': name}),
+        headers: {
+          'Authorization': 'Bearer $access_token',
+          'Content-Type': 'application/json'
+        }
+      );
+
+      final body1 = json.decode(response2.body);
+      List items = await getTopItems('tracks', timeRange);
+      List uris = [];
+      items.forEach((item) async {
+        uris.add(item['uri']);
+      });
+
+      final response3 = await http.post(
+        Uri.parse('https://api.spotify.com/v1/playlists/${body1['uri'].split(':')[2]}/tracks'),
+        body: jsonEncode({'uris': uris}),
+        headers: {
+          'Authorization': 'Bearer $access_token',
+          'Content-Type': 'application/json'
+        }
+      );
+    }
+  }
 }
 

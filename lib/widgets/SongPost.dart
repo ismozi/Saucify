@@ -95,7 +95,7 @@ class _SongPostState extends State<SongPost> {
             ),
             Container(
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 46, 46, 46),
+                color: Color.fromARGB(255, 37, 37, 37),
                 borderRadius: BorderRadius.circular(12)
               ),
               margin: const EdgeInsets.all(10.0),

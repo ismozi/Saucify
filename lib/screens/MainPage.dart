@@ -16,6 +16,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../app/app.locator.dart';
 import '../widgets/CustomFloatingActionButtonLocation .dart';
+import '../widgets/PlaylistForm.dart';
 
 class MainPage extends StatefulWidget {
 
@@ -29,12 +30,13 @@ class MainPageState extends State<MainPage> {
   bool isLibraryActive = false;
   bool isProfileActive = false;
   bool isFeedActive = false;
+  bool isPostsActive = true;
 
   Container container = Container(color:Color.fromARGB(255, 41, 41, 41));
   LibraryScreen libScreen = LibraryScreen();
   StatsPage statsPage = StatsPage();
   SearchPage searchPage = SearchPage();
-  FeedPage feedPage = FeedPage();
+  late FeedPage feedPage;
 
   dynamic activeScreen;
 
@@ -42,6 +44,15 @@ class MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     activeScreen = statsPage;
+    feedPage = FeedPage(setFAB);
+  }
+
+  void setFAB(int index) {
+    if (index == 0){
+      isPostsActive = true;
+    } else if (index == 1){
+      isPostsActive = false;
+    }
   }
 
   void setPage(int index) {
@@ -154,38 +165,41 @@ class MainPageState extends State<MainPage> {
         ),
         color: Color.fromARGB(255, 20, 20, 20)
       ),
-      floatingActionButton: isFeedActive ? Container(
-        height: 55.0,
-        width: 55.0,
-        decoration: BoxDecoration(
-          border: Border.all(color: Color.fromARGB(255, 20, 20, 20), width: 8),
-          shape: BoxShape.circle,
-        ),
-        child: FittedBox(
-          child: FloatingActionButton(
-            child: Icon(Icons.add, color: Colors.black),
-            onPressed: () {
-              showGeneralDialog(
-                barrierDismissible: true,
-                barrierLabel:
-                    MaterialLocalizations.of(context).modalBarrierDismissLabel,
-                transitionDuration: Duration(milliseconds: 200),
-                context: context,
-                pageBuilder: (ctx, anim1, anim2) => PostForm(),
-                transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
-                  child: FadeTransition(
-                    child: child,
-                    opacity: anim1,
+      floatingActionButton: Visibility(
+        visible: isFeedActive,
+        child: Container(
+          height: 55.0,
+          width: 55.0,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color.fromARGB(255, 20, 20, 20), width: 8),
+            shape: BoxShape.circle,
+          ),
+          child: FittedBox(
+            child: FloatingActionButton(
+              child: Icon(Icons.add, color: Colors.black),
+              onPressed: () {
+                showGeneralDialog(
+                  barrierDismissible: true,
+                  barrierLabel:
+                      MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                  transitionDuration: Duration(milliseconds: 200),
+                  context: context,
+                  pageBuilder: (ctx, anim1, anim2) => isPostsActive ? PostForm() : PlaylistForm(),
+                  transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
+                    child: FadeTransition(
+                      child: child,
+                      opacity: anim1,
+                    ),
                   ),
-                ),
-              );
-            }),
-        ),
-      ) : null,
+                );
+              }),
+          ),
+        )
+      ),
       floatingActionButtonLocation: CustomFloatingActionButtonLocation(
               168,
-              735
+              728
       )
     );
   }

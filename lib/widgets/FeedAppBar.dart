@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tuple/tuple.dart';
 
 class FeedAppBar extends StatefulWidget implements PreferredSizeWidget{
+  final Function callback;
+  FeedAppBar(this.callback);
   @override
   _FeedAppBarState createState() => _FeedAppBarState();
 
@@ -27,6 +29,9 @@ class _FeedAppBarState extends State<FeedAppBar> {
           children: [
           GestureDetector(
             onTap:() {
+              setState(() {
+                options = widget.callback(0);
+              });
             },
             child: Text("Feed", style: GoogleFonts.getFont(
               'Montserrat',
@@ -36,6 +41,9 @@ class _FeedAppBarState extends State<FeedAppBar> {
           ), 
           GestureDetector(
             onTap:() {
+              setState(() {
+                options = widget.callback(1);
+              });
             },
             child: Text("Playlists", style: GoogleFonts.getFont(
               'Montserrat',
