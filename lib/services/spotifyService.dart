@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:saucify/services/DatabaseService.dart';
 import 'dart:math';
 
 import 'package:tuple/tuple.dart';
@@ -15,6 +16,8 @@ class spotifyService {
   late String access_token;
   late bool isPlaying;
   late String deviceId;
+  late String userId;
+  DatabaseService dbService = DatabaseService();
 
   spotifyService(){
     client_id = 'ab34da279af84ac5a6573a70f14a1b0a'; // Your client id
@@ -30,6 +33,7 @@ class spotifyService {
     access_token = '';
     isPlaying = false;
     deviceId = "";
+    userId = "";
   }
   
   Future<void> logIn() async {
@@ -65,6 +69,25 @@ class spotifyService {
 
     final body = json.decode(response.body);
     access_token = body['access_token'];
+
+    final response1 = await http.get(
+      Uri.parse('https://api.spotify.com/v1/me'),
+      headers: {
+        'Authorization': 'Bearer $access_token',
+        'Content-Type': 'application/json'
+      }
+    );
+
+    if (response1.body.isNotEmpty){
+      final body = json.decode(response1.body);
+      userId = body['id'];
+      Object obj = {
+        'username': body['display_name'],
+        'imageUrl': "",
+        'friends': []
+      };
+      dbService.register(body['id'], obj);
+    }
   }
 
   String generateRandomString(int length){

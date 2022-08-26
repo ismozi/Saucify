@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:saucify/services/spotifyService.dart';
+import '../app/app.locator.dart';
 
-class DatabaseService {
-  
+class DatabaseService {  
   Future<List> getAllDocsOfCollection(String collection) async {
     CollectionReference collectionRef = FirebaseFirestore.instance.collection(collection);
     QuerySnapshot querySnapshot = await collectionRef.get();
@@ -13,8 +14,14 @@ class DatabaseService {
     await collectionRef.add(object);
   }
 
-  getCollectionStream(String collection){
-    return FirebaseFirestore.instance.collection(collection).orderBy('timestamp', descending: true).snapshots();
+  Future<void> register(String id, dynamic object) async {
+    CollectionReference collectionRef = FirebaseFirestore.instance.collection('users');
+    await collectionRef.doc(id).set(object);
+  }
+
+  getPostsStream(){
+    // TODO: Manage friends list
+    return FirebaseFirestore.instance.collection('posts').where('postedBy', whereIn: ['ismozirek']).orderBy('timestamp', descending: true).snapshots();
   }
 
 }

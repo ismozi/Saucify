@@ -18,7 +18,7 @@ class PostsPage extends StatefulWidget {
 
 class PostsPageState extends State<PostsPage> {
   spotifyService service = locator<spotifyService>();
-  double opacityLevel = 1;
+  double opacityLevel = 0;
   final player = AudioPlayer();
   List<Widget> widgets = [];
   DatabaseService dbService = DatabaseService();
@@ -26,6 +26,10 @@ class PostsPageState extends State<PostsPage> {
   @override
   void initState() {
     super.initState();
+    // TODO: Fix temporary fade in
+    Timer(Duration(milliseconds: 200), () {
+      setState(() => opacityLevel = 1);
+    });
   }
 
   @override
@@ -72,14 +76,13 @@ class PostsPageState extends State<PostsPage> {
           duration: const Duration(milliseconds: 300),
           child: 
           new StreamBuilder(
-            stream: dbService.getCollectionStream('posts'),
+            stream: dbService.getPostsStream(),
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
               } else { 
-                opacityLevel = 1;
                 return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
