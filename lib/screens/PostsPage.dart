@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saucify/services/spotifyService.dart';
@@ -11,7 +12,6 @@ import 'package:saucify/widgets/SongPost.dart';
 import '../services/DatabaseService.dart';
 
 class PostsPage extends StatefulWidget {
-
   @override
   State<PostsPage> createState() => PostsPageState();
 }
@@ -44,6 +44,7 @@ class PostsPageState extends State<PostsPage> {
     posts.forEach(((post) => {
       newWidgets.add(
         SongPost(
+          timestamp: post['timestamp'],
           profileImgUrl: post['profileImgUrl'],
           profileName: post['profileName'],
           description: post['description'],
@@ -71,9 +72,37 @@ class PostsPageState extends State<PostsPage> {
           opacity: opacityLevel,
           duration: const Duration(milliseconds: 300),
           child: 
-            ListView(
-              children: widgets
-            ) 
+          new StreamBuilder(
+            stream: dbService.getCollectionStream('posts'),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else { 
+                return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot post = snapshot.data!.docs[index];
+                    return SongPost(
+                      timestamp: post['timestamp'],
+                      profileImgUrl: post['profileImgUrl'],
+                      profileName: post['profileName'],
+                      description: post['description'],
+                      songImgUrl: post['songImgUrl'],
+                      songName: post['songName'],
+                      artistName: post['artistName'],
+                      previewUrl: post['previewUrl'],
+                      player: player
+                    );
+                  }
+                );
+              }
+            }
+          )
+            // ListView(
+            //   children: widgets
+            // ) 
           )
       ),
     );

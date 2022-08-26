@@ -13,4 +13,8 @@ class DatabaseService {
     await collectionRef.add(object);
   }
 
+  getCollectionStream(String collection){
+    return FirebaseFirestore.instance.collection(collection).orderBy('timestamp', descending: true).snapshots();
+  }
+
 }

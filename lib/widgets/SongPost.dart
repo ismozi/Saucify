@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saucify/widgets/ChooseOption.dart';
@@ -10,6 +11,7 @@ import '../services/spotifyService.dart';
 
 class SongPost extends StatefulWidget {
   SongPost({super.key, 
+            required this.timestamp,
             required this.profileImgUrl,
             required this.profileName,
             required this.description,
@@ -19,6 +21,7 @@ class SongPost extends StatefulWidget {
             required this.previewUrl,
             required this.player});
 
+  dynamic timestamp;
   String profileImgUrl;
   String profileName;
   String description;
@@ -63,6 +66,26 @@ class _SongPostState extends State<SongPost> {
     widget.player.pause();
   }
 
+  String getTime() {
+    // TODO : make it work for different timezones
+    if (widget.timestamp == null) {
+      return "";
+    }
+    int timeInSeconds = ((DateTime.now().millisecondsSinceEpoch - widget.timestamp.millisecondsSinceEpoch) / 1000).round();
+    String time = "";
+    if (timeInSeconds < 60) {
+      time = "Just now.";
+    } else if (timeInSeconds < 3600) {
+      time = "${(timeInSeconds / 60).round()} minutes ago.";
+    } else if (timeInSeconds < 86400) {
+      time = "${(timeInSeconds / 3600).round()} hours ago.";
+    } else {
+      time = widget.timestamp.toDate().day.toString();
+    }
+
+    return time;
+  }
+
   @override
   Widget build(BuildContext context){
     return Container(
@@ -85,7 +108,7 @@ class _SongPostState extends State<SongPost> {
               ),
               title: Text(widget.profileName,
                       style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
-              subtitle: Text('2h ago',
+              subtitle: Text(getTime(),
                         style: GoogleFonts.getFont('Montserrat', color: Colors.grey)),
             ),
             Padding(

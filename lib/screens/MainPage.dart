@@ -47,10 +47,6 @@ class MainPageState extends State<MainPage> {
     feedPage = FeedPage(setFAB);
   }
 
-  refreshFeedPage(){
-    feedPage = FeedPage(setFAB);
-  }
-
   void setFAB(int index) {
     if (index == 0){
       isPostsActive = true;
@@ -188,7 +184,7 @@ class MainPageState extends State<MainPage> {
                       MaterialLocalizations.of(context).modalBarrierDismissLabel,
                   transitionDuration: Duration(milliseconds: 200),
                   context: context,
-                  pageBuilder: (ctx, anim1, anim2) => isPostsActive ? PostForm(refreshFeedPage) : PlaylistForm(),
+                  pageBuilder: (ctx, anim1, anim2) => isPostsActive ? PostForm() : PlaylistForm(),
                   transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
                     child: FadeTransition(
@@ -202,7 +198,7 @@ class MainPageState extends State<MainPage> {
         )
       ),
       floatingActionButtonLocation: CustomFloatingActionButtonLocation(
-              168,
+              (MediaQuery.of(context).size.width*0.5)-27.5,
               728
       )
     );

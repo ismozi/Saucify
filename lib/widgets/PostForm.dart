@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saucify/widgets/CategoryPicker.dart';
@@ -8,9 +9,6 @@ import '../services/DatabaseService.dart';
 import '../services/spotifyService.dart';
 
 class PostForm extends StatefulWidget {
-  final refresh;
-  PostForm(this.refresh);
-
   @override
   State<PostForm> createState() => _PostFormState();
 }
@@ -59,8 +57,6 @@ class _PostFormState extends State<PostForm> {
     List myPlaylists = await service.searchItems(text, itemType);
     List<Widget> newList = [];
 
-    print(myPlaylists);
-
     myPlaylists.forEach((item) { 
       newList.add(
         Container(
@@ -101,6 +97,7 @@ class _PostFormState extends State<PostForm> {
 
   submitPost() async {
     Object post = {
+      'timestamp': FieldValue.serverTimestamp(),
       'profileImgUrl': 'https://scontent.fymq2-1.fna.fbcdn.net/v/t1.6435-9/49509493_2220570931333084_9073185916800991232_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=YFjTkrpSIjEAX-jPn8z&_nc_oc=AQlOprkDFtF0mkGFe_9mLW8YLx3Ll9g3ri5LJirC_qCXG3FOfhnA6SccOkbYvVEPNc4&_nc_ht=scontent.fymq2-1.fna&oh=00_AT-QsZe9PqKI15-hXXmqCyCsJC1Of6e-OZNRritSd81S0A&oe=632C2A80',
       'profileName': 'Ismaël Zirek',
       'description': descriptionController.text,
@@ -111,8 +108,7 @@ class _PostFormState extends State<PostForm> {
     };
 
     await dbService.addDocToCollection('posts', post);
-    widget.refresh();
-    Navigator.pop(context, true);
+    Navigator.pop(context);
   } 
 
   @override
