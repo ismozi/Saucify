@@ -20,6 +20,7 @@ class _PostFormState extends State<PostForm> {
   DatabaseService dbService = DatabaseService();
   List<Widget> list = [];
   dynamic selectedItem = {};
+  NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
 
   List categoryState = [true, false, false];
   String itemType = 'track';
@@ -69,7 +70,8 @@ class _PostFormState extends State<PostForm> {
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(0),
               child: Image(
-                image: NetworkImage(categoryState[0] ? item['album']['images'][0]['url'] : item['images'][0]['url']), 
+                image: categoryState[0] ? item['album']['images'].isNotEmpty ? NetworkImage(item['album']['images'][0]['url']) : emptyImage
+                                        : item['images'].isNotEmpty ? NetworkImage(item['images'][0]['url']) : emptyImage, 
                 width: 30, 
                 height: 30
               )
@@ -96,16 +98,42 @@ class _PostFormState extends State<PostForm> {
   }
 
   submitPost() async {
-    Object post = {
-      'timestamp': FieldValue.serverTimestamp(),
-      'profileImgUrl': 'https://scontent.fymq2-1.fna.fbcdn.net/v/t1.6435-9/49509493_2220570931333084_9073185916800991232_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=YFjTkrpSIjEAX-jPn8z&_nc_oc=AQlOprkDFtF0mkGFe_9mLW8YLx3Ll9g3ri5LJirC_qCXG3FOfhnA6SccOkbYvVEPNc4&_nc_ht=scontent.fymq2-1.fna&oh=00_AT-QsZe9PqKI15-hXXmqCyCsJC1Of6e-OZNRritSd81S0A&oe=632C2A80',
-      'profileName': 'Ismaël Zirek',
-      'description': descriptionController.text,
-      'songImgUrl': selectedItem['album']['images'][0]['url'],
-      'songName': selectedItem['name'],
-      'artistName': selectedItem['artists'][0]['name'],
-      'previewUrl': selectedItem['preview_url'],
-    };
+    Object post = {};
+
+    if (categoryState[0]) {
+      post = {
+        'timestamp': FieldValue.serverTimestamp(),
+        'postType': 'track',
+        'profileImgUrl': 'https://scontent.fymq2-1.fna.fbcdn.net/v/t1.6435-9/49509493_2220570931333084_9073185916800991232_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=YFjTkrpSIjEAX-jPn8z&_nc_oc=AQlOprkDFtF0mkGFe_9mLW8YLx3Ll9g3ri5LJirC_qCXG3FOfhnA6SccOkbYvVEPNc4&_nc_ht=scontent.fymq2-1.fna&oh=00_AT-QsZe9PqKI15-hXXmqCyCsJC1Of6e-OZNRritSd81S0A&oe=632C2A80',
+        'profileName': 'Ismaël Zirek',
+        'description': descriptionController.text,
+        'itemImgUrl': selectedItem['album']['images'][0]['url'],
+        'itemName': selectedItem['name'],
+        'artistName': selectedItem['artists'][0]['name'],
+        'previewUrl': selectedItem['preview_url'],
+      };
+    } else if (categoryState[1]) {
+      post = {
+        'timestamp': FieldValue.serverTimestamp(),
+        'postType': 'album',
+        'profileImgUrl': 'https://scontent.fymq2-1.fna.fbcdn.net/v/t1.6435-9/49509493_2220570931333084_9073185916800991232_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=YFjTkrpSIjEAX-jPn8z&_nc_oc=AQlOprkDFtF0mkGFe_9mLW8YLx3Ll9g3ri5LJirC_qCXG3FOfhnA6SccOkbYvVEPNc4&_nc_ht=scontent.fymq2-1.fna&oh=00_AT-QsZe9PqKI15-hXXmqCyCsJC1Of6e-OZNRritSd81S0A&oe=632C2A80',
+        'profileName': 'Ismaël Zirek',
+        'description': descriptionController.text,
+        'itemImgUrl': selectedItem['images'][0]['url'],
+        'itemName': selectedItem['name'],
+        'artistName': selectedItem['artists'][0]['name'],
+      };
+    } else if (categoryState[2]) {
+      post = {
+        'timestamp': FieldValue.serverTimestamp(),
+        'postType': 'artist',
+        'profileImgUrl': 'https://scontent.fymq2-1.fna.fbcdn.net/v/t1.6435-9/49509493_2220570931333084_9073185916800991232_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=YFjTkrpSIjEAX-jPn8z&_nc_oc=AQlOprkDFtF0mkGFe_9mLW8YLx3Ll9g3ri5LJirC_qCXG3FOfhnA6SccOkbYvVEPNc4&_nc_ht=scontent.fymq2-1.fna&oh=00_AT-QsZe9PqKI15-hXXmqCyCsJC1Of6e-OZNRritSd81S0A&oe=632C2A80',
+        'profileName': 'Ismaël Zirek',
+        'description': descriptionController.text,
+        'itemImgUrl': selectedItem['images'][0]['url'],
+        'itemName': selectedItem['name'],
+      };
+    }
 
     await dbService.addDocToCollection('posts', post);
     Navigator.pop(context);

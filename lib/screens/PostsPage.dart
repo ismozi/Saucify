@@ -26,7 +26,6 @@ class PostsPageState extends State<PostsPage> {
   @override
   void initState() {
     super.initState();
-    generatePosts();
   }
 
   @override
@@ -36,31 +35,31 @@ class PostsPageState extends State<PostsPage> {
     }
   }
 
-  generatePosts() async {
-    List<Widget> newWidgets = [];
-    newWidgets.add(Container(padding: EdgeInsets.fromLTRB(0, 7, 0, 0)));
-    List posts = await dbService.getAllDocsOfCollection('posts');
+  // generatePosts() async {
+  //   List<Widget> newWidgets = [];
+  //   newWidgets.add(Container(padding: EdgeInsets.fromLTRB(0, 7, 0, 0)));
+  //   List posts = await dbService.getAllDocsOfCollection('posts');
 
-    posts.forEach(((post) => {
-      newWidgets.add(
-        SongPost(
-          timestamp: post['timestamp'],
-          profileImgUrl: post['profileImgUrl'],
-          profileName: post['profileName'],
-          description: post['description'],
-          songImgUrl: post['songImgUrl'],
-          songName: post['songName'],
-          artistName: post['artistName'],
-          previewUrl: post['previewUrl'],
-          player: player
-        ),
-      )
-    }));
+  //   posts.forEach(((post) => {
+  //     newWidgets.add(
+  //       SongPost(
+  //         timestamp: post['timestamp'],
+  //         profileImgUrl: post['profileImgUrl'],
+  //         profileName: post['profileName'],
+  //         description: post['description'],
+  //         itemImgUrl: post['itemImgUrl'],
+  //         itemName: post['itemName'],
+  //         artistName: post['artistName'],
+  //         previewUrl: post['previewUrl'],
+  //         player: player
+  //       ),
+  //     )
+  //   }));
 
-    setState(() {
-      widgets = newWidgets;
-    });
-  }
+  //   setState(() {
+  //     widgets = newWidgets;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context){
@@ -80,6 +79,7 @@ class PostsPageState extends State<PostsPage> {
                   child: CircularProgressIndicator(),
                 );
               } else { 
+                opacityLevel = 1;
                 return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
@@ -89,10 +89,10 @@ class PostsPageState extends State<PostsPage> {
                       profileImgUrl: post['profileImgUrl'],
                       profileName: post['profileName'],
                       description: post['description'],
-                      songImgUrl: post['songImgUrl'],
-                      songName: post['songName'],
-                      artistName: post['artistName'],
-                      previewUrl: post['previewUrl'],
+                      itemImgUrl: post['itemImgUrl'],
+                      itemName: post['itemName'],
+                      artistName: post['postType'] == 'artist' ? null : post['artistName'],
+                      previewUrl: post['postType'] == 'track' ? post['previewUrl'] : null,
                       player: player
                     );
                   }

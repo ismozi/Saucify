@@ -15,8 +15,8 @@ class SongPost extends StatefulWidget {
             required this.profileImgUrl,
             required this.profileName,
             required this.description,
-            required this.songImgUrl, 
-            required this.songName, 
+            required this.itemImgUrl, 
+            required this.itemName, 
             required this.artistName,
             required this.previewUrl,
             required this.player});
@@ -25,9 +25,9 @@ class SongPost extends StatefulWidget {
   String profileImgUrl;
   String profileName;
   String description;
-  String songImgUrl;
-  String songName;
-  String artistName;
+  String itemImgUrl;
+  String itemName;
+  dynamic artistName;
   dynamic previewUrl;
   final player;
 
@@ -37,6 +37,7 @@ class SongPost extends StatefulWidget {
 
 class _SongPostState extends State<SongPost> {
   bool isPlaying = false;
+  bool isLiked = false;
 
   // TODO : manage listeners to remove
   void play() async {
@@ -76,14 +77,22 @@ class _SongPostState extends State<SongPost> {
     if (timeInSeconds < 60) {
       time = "Just now.";
     } else if (timeInSeconds < 3600) {
-      time = "${(timeInSeconds / 60).round()} minutes ago.";
+      int timeInMinutes = (timeInSeconds / 60).round();
+      time = timeInMinutes == 1 ? "1 minute ago." : "$timeInMinutes minutes ago.";
     } else if (timeInSeconds < 86400) {
-      time = "${(timeInSeconds / 3600).round()} hours ago.";
+      int timeInHours = (timeInSeconds / 3600).round();
+      time = timeInHours == 1 ? "1 hour ago." : "$timeInHours hours ago.";
     } else {
       time = widget.timestamp.toDate().day.toString();
     }
 
     return time;
+  }
+
+  void toggleLike(){
+    setState(() {
+      isLiked = !isLiked;
+    });
   }
 
   @override
@@ -106,6 +115,13 @@ class _SongPostState extends State<SongPost> {
                   height: 45
                 )
               ),
+              trailing: IconButton(
+                icon: Icon(!isLiked ? Icons.favorite_border : Icons.favorite, 
+                      color: !isLiked ? Colors.grey : Colors.red),
+                onPressed: () {
+                  toggleLike();
+                },
+              ),
               title: Text(widget.profileName,
                       style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
               subtitle: Text(getTime(),
@@ -125,7 +141,7 @@ class _SongPostState extends State<SongPost> {
               child: ListTile(
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image(image: NetworkImage(widget.songImgUrl), width: 45, height: 45)
+                  child: Image(image: NetworkImage(widget.itemImgUrl), width: 45, height: 45)
                 ),
                 trailing: IconButton(
                   icon:Icon(!isPlaying ? Icons.more_horiz : Icons.pause_circle), 
@@ -149,10 +165,10 @@ class _SongPostState extends State<SongPost> {
                     );
                   })
                 ),
-                title: Text(widget.songName, 
+                title: Text(widget.itemName, 
                             style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
-                subtitle: Text(widget.artistName, 
-                            style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+                subtitle: widget.artistName != null ? Text(widget.artistName, 
+                            style: GoogleFonts.getFont('Montserrat', color: Colors.white)) : null,
               )
             )
           ]
