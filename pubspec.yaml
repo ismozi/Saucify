@@ -41,6 +41,8 @@ dependencies:
   tuple: ^2.0.0
   google_fonts: ^3.0.1
   audioplayers: ^1.0.1
+  firebase_core: ^1.6.0
+  cloud_firestore: ^2.5.1
 
 dev_dependencies:
   flutter_test:

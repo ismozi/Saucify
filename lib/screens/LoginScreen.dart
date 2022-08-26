@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saucify/screens/MainPage.dart';
 import 'package:saucify/screens/TopTracksScreen.dart';
+import 'package:saucify/services/DatabaseService.dart';
 import 'package:saucify/services/spotifyService.dart';
 
 import '../app/app.locator.dart';

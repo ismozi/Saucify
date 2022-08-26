@@ -25,7 +25,7 @@ class SongPost extends StatefulWidget {
   String songImgUrl;
   String songName;
   String artistName;
-  String previewUrl;
+  dynamic previewUrl;
   final player;
 
   @override

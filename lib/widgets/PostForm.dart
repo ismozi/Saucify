@@ -4,17 +4,24 @@ import 'package:saucify/widgets/CategoryPicker.dart';
 import 'package:saucify/widgets/SearchBar.dart';
 
 import '../app/app.locator.dart';
+import '../services/DatabaseService.dart';
 import '../services/spotifyService.dart';
 
 class PostForm extends StatefulWidget {
+  final refresh;
+  PostForm(this.refresh);
+
   @override
   State<PostForm> createState() => _PostFormState();
 }
 
 class _PostFormState extends State<PostForm> {  
   spotifyService service = locator<spotifyService>();
-  TextEditingController controller = TextEditingController();
+  TextEditingController searchController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  DatabaseService dbService = DatabaseService();
   List<Widget> list = [];
+  dynamic selectedItem = {};
 
   List categoryState = [true, false, false];
   String itemType = 'track';
@@ -75,7 +82,12 @@ class _PostFormState extends State<PostForm> {
                         style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 10), overflow: TextOverflow.ellipsis),
             subtitle: categoryState[0] ? Text(item['artists'][0]['name'], 
                         style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 10)) : null,
-            onTap: () => {
+            onTap: () {
+              searchController.text = item['name'];
+              selectedItem = item;
+              setState(() {
+                list = [];
+              });
             },
           ),
         )
@@ -85,6 +97,22 @@ class _PostFormState extends State<PostForm> {
     setState(() {
       list = newList;
     });
+  }
+
+  submitPost() async {
+    Object post = {
+      'profileImgUrl': 'https://scontent.fymq2-1.fna.fbcdn.net/v/t1.6435-9/49509493_2220570931333084_9073185916800991232_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=YFjTkrpSIjEAX-jPn8z&_nc_oc=AQlOprkDFtF0mkGFe_9mLW8YLx3Ll9g3ri5LJirC_qCXG3FOfhnA6SccOkbYvVEPNc4&_nc_ht=scontent.fymq2-1.fna&oh=00_AT-QsZe9PqKI15-hXXmqCyCsJC1Of6e-OZNRritSd81S0A&oe=632C2A80',
+      'profileName': 'Ismaël Zirek',
+      'description': descriptionController.text,
+      'songImgUrl': selectedItem['album']['images'][0]['url'],
+      'songName': selectedItem['name'],
+      'artistName': selectedItem['artists'][0]['name'],
+      'previewUrl': selectedItem['preview_url'],
+    };
+
+    await dbService.addDocToCollection('posts', post);
+    widget.refresh();
+    Navigator.pop(context, true);
   } 
 
   @override
@@ -117,7 +145,7 @@ class _PostFormState extends State<PostForm> {
                   Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
                   CategoryPicker(setItemType, getCategoryState),
                   Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
-                  SearchBar(controller, getSearchedItems),
+                  SearchBar(searchController, getSearchedItems),
                   Stack(
                     children: [
                       Column(
@@ -141,6 +169,7 @@ class _PostFormState extends State<PostForm> {
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                                 child: TextField(
+                                  controller: descriptionController,
                                   style: TextStyle(color: Colors.white),
                                   expands: true,
                                   maxLines: null,
@@ -150,7 +179,7 @@ class _PostFormState extends State<PostForm> {
                           )
                         ]
                       ),
-                      Center(
+                      list.isNotEmpty ? Center(
                         child: Container(
                           width: MediaQuery.of(context).size.width*0.6,
                           height: 220,
@@ -162,7 +191,7 @@ class _PostFormState extends State<PostForm> {
                             ), 
                           ) // It will provide scroll functionality with your column
                         ),
-                      )
+                      ) : Container()
                     ],
                   )
                 ]
@@ -179,7 +208,7 @@ class _PostFormState extends State<PostForm> {
                 child: IconButton(
                   color: Colors.black,
                   icon: Icon(Icons.post_add),
-                  onPressed: (() => {}),
+                  onPressed: (() => submitPost()),
                 ),
               )
             ]
