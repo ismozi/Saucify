@@ -83,8 +83,8 @@ class spotifyService {
       userId = body['id'];
       Object obj = {
         'username': body['display_name'],
-        'imageUrl': "",
-        'friends': []
+        'imageUrl': null,
+        'friends': [],
       };
       dbService.register(body['id'], obj);
     }

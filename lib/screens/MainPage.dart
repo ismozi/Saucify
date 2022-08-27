@@ -6,6 +6,7 @@ import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:saucify/screens/FeedPage.dart';
 import 'package:saucify/screens/LibraryScreen.dart';
+import 'package:saucify/screens/ProfilePage.dart';
 import 'package:saucify/screens/SearchPage.dart';
 import 'package:saucify/screens/StatsPage.dart';
 import 'package:saucify/services/spotifyService.dart';
@@ -17,6 +18,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../app/app.locator.dart';
 import '../widgets/CustomFloatingActionButtonLocation .dart';
 import '../widgets/PlaylistForm.dart';
+import 'SearchPage1.dart';
 
 class MainPage extends StatefulWidget {
 
@@ -35,7 +37,7 @@ class MainPageState extends State<MainPage> {
   Container container = Container(color:Color.fromARGB(255, 41, 41, 41));
   LibraryScreen libScreen = LibraryScreen();
   StatsPage statsPage = StatsPage();
-  SearchPage searchPage = SearchPage();
+  late ProfilePage profilePage;
   late FeedPage feedPage;
 
   dynamic activeScreen;
@@ -45,6 +47,7 @@ class MainPageState extends State<MainPage> {
     super.initState();
     activeScreen = statsPage;
     feedPage = FeedPage(setFAB);
+    profilePage = ProfilePage(service.userId);
   }
 
   void setFAB(int index) {
@@ -83,7 +86,7 @@ class MainPageState extends State<MainPage> {
       });
     } else if (index == 3) {
       setState(() {
-        activeScreen = searchPage;
+        activeScreen = profilePage;
         isFeedActive = false;
         isStatsActive =  false;
         isLibraryActive = false;
@@ -122,11 +125,37 @@ class MainPageState extends State<MainPage> {
               ),
               Row(
                 children: [
-                  Icon(Icons.search, color: Colors.grey),
-                  Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0)),
-                  Icon(Icons.person, color: Colors.grey),
-                  Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0)),
-                  Icon(Icons.message_rounded, color: Colors.grey)
+                  IconButton(
+                    color: Colors.grey,
+                    icon: Icon(Icons.search), 
+                    onPressed: (() => {
+                      Navigator.of(context).push(PageRouteBuilder(
+                        pageBuilder: (c, a1, a2) => SearchPage1(),
+                        transitionsBuilder: (c, anim, a2, child) {
+                          const begin = Offset(1.0, 0.0);
+                          const end = Offset(0.0, 0.0);
+                          final tween = Tween(begin: begin, end: end);
+                          final offsetAnimation = anim.drive(tween);
+                          return SlideTransition(position: offsetAnimation, child: child);
+                        },
+                        transitionDuration: Duration(milliseconds: 100),
+                      )),
+                    })
+                  ), 
+                  IconButton(
+                    color: Colors.grey,
+                    icon: Icon(Icons.notifications, color: Colors.grey), 
+                    onPressed: (() => {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => SearchPage1())),
+                    })
+                  ), 
+                  IconButton(
+                    color: Colors.grey,
+                    icon: Icon(Icons.message_rounded, color: Colors.grey), 
+                    onPressed: (() => {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => SearchPage1())),
+                    })
+                  ),
                 ]
               )
             ]
@@ -156,7 +185,7 @@ class MainPageState extends State<MainPage> {
             ), 
             IconButton(
               color: isProfileActive ? Colors.green : Colors.grey,
-              icon: Icon(Icons.search_rounded), 
+              icon: Icon(Icons.person), 
               iconSize: isProfileActive ? 32 : 27,
               onPressed: (() => {setPage(3)})
             ), 
