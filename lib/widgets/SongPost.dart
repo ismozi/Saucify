@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saucify/services/DatabaseService.dart';
 import 'package:saucify/widgets/ChooseOption.dart';
 
 import '../app/app.locator.dart';
@@ -11,6 +12,8 @@ import '../services/spotifyService.dart';
 
 class SongPost extends StatefulWidget {
   SongPost({super.key, 
+            required this.postId,
+            required this.isLiked,
             required this.timestamp,
             required this.profileImgUrl,
             required this.profileName,
@@ -21,8 +24,10 @@ class SongPost extends StatefulWidget {
             required this.previewUrl,
             required this.player});
 
+  String postId;
+  bool isLiked;
   dynamic timestamp;
-  String profileImgUrl;
+  dynamic profileImgUrl;
   String profileName;
   String description;
   String itemImgUrl;
@@ -38,6 +43,15 @@ class SongPost extends StatefulWidget {
 class _SongPostState extends State<SongPost> {
   bool isPlaying = false;
   bool isLiked = false;
+  spotifyService service = locator<spotifyService>();
+  DatabaseService dbService = DatabaseService();
+  NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
+
+  @override
+  void initState() {
+    super.initState();
+    isLiked = widget.isLiked;
+  }
 
   // TODO : manage listeners to remove
   void play() async {
@@ -83,13 +97,14 @@ class _SongPostState extends State<SongPost> {
       int timeInHours = (timeInSeconds / 3600).round();
       time = timeInHours == 1 ? "1 hour ago." : "$timeInHours hours ago.";
     } else {
-      time = widget.timestamp.toDate().day.toString();
+      time = widget.timestamp.toDate().toString().split(' ')[0];
     }
 
     return time;
   }
 
   void toggleLike(){
+    dbService.toggleLike(widget.postId, service.userId);
     setState(() {
       isLiked = !isLiked;
     });
@@ -100,6 +115,7 @@ class _SongPostState extends State<SongPost> {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Card(
+        elevation: 8.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
@@ -110,14 +126,14 @@ class _SongPostState extends State<SongPost> {
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image(
-                  image: NetworkImage(widget.profileImgUrl), 
+                  image: widget.profileImgUrl != null ? NetworkImage(widget.profileImgUrl) : emptyImage, 
                   width: 45, 
                   height: 45
                 )
               ),
               trailing: IconButton(
                 icon: Icon(!isLiked ? Icons.favorite_border : Icons.favorite, 
-                      color: !isLiked ? Colors.grey : Colors.red),
+                      color: !isLiked ? Colors.grey : Colors.green),
                 onPressed: () {
                   toggleLike();
                 },

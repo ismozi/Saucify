@@ -39,32 +39,6 @@ class PostsPageState extends State<PostsPage> {
     }
   }
 
-  // generatePosts() async {
-  //   List<Widget> newWidgets = [];
-  //   newWidgets.add(Container(padding: EdgeInsets.fromLTRB(0, 7, 0, 0)));
-  //   List posts = await dbService.getAllDocsOfCollection('posts');
-
-  //   posts.forEach(((post) => {
-  //     newWidgets.add(
-  //       SongPost(
-  //         timestamp: post['timestamp'],
-  //         profileImgUrl: post['profileImgUrl'],
-  //         profileName: post['profileName'],
-  //         description: post['description'],
-  //         itemImgUrl: post['itemImgUrl'],
-  //         itemName: post['itemName'],
-  //         artistName: post['artistName'],
-  //         previewUrl: post['previewUrl'],
-  //         player: player
-  //       ),
-  //     )
-  //   }));
-
-  //   setState(() {
-  //     widgets = newWidgets;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -88,6 +62,8 @@ class PostsPageState extends State<PostsPage> {
                   itemBuilder: (context, index) {
                     DocumentSnapshot post = snapshot.data!.docs[index];
                     return SongPost(
+                      postId: post.id,
+                      isLiked: post['likedBy'].contains(service.userId),
                       timestamp: post['timestamp'],
                       profileImgUrl: post['profileImgUrl'],
                       profileName: post['profileName'],

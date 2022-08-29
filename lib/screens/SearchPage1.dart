@@ -83,8 +83,8 @@ class _SearchPage1State extends State<SearchPage1> {
                         margin: const EdgeInsets.all(3.0),
                         child: ListTile(
                           leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image(image: user['imageUrl'] != null ? NetworkImage(user['imageUrl']): emptyImage, width: 45, height: 45)
+                            borderRadius: BorderRadius.circular(30),
+                            child: Image(image: user['imageUrl'] != null ? NetworkImage(user['imageUrl']): emptyImage, width: 40, height: 40)
                           ),
                           trailing: IconButton(
                             color: Colors.grey,

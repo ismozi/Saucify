@@ -162,8 +162,8 @@ class MainPageState extends State<MainPage> {
           ),
       ),
       body: activeScreen,
-      bottomNavigationBar: BottomAppBar(child: 
-        Row(
+      bottomNavigationBar: BottomAppBar( 
+        child: Row(
           children: [
             IconButton(
               color: isFeedActive ? Colors.green : Colors.grey,

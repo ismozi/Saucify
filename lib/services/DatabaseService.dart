@@ -26,8 +26,28 @@ class DatabaseService {
 
   Future<void> register(String id, dynamic object) async {
     CollectionReference collectionRef = FirebaseFirestore.instance.collection('users');
-    object['searchParams'] = setSearchParam(object['username']);
-    await collectionRef.doc(id).set(object);
+    DocumentReference docRef = collectionRef.doc(id);
+    DocumentSnapshot docSnapshot = await docRef.get();
+    if (!docSnapshot.exists) {
+      object['searchParams'] = setSearchParam(object['username']);
+      docRef.set(object);
+    }
+  }
+
+  Future<void> toggleLike(String postId, String userId) async {
+    CollectionReference collectionRef = FirebaseFirestore.instance.collection('posts');
+    DocumentReference docRef = collectionRef.doc(postId);
+    DocumentSnapshot docSnapshot = await docRef.get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic> docData = docSnapshot.data() as Map<String, dynamic>;
+      bool isLiked = docData['likedBy'].contains(userId);
+      if (isLiked){
+        docData['likedBy'].remove(userId);
+      } else {
+        docData['likedBy'].add(userId);
+      }
+      docRef.set(docData);
+    }
   }
 
   getPostsStream(){
