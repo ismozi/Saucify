@@ -51,6 +51,7 @@ class _SearchPage1State extends State<SearchPage1> {
         title: TextField(
           controller: controller,
           style: TextStyle(color: Colors.white),
+          autofocus: true,
           onChanged: (text) {
             setState(() {
               searchQuery = text;

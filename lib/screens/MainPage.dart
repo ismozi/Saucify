@@ -105,6 +105,7 @@ class MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 20, 20, 20),
           foregroundColor: Colors.green,
@@ -126,34 +127,26 @@ class MainPageState extends State<MainPage> {
               Row(
                 children: [
                   IconButton(
-                    color: Colors.grey,
+                    color: Color.fromARGB(255, 212, 212, 212),
                     icon: Icon(Icons.search), 
                     onPressed: (() => {
                       Navigator.of(context).push(PageRouteBuilder(
                         pageBuilder: (c, a1, a2) => SearchPage1(),
-                        transitionsBuilder: (c, anim, a2, child) {
-                          const begin = Offset(1.0, 0.0);
-                          const end = Offset(0.0, 0.0);
-                          final tween = Tween(begin: begin, end: end);
-                          final offsetAnimation = anim.drive(tween);
-                          return SlideTransition(position: offsetAnimation, child: child);
-                        },
-                        transitionDuration: Duration(milliseconds: 100),
+                        transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                        transitionDuration: Duration(milliseconds: 150),
                       )),
                     })
                   ), 
                   IconButton(
-                    color: Colors.grey,
-                    icon: Icon(Icons.notifications, color: Colors.grey), 
+                    color: Color.fromARGB(255, 212, 212, 212),
+                    icon: Icon(Icons.notifications), 
                     onPressed: (() => {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => SearchPage1())),
                     })
                   ), 
                   IconButton(
-                    color: Colors.grey,
-                    icon: Icon(Icons.message_rounded, color: Colors.grey), 
+                    color: Color.fromARGB(255, 212, 212, 212),
+                    icon: Icon(Icons.message_rounded), 
                     onPressed: (() => {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => SearchPage1())),
                     })
                   ),
                 ]
@@ -162,46 +155,66 @@ class MainPageState extends State<MainPage> {
           ),
       ),
       body: activeScreen,
-      bottomNavigationBar: BottomAppBar( 
-        child: Row(
-          children: [
-            IconButton(
-              color: isFeedActive ? Colors.green : Colors.grey,
-              icon: Icon(Icons.feed), 
-              iconSize: isFeedActive ? 32 : 27,
-              onPressed: (() => {setPage(0)})
-            ), 
-            IconButton(
-              color: isStatsActive ? Colors.green : Colors.grey,
-              icon: Icon(Icons.query_stats_rounded), 
-              iconSize: isStatsActive ? 32 : 27,
-              onPressed: (() => {setPage(1)})
-            ), 
-            IconButton(
-              color: isLibraryActive ? Colors.green : Colors.grey,
-              icon: Icon(Icons.music_note), 
-              iconSize: isLibraryActive ? 32 : 27,
-              onPressed: (() => {setPage(2)})
-            ), 
-            IconButton(
-              color: isProfileActive ? Colors.green : Colors.grey,
-              icon: Icon(Icons.person), 
-              iconSize: isProfileActive ? 32 : 27,
-              onPressed: (() => {setPage(3)})
-            ), 
-          ],
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      bottomNavigationBar: Container(
+        decoration: !isStatsActive ? BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+          ): null,
+        child: BottomAppBar( 
+          shape: isFeedActive ? CircularNotchedRectangle(): null,
+          child: Row(
+            children: [
+              IconButton(
+                color: isFeedActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
+                icon: Icon(Icons.feed), 
+                iconSize: isFeedActive ? 32 : 27,
+                onPressed: (() => {setPage(0)})
+              ), 
+              IconButton(
+                color: isStatsActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
+                icon: Icon(Icons.query_stats_rounded), 
+                iconSize: isStatsActive ? 32 : 27,
+                onPressed: (() => {setPage(1)})
+              ), 
+              IconButton(
+                color: isLibraryActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
+                icon: Icon(Icons.music_note), 
+                iconSize: isLibraryActive ? 32 : 27,
+                onPressed: (() => {setPage(2)})
+              ), 
+              IconButton(
+                color: isProfileActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
+                icon: Icon(Icons.person), 
+                iconSize: isProfileActive ? 32 : 27,
+                onPressed: (() => {setPage(3)})
+              ), 
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          ),
+          color: Color.fromARGB(255, 20, 20, 20)
         ),
-        color: Color.fromARGB(255, 20, 20, 20)
       ),
       floatingActionButton: Visibility(
         visible: isFeedActive,
         child: Container(
-          height: 55.0,
-          width: 55.0,
+          height: 40.0,
+          width: 40.0,
           decoration: BoxDecoration(
-            border: Border.all(color: Color.fromARGB(255, 20, 20, 20), width: 8),
             shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
           ),
           child: FittedBox(
             child: FloatingActionButton(
@@ -226,10 +239,11 @@ class MainPageState extends State<MainPage> {
           ),
         )
       ),
-      floatingActionButtonLocation: CustomFloatingActionButtonLocation(
-              (MediaQuery.of(context).size.width*0.5)-27.5,
-              728
-      )
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked
+      // CustomFloatingActionButtonLocation(
+      //         (MediaQuery.of(context).size.width*0.5)-27.5,
+      //         728
+      // )
     );
   }
 }

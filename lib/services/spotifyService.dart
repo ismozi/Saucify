@@ -125,6 +125,33 @@ class spotifyService {
     return [];
   }
 
+  Future<Tuple2<dynamic, List>> getTopItems1(String itemType, String timeRange, [String uri = '']) async {
+    dynamic body;
+    List items = [];
+    if (itemType != 'artists' && itemType != 'tracks') {
+      return Tuple2<dynamic, List>(null, items);
+    }
+
+    final response = await http.get(
+      Uri.parse(uri != '' ? uri : 'https://api.spotify.com/v1/me/top/$itemType?time_range=$timeRange'),
+      headers: {
+        'Authorization': 'Bearer $access_token',
+        'Content-Type': 'application/json'
+      }
+    );
+
+    if (response.body.isNotEmpty){
+      body = json.decode(response.body);
+      body['items'].forEach((item) => {
+        items.add(item)
+      });
+    } else {
+      return Tuple2<dynamic, List>(null, items);
+    }
+
+    return Tuple2<dynamic, List>(body['next'], items);
+  }
+
   Future<Tuple2<dynamic, List>> getPlaylistTracks(String id, [String uri = '']) async {
     dynamic body;
     List items = [];

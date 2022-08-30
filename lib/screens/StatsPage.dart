@@ -30,6 +30,8 @@ class StatsPageState extends State<StatsPage> {
   bool isAllTime = false;
   String timeRange = 'short_term';
 
+  NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
+
   Tuple2<bool, bool> getOptionsState() {
     return Tuple2<bool, bool>(isTracksActive, isArtistsActive);
   }
@@ -59,8 +61,9 @@ class StatsPageState extends State<StatsPage> {
         timeRange = 'long_term';
       });
     }
-
-    getTopItems();
+    
+    list = [];
+    getTopItems(isTracksActive, timeRange);
   }
 
   void setItemType(int index) {
@@ -78,16 +81,50 @@ class StatsPageState extends State<StatsPage> {
       });
     }
 
-    getTopItems();
+    list = [];
+    getTopItems(isTracksActive, timeRange);
   }
 
-  void getTopItems() async {
-    List myItems = isTracksActive ? await service.getTopItems('tracks', timeRange) : 
-                  await service.getTopItems('artists', timeRange);
+
+  void getTopItems(bool itemTypeAtStart, String timeRangeAtStart) async{
+    List topItems = [];
+    Tuple2<dynamic, List> myItemsTuple = isTracksActive ? await service.getTopItems1('tracks', timeRange) : 
+                                         await service.getTopItems1('artists', timeRange);
+
+    topItems.addAll(myItemsTuple.item2);
+    dynamic nextUri = myItemsTuple.item1;
+
+    setState(() {
+      if (itemTypeAtStart == isTracksActive && timeRangeAtStart == timeRange) {
+        list = generateWidget(topItems);
+        opacityLevel = 1.0;
+      } else {
+        return;
+      }
+    });
+
+    while (nextUri != null){
+      myItemsTuple = isTracksActive ? await service.getTopItems1('tracks', timeRange, nextUri) : 
+                     await service.getTopItems1('artists', timeRange, nextUri);
+
+      topItems.addAll(myItemsTuple.item2);
+      nextUri = myItemsTuple.item1;
+
+      setState(() {
+        if (itemTypeAtStart == isTracksActive && timeRangeAtStart == timeRange) {
+          list = generateWidget(topItems);
+        } else {
+          return;
+        }
+      });
+    }
+  }
+
+  List<Widget> generateWidget(List topItems) {
     List<Widget> newList = [];
     int itemPosition = 1;
 
-    myItems.forEach((item) { 
+    topItems.forEach((item) { 
       newList.add(
         Container(
           decoration: BoxDecoration(
@@ -98,8 +135,8 @@ class StatsPageState extends State<StatsPage> {
           child: ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: isTracksActive ? Image(image: NetworkImage(item['album']['images'][0]['url']), width: 45, height: 45) :
-                                      Image(image: NetworkImage(item['images'][0]['url']), width: 45, height: 45)
+              child: isTracksActive ? Image(image: item['album']['images'] != null ? NetworkImage(item['album']['images'][0]['url']) : emptyImage, width: 45, height: 45) :
+                                      Image(image: item['images'] != null ? NetworkImage(item['images'][0]['url']) : emptyImage, width: 45, height: 45)
             ),
             trailing: Text('#$itemPosition', style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontWeight: FontWeight.w700)),
             title: Text(item['name'], 
@@ -113,17 +150,13 @@ class StatsPageState extends State<StatsPage> {
       ));
       itemPosition++;
     });
-
-    setState(() {
-      list = newList;
-      opacityLevel = 1.0;
-    });
+    return newList;
   }
   
   @override
   void initState() {
     super.initState();
-    getTopItems();
+    getTopItems(isTracksActive, timeRange);
   }
 
   @override
@@ -149,47 +182,59 @@ class StatsPageState extends State<StatsPage> {
             ) 
           )
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Color.fromARGB(255, 20, 20, 20),
-        child: Container(
-          padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                child: GestureDetector(
-                  onTap:() => {setTimeRange(0)},
-                  child: Text("1 Month", style: GoogleFonts.getFont(
-                    'Montserrat',
-                    color: isOneMonth ? Colors.green : Colors.white, 
-                    fontWeight: isOneMonth ? FontWeight.w700 : FontWeight.w400)
-                  ),
-                ),
-              ),
-              Container(
-                child: GestureDetector(
-                  onTap:() => {setTimeRange(1)},
-                  child: Text("4 Months", style: GoogleFonts.getFont(
-                    'Montserrat',
-                    color: isFourMonths ? Colors.green : Colors.white, 
-                    fontWeight: isFourMonths ? FontWeight.w700 : FontWeight.w400)
-                  ),
-                ),
-              ),
-              Container(
-                child: GestureDetector(
-                  onTap:() => {setTimeRange(2)},
-                  child: Text("All time", style: GoogleFonts.getFont(
-                    'Montserrat',
-                    color: isAllTime ? Colors.green : Colors.white, 
-                    fontWeight: isAllTime ? FontWeight.w700 : FontWeight.w400)
-                  ),
-                ),
-              ),
-            ]
-          )
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
         ),
-      ),
+        child: BottomAppBar(
+          color: Color.fromARGB(255, 20, 20, 20),
+          child: Container(
+            padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  child: GestureDetector(
+                    onTap:() => {setTimeRange(0)},
+                    child: Text("1 Month", style: GoogleFonts.getFont(
+                      'Montserrat',
+                      color: isOneMonth ? Colors.green : Colors.white, 
+                      fontWeight: isOneMonth ? FontWeight.w700 : FontWeight.w400)
+                    ),
+                  ),
+                ),
+                Container(
+                  child: GestureDetector(
+                    onTap:() => {setTimeRange(1)},
+                    child: Text("6 Months", style: GoogleFonts.getFont(
+                      'Montserrat',
+                      color: isFourMonths ? Colors.green : Colors.white, 
+                      fontWeight: isFourMonths ? FontWeight.w700 : FontWeight.w400)
+                    ),
+                  ),
+                ),
+                Container(
+                  child: GestureDetector(
+                    onTap:() => {setTimeRange(2)},
+                    child: Text("All time", style: GoogleFonts.getFont(
+                      'Montserrat',
+                      color: isAllTime ? Colors.green : Colors.white, 
+                      fontWeight: isAllTime ? FontWeight.w700 : FontWeight.w400)
+                    ),
+                  ),
+                ),
+              ]
+            )
+          ),
+        ),
+      )
     );
   }
 }

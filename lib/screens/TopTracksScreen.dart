@@ -119,7 +119,6 @@ class TopTracksScreenState extends State<TopTracksScreen> {
     });
 
     while (nextUri != null){
-      print(nextUri);
       playlistTuple = await service.getPlaylistTracks(widget.playlistId, nextUri);
 
       topTracks.addAll(playlistTuple.item2);

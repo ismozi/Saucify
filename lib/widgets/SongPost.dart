@@ -42,16 +42,9 @@ class SongPost extends StatefulWidget {
 
 class _SongPostState extends State<SongPost> {
   bool isPlaying = false;
-  bool isLiked = false;
   spotifyService service = locator<spotifyService>();
   DatabaseService dbService = DatabaseService();
   NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
-
-  @override
-  void initState() {
-    super.initState();
-    isLiked = widget.isLiked;
-  }
 
   // TODO : manage listeners to remove
   void play() async {
@@ -106,7 +99,7 @@ class _SongPostState extends State<SongPost> {
   void toggleLike(){
     dbService.toggleLike(widget.postId, service.userId);
     setState(() {
-      isLiked = !isLiked;
+      widget.isLiked = !widget.isLiked;
     });
   }
 
@@ -132,8 +125,8 @@ class _SongPostState extends State<SongPost> {
                 )
               ),
               trailing: IconButton(
-                icon: Icon(!isLiked ? Icons.favorite_border : Icons.favorite, 
-                      color: !isLiked ? Colors.grey : Colors.green),
+                icon: Icon(!widget.isLiked ? Icons.favorite_border : Icons.favorite, 
+                      color: !widget.isLiked ? Colors.grey : Colors.green),
                 onPressed: () {
                   toggleLike();
                 },
