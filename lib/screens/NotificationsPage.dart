@@ -8,14 +8,14 @@ import 'package:saucify/services/DatabaseService.dart';
 import '../app/app.locator.dart';
 import 'LibraryScreen.dart';
 
-class ProfilePage extends StatefulWidget {
+class NotificationsPage extends StatefulWidget {
   final userId;
-  ProfilePage(this.userId);
+  NotificationsPage(this.userId);
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<NotificationsPage> createState() => _NotificationsPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _NotificationsPageState extends State<NotificationsPage> {
   DatabaseService dbService = DatabaseService();
   double opacityLevel = 0;
   NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
@@ -88,9 +88,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     Text(user['username'], 
                         style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontWeight: FontWeight.w300, fontSize: 35)),
                     Padding(padding: const EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                    Text("Followers: ${user['followers'].length}", 
-                        style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 20)),
-                    Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
                     Divider(
                       color: Color.fromARGB(255, 80, 80, 80)
                     )

@@ -9,6 +9,7 @@ import 'package:saucify/screens/TopTracksScreen.dart';
 import 'package:saucify/services/DatabaseService.dart';
 import 'package:saucify/services/spotifyService.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
+import 'package:saucify/widgets/searchItem.dart';
 
 import '../app/app.locator.dart';
 import 'LibraryScreen.dart';
@@ -20,14 +21,16 @@ class SearchPage1 extends StatefulWidget {
 
 class _SearchPage1State extends State<SearchPage1> {
   TextEditingController controller = TextEditingController();
+  spotifyService service = locator<spotifyService>();
   DatabaseService dbService = DatabaseService();
   String searchQuery = "";
   NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
-
+  List userFollowing = [];
 
   @override
   void initState() {
     super.initState();
+    getUserFollowing();
   }
 
   @override
@@ -35,6 +38,10 @@ class _SearchPage1State extends State<SearchPage1> {
     if(mounted) {
       super.setState(fn);
     }
+  }
+
+  getUserFollowing() async {
+    userFollowing = await dbService.getFollowing(service.userId);
   }
 
   @override
@@ -66,7 +73,7 @@ class _SearchPage1State extends State<SearchPage1> {
           child: AnimatedOpacity(
             opacity: 1,
             duration: const Duration(milliseconds: 300),
-            child: new StreamBuilder(
+            child: StreamBuilder(
               stream: dbService.getSearchStream(searchQuery),
               builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
@@ -76,41 +83,7 @@ class _SearchPage1State extends State<SearchPage1> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot user = snapshot.data!.docs[index];
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 29, 29, 29),
-                          borderRadius: BorderRadius.circular(12)
-                        ),
-                        margin: const EdgeInsets.all(3.0),
-                        child: ListTile(
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Image(image: user['imageUrl'] != null ? NetworkImage(user['imageUrl']): emptyImage, width: 40, height: 40)
-                          ),
-                          trailing: IconButton(
-                            color: Colors.grey,
-                            icon: Icon(Icons.person_add, color: Colors.grey), 
-                            onPressed: (() => {
-
-                            })
-                          ),
-                          title: Text(user['username'], 
-                                      style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
-                          onTap: () => {
-                            Navigator.of(context).push(PageRouteBuilder(
-                              pageBuilder: (c, a1, a2) => ProfilePage(user['username']),
-                              transitionsBuilder: (c, anim, a2, child) {
-                                const begin = Offset(1.0, 0.0);
-                                const end = Offset(0.0, 0.0);
-                                final tween = Tween(begin: begin, end: end);
-                                final offsetAnimation = anim.drive(tween);
-                                return SlideTransition(position: offsetAnimation, child: child);
-                              },
-                              transitionDuration: Duration(milliseconds: 100),
-                            ))
-                          },
-                        )
-                      );
+                      return SearchItem(user, userFollowing);
                     }
                   );
                 }

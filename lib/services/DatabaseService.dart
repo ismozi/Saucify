@@ -8,7 +8,7 @@ class DatabaseService {
     String temp = "";
     for (int i = 0; i < username.length; i++) {
       temp = temp + username[i];
-      caseSearchList.add(temp);
+      caseSearchList.add(temp.toLowerCase());
     }
     return caseSearchList;
 }
@@ -50,16 +50,47 @@ class DatabaseService {
     }
   }
 
-  getPostsStream(){
+  getPostsStream(List following) {
     // TODO: Manage friends list
-    return FirebaseFirestore.instance.collection('posts').where('postedBy', whereIn: ['ismozirek']).orderBy('timestamp', descending: true).snapshots();
+    return FirebaseFirestore.instance.collection('posts').where('postedBy', whereIn: following).orderBy('timestamp', descending: true).snapshots();
   }
 
   getSearchStream(String query) {
-    return FirebaseFirestore.instance.collection('users').where('searchParams', arrayContains: query).snapshots();
+    String lowerCaseQuery = query.toLowerCase();
+    return FirebaseFirestore.instance.collection('users').where('searchParams', arrayContains: lowerCaseQuery).snapshots();
   }
 
   getUserDocument(String userId){
     return FirebaseFirestore.instance.collection('users').doc(userId).get();
+  }
+
+  toggleFollow(String userId, String userToFollow) async {
+    CollectionReference collectionRef = FirebaseFirestore.instance.collection('users');
+    DocumentReference docRef = collectionRef.doc(userToFollow);
+    DocumentSnapshot docSnapshot = await docRef.get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic> docData = docSnapshot.data() as Map<String, dynamic>;
+      bool isFollowed = docData['followers'].contains(userId);
+      if (isFollowed){
+        docData['followers'].remove(userId);
+      } else {
+        docData['followers'].add(userId);
+      }
+      docRef.set(docData);
+    }
+  }
+
+  Future<List> getFollowing(String userId) async {
+    QuerySnapshot querySnap = await FirebaseFirestore.instance.collection('users').where('followers', arrayContains: userId).get();
+    List docList = querySnap.docs;
+    List userFollowing = [];
+    docList.forEach((element) {
+      userFollowing.add(element.id);
+    });
+    return userFollowing;
+  }
+
+  getFollowingSnapshot(String userId) {
+    return FirebaseFirestore.instance.collection('users').where('followers', arrayContains: userId).snapshots();
   }
 }
