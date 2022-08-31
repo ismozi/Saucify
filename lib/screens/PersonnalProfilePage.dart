@@ -10,14 +10,14 @@ import '../services/spotifyService.dart';
 import '../widgets/ProfileContainer.dart';
 import 'LibraryScreen.dart';
 
-class ProfilePage extends StatefulWidget {
+class PersonnalProfilePage extends StatefulWidget {
   final userId;
-  ProfilePage(this.userId);
+  PersonnalProfilePage(this.userId);
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<PersonnalProfilePage> createState() => _PersonnalProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _PersonnalProfilePageState extends State<PersonnalProfilePage> {
   DatabaseService dbService = DatabaseService();
   double opacityLevel = 0;
   spotifyService service = locator<spotifyService>();
@@ -59,14 +59,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Color(0x44000000),
-        elevation: 0,
-      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.fromLTRB(10, 80, 10, 0),
+        padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
         color: Color.fromARGB(255, 37, 37, 37),
         child: AnimatedOpacity(
           opacity: opacityLevel,

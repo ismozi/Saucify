@@ -64,6 +64,10 @@ class DatabaseService {
     return FirebaseFirestore.instance.collection('users').doc(userId).get();
   }
 
+  getUserDocumentStream(String userId){
+    return FirebaseFirestore.instance.collection('users').doc(userId).snapshots();
+  }
+
   toggleFollow(String userId, String userToFollow) async {
     CollectionReference collectionRef = FirebaseFirestore.instance.collection('users');
     DocumentReference docRef = collectionRef.doc(userToFollow);

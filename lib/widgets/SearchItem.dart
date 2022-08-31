@@ -73,18 +73,12 @@ class _SearchItemState extends State<SearchItem> {
         // ),
         title: Text(widget.user['username'], 
                     style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
-        onTap: () => {
+        onTap: () => {   
           Navigator.of(context).push(PageRouteBuilder(
             pageBuilder: (c, a1, a2) => ProfilePage(widget.user['username']),
-            transitionsBuilder: (c, anim, a2, child) {
-              const begin = Offset(1.0, 0.0);
-              const end = Offset(0.0, 0.0);
-              final tween = Tween(begin: begin, end: end);
-              final offsetAnimation = anim.drive(tween);
-              return SlideTransition(position: offsetAnimation, child: child);
-            },
-            transitionDuration: Duration(milliseconds: 100),
-          ))
+            transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+            transitionDuration: Duration(milliseconds: 150),
+          )),
         },
       )
     );
