@@ -73,19 +73,32 @@ class _SearchPage1State extends State<SearchPage1> {
             opacity: 1,
             duration: const Duration(milliseconds: 300),
             child: StreamBuilder(
-              stream: dbService.getSearchStream(searchQuery),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return Container();
-                } else { 
-                  return ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot user = snapshot.data!.docs[index];
-                      return SearchItem(user, userFollowing);
-                    }
-                  );
+              stream: dbService.getFollowingSnapshot(service.userId),
+              builder:(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot1) {
+                if (!snapshot1.hasData) {
+                    return Container();
                 }
+                List currentUserFollowing = [];
+                snapshot1.data!.docs.forEach((element) {
+                  currentUserFollowing.add(element.id);
+                });
+                return StreamBuilder(
+                  stream: dbService.getSearchStream(searchQuery),
+                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container();
+                    } else { 
+                      return ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot user = snapshot.data!.docs[index];
+                          bool isFollowed = currentUserFollowing.contains(user.id);
+                          return SearchItem(user, isFollowed);
+                        }
+                      );
+                    }
+                  }
+                );
               }
             )
           )

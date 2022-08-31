@@ -10,8 +10,8 @@ import '../services/spotifyService.dart';
 
 class SearchItem extends StatefulWidget{
   final DocumentSnapshot user;
-  List userFollowing;
-  SearchItem(this.user, this.userFollowing);
+  bool isFollowed;
+  SearchItem(this.user, this.isFollowed);
   @override
   _SearchItemState createState() => _SearchItemState();
 }
@@ -21,12 +21,10 @@ class _SearchItemState extends State<SearchItem> {
   DatabaseService dbService = DatabaseService();
   spotifyService service = locator<spotifyService>();
   NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
-  bool isFollowed = false;
 
   @override
   void initState() {
     super.initState();
-    isFollowed = widget.userFollowing.contains(widget.user.id);
   }
 
   @override
@@ -45,32 +43,20 @@ class _SearchItemState extends State<SearchItem> {
         trailing: GestureDetector(
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: isFollowed ? Colors.green :Colors.grey),
+              border: Border.all(color: widget.isFollowed ? Colors.green :Colors.grey),
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             padding: EdgeInsets.all(5),
-            child: Text(isFollowed ? 'Following' : 'Follow',
-            style: GoogleFonts.getFont('Montserrat', color: isFollowed ? Colors.green :Colors.grey))
+            child: Text(widget.isFollowed ? 'Following' : 'Follow',
+            style: GoogleFonts.getFont('Montserrat', color: widget.isFollowed ? Colors.green :Colors.grey))
           ), 
           onTap: () {
             dbService.toggleFollow(service.userId, widget.user.id);
             setState(() {
-              isFollowed = !isFollowed;
+              widget.isFollowed = !widget.isFollowed;
             });
           },
         ),
-        
-        // IconButton(
-        //   color: isFollowed ? Colors.green :Colors.grey,
-        //   icon: Icon(Icons.person_add), 
-        //   onPressed: (() {
-        //     dbService.toggleFollow(service.userId, widget.user.id);
-        //     setState(() {
-        //       isFollowed = !isFollowed;
-        //       print(isFollowed);
-        //     });
-        //   })
-        // ),
         title: Text(widget.user['username'], 
                     style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
         onTap: () => {   

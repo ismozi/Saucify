@@ -46,7 +46,7 @@ class MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     activeScreen = statsPage;
-    feedPage = FeedPage(setFAB);
+    feedPage = FeedPage(setFAB, displayProfile);
     profilePage = PersonnalProfilePage(service.userId);
   }
 
@@ -100,6 +100,16 @@ class MainPageState extends State<MainPage> {
     if(mounted) {
       super.setState(fn);
     }
+  }
+
+  displayProfile() {
+    setState(() {
+      activeScreen = profilePage;
+      isFeedActive = false;
+      isStatsActive =  false;
+      isLibraryActive = false;
+      isProfileActive = true;
+    });
   }
 
   @override

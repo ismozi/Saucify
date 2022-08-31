@@ -15,7 +15,8 @@ import '../app/app.locator.dart';
 
 class FeedPage extends StatefulWidget {
   final Function setFAB;
-  FeedPage(this.setFAB);
+  final Function displayProfile;
+  FeedPage(this.setFAB, this.displayProfile);
   @override
   State<FeedPage> createState() => _FeedPageState();
 }
@@ -73,7 +74,7 @@ class _FeedPageState extends State<FeedPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: FeedAppBar(setItemType),
-      body: isPostsActive ? PostsPage() : PlaylistsPage()
+      body: isPostsActive ? PostsPage(widget.displayProfile) : PlaylistsPage()
     );
   }
 }

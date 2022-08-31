@@ -11,8 +11,8 @@ class ProfileContainer extends StatefulWidget{
   final DocumentSnapshot user;
   List targetUserFollowing;
   bool isFollowed;
-  Function refresh;
-  ProfileContainer(this.user, this.targetUserFollowing, this.isFollowed, this.refresh, {required Key key}): super(key: key);
+  bool isCurrentUser;
+  ProfileContainer(this.user, this.targetUserFollowing, this.isFollowed, this.isCurrentUser, {required Key key}): super(key: key);
   @override
   _ProfileContainerState createState() => _ProfileContainerState();
 }
@@ -63,27 +63,28 @@ class _ProfileContainerState extends State<ProfileContainer> {
             )
           )
         ),
-        Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
+        Padding(padding: const EdgeInsets.fromLTRB(0, 15, 0, 0)),
         Text(user['username'], 
             style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontWeight: FontWeight.w300, fontSize: 30)),
-        Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
-        GestureDetector(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: widget.isFollowed ? Colors.green :Colors.grey),
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            padding: EdgeInsets.all(5),
-            child: Text(widget.isFollowed ? 'Following' : 'Follow',
-            style: GoogleFonts.getFont('Montserrat', color: widget.isFollowed ? Colors.green :Colors.grey))
-          ), 
-          onTap: () async {
-            await dbService.toggleFollow(service.userId, widget.user.id);
-            setState(() {
-              widget.isFollowed = !widget.isFollowed;
-            });
-            await widget.refresh();
-          },
+        Padding(padding:  widget.isCurrentUser ? const EdgeInsets.fromLTRB(0, 10, 0, 0) : const EdgeInsets.fromLTRB(0, 0, 0, 0)),
+        Container(
+          child: widget.isCurrentUser ? GestureDetector(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: widget.isFollowed ? Colors.green :Colors.grey),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              padding: EdgeInsets.all(5),
+              child: Text(widget.isFollowed ? 'Following' : 'Follow',
+              style: GoogleFonts.getFont('Montserrat', color: widget.isFollowed ? Colors.green :Colors.grey))
+            ), 
+            onTap: () async {
+              await dbService.toggleFollow(service.userId, widget.user.id);
+              setState(() {
+                widget.isFollowed = !widget.isFollowed;
+              });
+            },
+          ) : null,
         ),
         Padding(padding: const EdgeInsets.fromLTRB(0, 15, 0, 0)),
         Row(

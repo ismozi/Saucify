@@ -8,10 +8,14 @@ import 'package:saucify/services/DatabaseService.dart';
 import 'package:saucify/widgets/ChooseOption.dart';
 
 import '../app/app.locator.dart';
+import '../screens/PersonnalProfilePage.dart';
+import '../screens/ProfilePage.dart';
 import '../services/spotifyService.dart';
 
 class SongPost extends StatefulWidget {
-  SongPost({super.key, 
+  SongPost({super.key,
+            required this.displayProfile,
+            required this.userId, 
             required this.postId,
             required this.isLiked,
             required this.timestamp,
@@ -24,6 +28,8 @@ class SongPost extends StatefulWidget {
             required this.previewUrl,
             required this.player});
 
+  Function displayProfile;
+  String userId;
   String postId;
   bool isLiked;
   dynamic timestamp;
@@ -116,13 +122,23 @@ class _SongPostState extends State<SongPost> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: Image(
-                  image: widget.profileImgUrl != null ? NetworkImage(widget.profileImgUrl) : emptyImage, 
-                  width: 45, 
-                  height: 45
-                )
+              leading: GestureDetector(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image(
+                    image: widget.profileImgUrl != null ? NetworkImage(widget.profileImgUrl) : emptyImage, 
+                    width: 45, 
+                    height: 45
+                  )
+                ),
+                onTap: () => {
+                  service.userId == widget.userId ? widget.displayProfile() :   
+                  Navigator.of(context).push(PageRouteBuilder(
+                    pageBuilder: (c, a1, a2) => ProfilePage(widget.userId),
+                    transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                    transitionDuration: Duration(milliseconds: 150),
+                  )),
+                },
               ),
               trailing: IconButton(
                 icon: Icon(!widget.isLiked ? Icons.favorite_border : Icons.favorite, 
@@ -131,8 +147,18 @@ class _SongPostState extends State<SongPost> {
                   toggleLike();
                 },
               ),
-              title: Text(widget.profileName,
-                      style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+              title: GestureDetector(
+                child: Text(widget.profileName,
+                       style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+                onTap: () => {   
+                  service.userId == widget.userId ? widget.displayProfile() :
+                  Navigator.of(context).push(PageRouteBuilder(
+                    pageBuilder: (c, a1, a2) => ProfilePage(widget.userId),
+                    transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                    transitionDuration: Duration(milliseconds: 150),
+                  )),
+                },
+              ),
               subtitle: Text(getTime(),
                         style: GoogleFonts.getFont('Montserrat', color: Colors.grey)),
             ),

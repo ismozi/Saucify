@@ -30,7 +30,6 @@ class _PersonnalProfilePageState extends State<PersonnalProfilePage> {
   void initState() {
     super.initState();
     userDoc = dbService.getUserDocument(widget.userId);
-    getUserFollowing();
     Timer(Duration(milliseconds: 200), () {
       setState(() => opacityLevel = 1);
     });
@@ -43,19 +42,6 @@ class _PersonnalProfilePageState extends State<PersonnalProfilePage> {
     }
   }
 
-  getUserFollowing() async {
-    List currentUserFollowing = await dbService.getFollowing(service.userId);
-    isFollowed = currentUserFollowing.contains(widget.userId);
-    targetUserFollowing = await dbService.getFollowing(widget.userId);
-  }
-
-  refresh() async {
-    await getUserFollowing();
-    setState(() {
-      userDoc = dbService.getUserDocument(widget.userId);
-    });
-  }
-
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -66,15 +52,40 @@ class _PersonnalProfilePageState extends State<PersonnalProfilePage> {
         child: AnimatedOpacity(
           opacity: opacityLevel,
           duration: const Duration(milliseconds: 300),
-          child: FutureBuilder<DocumentSnapshot>(
-            future: userDoc,
-            builder:(BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          child: StreamBuilder(
+            stream: dbService.getFollowingSnapshot(widget.userId),
+            builder:(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) {
                   return Container();
-              } else { 
-                DocumentSnapshot user = snapshot.data!;
-                return ProfileContainer(user, targetUserFollowing, isFollowed, refresh, key: ObjectKey(user));
               }
+              List targetUserFollowing = [];
+              snapshot.data!.docs.forEach((element) {
+                targetUserFollowing.add(element.id);
+              });
+              return StreamBuilder(
+                stream: dbService.getFollowingSnapshot(service.userId),
+                builder:(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot1) {
+                  if (!snapshot1.hasData) {
+                      return Container();
+                  }
+                  List currentUserFollowing = [];
+                  snapshot1.data!.docs.forEach((element) {
+                    currentUserFollowing.add(element.id);
+                  });
+                  bool isFollowed = currentUserFollowing.contains(widget.userId);
+                  return StreamBuilder<DocumentSnapshot>(
+                    stream: dbService.getUserDocumentStream(widget.userId),
+                    builder:(BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot2) {
+                      if (!snapshot2.hasData) {
+                          return Container();
+                      } else { 
+                        DocumentSnapshot user = snapshot2.data!;
+                        return ProfileContainer(user, targetUserFollowing, isFollowed, false, key: ObjectKey(user));
+                      }
+                    },
+                  );
+                },
+              );
             },
           )
         ),

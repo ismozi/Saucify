@@ -12,6 +12,8 @@ import 'package:saucify/widgets/SongPost.dart';
 import '../services/DatabaseService.dart';
 
 class PostsPage extends StatefulWidget {
+  final Function displayProfile;
+  PostsPage(this.displayProfile);
   @override
   State<PostsPage> createState() => PostsPageState();
 }
@@ -77,6 +79,8 @@ class PostsPageState extends State<PostsPage> {
                         itemBuilder: (context, index) {
                           DocumentSnapshot post = snapshot.data!.docs[index];
                           return SongPost(
+                            displayProfile: widget.displayProfile,
+                            userId: post['postedBy'],
                             postId: post.id,
                             isLiked: post['likedBy'].contains(service.userId),
                             timestamp: post['timestamp'],
