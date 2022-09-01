@@ -34,13 +34,15 @@ class _SearchItemState extends State<SearchItem> {
         color: Color.fromARGB(255, 29, 29, 29),
         borderRadius: BorderRadius.circular(12)
       ),
-      margin: const EdgeInsets.all(3.0),
+      alignment: Alignment.center,
+      height: MediaQuery.of(context).size.height * 0.08,
+      margin: const EdgeInsets.fromLTRB(3, 13, 3, 3),
       child: ListTile(
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(30),
-          child: Image(image: widget.user['imageUrl'] != null ? NetworkImage(widget.user['imageUrl']): emptyImage, width: 40, height: 40)
+          child: Image(image: widget.user['imageUrl'] != null ? NetworkImage(widget.user['imageUrl']): emptyImage, width: 50, height: 50)
         ),
-        trailing: GestureDetector(
+        trailing: widget.user.id != service.userId ? GestureDetector(
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: widget.isFollowed ? Colors.green :Colors.grey),
@@ -56,12 +58,12 @@ class _SearchItemState extends State<SearchItem> {
               widget.isFollowed = !widget.isFollowed;
             });
           },
-        ),
+        ) : null,
         title: Text(widget.user['username'], 
-                    style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+                    style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 18)),
         onTap: () => {   
           Navigator.of(context).push(PageRouteBuilder(
-            pageBuilder: (c, a1, a2) => ProfilePage(widget.user['username']),
+            pageBuilder: (c, a1, a2) => widget.user.id == service.userId ? ProfilePage(widget.user.id, true, false) : ProfilePage(widget.user.id, false, false),
             transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
             transitionDuration: Duration(milliseconds: 150),
           )),

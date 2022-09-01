@@ -87,6 +87,7 @@ class PostsPageState extends State<PostsPage> {
                             profileImgUrl: post['profileImgUrl'],
                             profileName: post['profileName'],
                             description: post['description'],
+                            itemUrl: post['itemUrl'],
                             itemImgUrl: post['itemImgUrl'],
                             itemName: post['itemName'],
                             artistName: post['postType'] == 'artist' ? null : post['artistName'],

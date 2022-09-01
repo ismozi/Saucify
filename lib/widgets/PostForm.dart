@@ -110,6 +110,7 @@ class _PostFormState extends State<PostForm> {
         'profileImgUrl': doc['imageUrl'],
         'profileName': service.userId,
         'description': descriptionController.text,
+        'itemUrl': selectedItem['uri'],
         'itemImgUrl': selectedItem['album']['images'][0]['url'],
         'itemName': selectedItem['name'],
         'artistName': selectedItem['artists'][0]['name'],
@@ -124,6 +125,7 @@ class _PostFormState extends State<PostForm> {
         'profileImgUrl': doc['imageUrl'],
         'profileName': service.userId,
         'description': descriptionController.text,
+        'itemUrl': selectedItem['uri'],
         'itemImgUrl': selectedItem['images'][0]['url'],
         'itemName': selectedItem['name'],
         'artistName': selectedItem['artists'][0]['name'],
@@ -137,6 +139,7 @@ class _PostFormState extends State<PostForm> {
         'profileImgUrl': doc['imageUrl'],
         'profileName': service.userId,
         'description': descriptionController.text,
+        'itemUrl': selectedItem['uri'],
         'itemImgUrl': selectedItem['images'][0]['url'],
         'itemName': selectedItem['name'],
       };

@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saucify/services/DatabaseService.dart';
 import 'package:saucify/widgets/ChooseOption.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../app/app.locator.dart';
-import '../screens/PersonnalProfilePage.dart';
 import '../screens/ProfilePage.dart';
 import '../services/spotifyService.dart';
 
@@ -22,6 +22,7 @@ class SongPost extends StatefulWidget {
             required this.profileImgUrl,
             required this.profileName,
             required this.description,
+            required this.itemUrl,
             required this.itemImgUrl, 
             required this.itemName, 
             required this.artistName,
@@ -36,6 +37,7 @@ class SongPost extends StatefulWidget {
   dynamic profileImgUrl;
   String profileName;
   String description;
+  String itemUrl;
   String itemImgUrl;
   String itemName;
   dynamic artistName;
@@ -134,14 +136,14 @@ class _SongPostState extends State<SongPost> {
                 onTap: () => {
                   service.userId == widget.userId ? widget.displayProfile() :   
                   Navigator.of(context).push(PageRouteBuilder(
-                    pageBuilder: (c, a1, a2) => ProfilePage(widget.userId),
+                    pageBuilder: (c, a1, a2) => ProfilePage(widget.userId, false, true),
                     transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
                     transitionDuration: Duration(milliseconds: 150),
                   )),
                 },
               ),
               trailing: IconButton(
-                icon: Icon(!widget.isLiked ? Icons.favorite_border : Icons.favorite, 
+                icon: Icon(!widget.isLiked ? Icons.star_border : Icons.star, 
                       color: !widget.isLiked ? Colors.grey : Colors.green),
                 onPressed: () {
                   toggleLike();
@@ -153,7 +155,7 @@ class _SongPostState extends State<SongPost> {
                 onTap: () => {   
                   service.userId == widget.userId ? widget.displayProfile() :
                   Navigator.of(context).push(PageRouteBuilder(
-                    pageBuilder: (c, a1, a2) => ProfilePage(widget.userId),
+                    pageBuilder: (c, a1, a2) => ProfilePage(widget.userId, false, true),
                     transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
                     transitionDuration: Duration(milliseconds: 150),
                   )),
@@ -174,6 +176,12 @@ class _SongPostState extends State<SongPost> {
               ),
               margin: const EdgeInsets.all(10.0),
               child: ListTile(
+                onTap: () async {
+                  final Uri _url = Uri.parse(widget.itemUrl);
+                  if (!await launchUrl(_url)) {
+                    throw 'Could not launch $_url';
+                  }
+                },
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image(image: NetworkImage(widget.itemImgUrl), width: 45, height: 45)

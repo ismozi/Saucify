@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saucify/app/app.locator.dart';
+import 'package:saucify/screens/UserListPage.dart';
 import 'package:saucify/services/DatabaseService.dart';
 import 'package:tuple/tuple.dart';
 
@@ -66,9 +67,9 @@ class _ProfileContainerState extends State<ProfileContainer> {
         Padding(padding: const EdgeInsets.fromLTRB(0, 15, 0, 0)),
         Text(user['username'], 
             style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontWeight: FontWeight.w300, fontSize: 30)),
-        Padding(padding:  widget.isCurrentUser ? const EdgeInsets.fromLTRB(0, 10, 0, 0) : const EdgeInsets.fromLTRB(0, 0, 0, 0)),
+        Padding(padding: !widget.isCurrentUser ? const EdgeInsets.fromLTRB(0, 10, 0, 0) : const EdgeInsets.fromLTRB(0, 0, 0, 0)),
         Container(
-          child: widget.isCurrentUser ? GestureDetector(
+          child: !widget.isCurrentUser ? GestureDetector(
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(color: widget.isFollowed ? Colors.green :Colors.grey),
@@ -90,11 +91,29 @@ class _ProfileContainerState extends State<ProfileContainer> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Followers: ${user['followers'].length}", 
-              style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 17)),
+            GestureDetector(
+              child: Text("Followers: ${user['followers'].length}", 
+                      style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 17)),
+              onTap: () {
+                Navigator.of(context).push(PageRouteBuilder(
+                  pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, true),
+                  transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                  transitionDuration: Duration(milliseconds: 150),
+                ));
+              },
+            ),
             Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0)),
-            Text("Following: ${widget.targetUserFollowing.length}", 
-              style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 17)),
+            GestureDetector(
+              child: Text("Following: ${widget.targetUserFollowing.length}", 
+                      style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 17)),
+              onTap: () {
+                Navigator.of(context).push(PageRouteBuilder(
+                  pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, false),
+                  transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                  transitionDuration: Duration(milliseconds: 150),
+                ));
+              },
+            )
           ]
         ),
         Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),

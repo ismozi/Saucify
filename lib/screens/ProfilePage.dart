@@ -12,7 +12,9 @@ import 'LibraryScreen.dart';
 
 class ProfilePage extends StatefulWidget {
   final userId;
-  ProfilePage(this.userId);
+  final bool isCurrentUser;
+  final bool fromDashboard;
+  ProfilePage(this.userId, this.isCurrentUser, this.fromDashboard);
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
@@ -46,14 +48,15 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context){
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
+      appBar: !widget.isCurrentUser || !widget.fromDashboard ? AppBar(
         foregroundColor: Colors.green,
         backgroundColor: Color(0x44000000),
         elevation: 0,
-      ),
+      ) : null,
       body: Container(
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.fromLTRB(10, 80, 10, 0),
+        padding: !widget.isCurrentUser || !widget.fromDashboard ? const EdgeInsets.fromLTRB(10, 80, 10, 0)
+                                                                : const EdgeInsets.fromLTRB(10, 3, 10, 0),
         color: Color.fromARGB(255, 37, 37, 37),
         child: AnimatedOpacity(
           opacity: opacityLevel,
@@ -86,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           return Container();
                       } else { 
                         DocumentSnapshot user = snapshot2.data!;
-                        return ProfileContainer(user, targetUserFollowing, isFollowed, true, key: ObjectKey(user));
+                        return ProfileContainer(user, targetUserFollowing, isFollowed, widget.isCurrentUser, key: ObjectKey(user));
                       }
                     },
                   );

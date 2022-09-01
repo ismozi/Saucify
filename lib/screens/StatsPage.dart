@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:saucify/services/spotifyService.dart';
 import 'package:saucify/widgets/bottomPlayer.dart';
 import 'package:tuple/tuple.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../app/app.locator.dart';
 import '../widgets/StatsAppBar.dart';
@@ -143,8 +144,11 @@ class StatsPageState extends State<StatsPage> {
                         style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
             subtitle: isTracksActive ? Text(item['artists'][0]['name'], 
                         style: GoogleFonts.getFont('Montserrat', color: Colors.white)) : null,
-            onTap: () => {
-
+            onTap: () async {
+              final Uri _url = Uri.parse(item['uri']);
+              if (!await launchUrl(_url)) {
+                throw 'Could not launch $_url';
+              }
             },
         )
       ));
