@@ -13,13 +13,13 @@ import 'package:saucify/widgets/searchItem.dart';
 import '../app/app.locator.dart';
 import 'LibraryScreen.dart';
 
-class NotificationsPage extends StatefulWidget {
-  NotificationsPage();
+class MessagesPage extends StatefulWidget {
+  MessagesPage();
   @override
-  State<NotificationsPage> createState() => _NotificationsPageState();
+  State<MessagesPage> createState() => _MessagesPageState();
 }
 
-class _NotificationsPageState extends State<NotificationsPage> {
+class _MessagesPageState extends State<MessagesPage> {
   TextEditingController controller = TextEditingController();
   spotifyService service = locator<spotifyService>();
   DatabaseService dbService = DatabaseService();
@@ -49,7 +49,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 20, 20, 20),
-        title: Text("Notifications", style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+        title: Text("Messages", style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.green),
           onPressed: () {

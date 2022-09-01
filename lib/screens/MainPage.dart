@@ -6,6 +6,8 @@ import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:saucify/screens/FeedPage.dart';
 import 'package:saucify/screens/LibraryScreen.dart';
+import 'package:saucify/screens/MessagesPage.dart';
+import 'package:saucify/screens/NotificationsPage.dart';
 import 'package:saucify/screens/ProfilePage.dart';
 import 'package:saucify/screens/StatsPage.dart';
 import 'package:saucify/services/spotifyService.dart';
@@ -150,12 +152,22 @@ class MainPageState extends State<MainPage> {
                     color: Color.fromARGB(255, 212, 212, 212),
                     icon: Icon(Icons.notifications), 
                     onPressed: (() => {
+                      Navigator.of(context).push(PageRouteBuilder(
+                        pageBuilder: (c, a1, a2) => NotificationsPage(),
+                        transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                        transitionDuration: Duration(milliseconds: 150),
+                      )),
                     })
                   ), 
                   IconButton(
                     color: Color.fromARGB(255, 212, 212, 212),
                     icon: Icon(Icons.message_rounded), 
                     onPressed: (() => {
+                      Navigator.of(context).push(PageRouteBuilder(
+                        pageBuilder: (c, a1, a2) => MessagesPage(),
+                        transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                        transitionDuration: Duration(milliseconds: 150),
+                      )),
                     })
                   ),
                 ]

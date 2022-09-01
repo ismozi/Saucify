@@ -49,6 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: !widget.isCurrentUser || !widget.fromDashboard ? AppBar(
+        title: Text("Profile", style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
         foregroundColor: Colors.green,
         backgroundColor: Color(0x44000000),
         elevation: 0,

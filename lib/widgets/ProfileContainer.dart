@@ -91,35 +91,135 @@ class _ProfileContainerState extends State<ProfileContainer> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GestureDetector(
-              child: Text("Followers: ${user['followers'].length}", 
-                      style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 17)),
-              onTap: () {
-                Navigator.of(context).push(PageRouteBuilder(
-                  pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, true),
-                  transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
-                  transitionDuration: Duration(milliseconds: 150),
-                ));
-              },
+            Container(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 29, 29, 29),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromARGB(255, 19, 19, 19).withOpacity(0.2),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              alignment: Alignment.center,
+              padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
+              width: 120,
+              child: GestureDetector(
+                child: Text("Followers:  ${user['followers'].length}", 
+                        style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 17)),
+                onTap: () {
+                  Navigator.of(context).push(PageRouteBuilder(
+                    pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, true),
+                    transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                    transitionDuration: Duration(milliseconds: 150),
+                  ));
+                },
+              ),
             ),
-            Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0)),
-            GestureDetector(
-              child: Text("Following: ${widget.targetUserFollowing.length}", 
-                      style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 17)),
-              onTap: () {
-                Navigator.of(context).push(PageRouteBuilder(
-                  pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, false),
-                  transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
-                  transitionDuration: Duration(milliseconds: 150),
-                ));
-              },
+            Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0)),
+            Container(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 29, 29, 29),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromARGB(255, 19, 19, 19).withOpacity(0.2),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              alignment: Alignment.center,
+              padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
+              width: 120,
+              child: GestureDetector(
+                child: Text("Following:  ${widget.targetUserFollowing.length}", 
+                        style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 17)),
+                onTap: () {
+                  Navigator.of(context).push(PageRouteBuilder(
+                    pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, false),
+                    transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                    transitionDuration: Duration(milliseconds: 150),
+                  ));
+                },
+              )
             )
           ]
         ),
         Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
         Divider(
-          color: Color.fromARGB(255, 80, 80, 80)
-        )
+          color: Color.fromARGB(255, 77, 77, 77)
+        ),
+        Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
+        Container(
+          alignment: Alignment.topLeft,
+          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+          child: Text("Top 5 Songs All Time", 
+            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 22)),
+        ),
+        Padding(padding: const EdgeInsets.fromLTRB(0, 9, 0, 0)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image(image: emptyImage, width: 50, height: 50)
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image(image: emptyImage, width: 50, height: 50)
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image(image: emptyImage, width: 50, height: 50)
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image(image: emptyImage, width: 50, height: 50)
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image(image: emptyImage, width: 50, height: 50)
+            ),
+          ]
+        ),
+        Padding(padding: const EdgeInsets.fromLTRB(0, 50, 0, 0)),
+        Container(
+          alignment: Alignment.topLeft,
+          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+          child: Text("Top 5 Artists All Time", 
+            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 22)),
+        ),
+        Padding(padding: const EdgeInsets.fromLTRB(0, 9, 0, 0)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image(image: emptyImage, width: 50, height: 50)
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image(image: emptyImage, width: 50, height: 50)
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image(image: emptyImage, width: 50, height: 50)
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image(image: emptyImage, width: 50, height: 50)
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image(image: emptyImage, width: 50, height: 50)
+            ),
+          ]
+        ),
       ]
     );
   }
