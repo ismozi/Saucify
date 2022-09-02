@@ -31,6 +31,11 @@ class DatabaseService {
     if (!docSnapshot.exists) {
       object['searchParams'] = setSearchParam(object['username']);
       docRef.set(object);
+    } else {
+      Map<String, dynamic> userObj = docSnapshot.data() as Map<String, dynamic>;
+      userObj['topTracks'] = object['topTracks'];
+      userObj['topArtists'] = object['topArtist'];
+      docRef.set(userObj);
     }
   }
 

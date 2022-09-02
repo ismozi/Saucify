@@ -154,69 +154,131 @@ class _ProfileContainerState extends State<ProfileContainer> {
         Divider(
           color: Color.fromARGB(255, 77, 77, 77)
         ),
-        Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
+        Padding(padding: const EdgeInsets.fromLTRB(0, 12, 0, 0)),
         Container(
           alignment: Alignment.topLeft,
           padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-          child: Text("Top 5 Songs All Time", 
+          child: Text("Top 3 Songs All Time", 
             style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 22)),
         ),
-        Padding(padding: const EdgeInsets.fromLTRB(0, 9, 0, 0)),
+        Padding(padding: const EdgeInsets.fromLTRB(0, 12, 0, 0)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image(image: emptyImage, width: 50, height: 50)
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              width: MediaQuery.of(context).size.height * 0.14,
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image(image: NetworkImage(user['topTracks'][0]['album']['images'][0]['url']), width: 70, height: 70)
+                  ),
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
+                  Text(user['topTracks'][0]['name'].length > 15 ? user['topTracks'][0]['name'].substring(0, 15)+'...' : user['topTracks'][0]['name'], 
+                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 12)),
+                ]
+              )
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image(image: emptyImage, width: 50, height: 50)
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              width: MediaQuery.of(context).size.height * 0.14,
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image(image: NetworkImage(user['topTracks'][1]['album']['images'][0]['url']), width: 70, height: 70)
+                  ),
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
+                  Text(user['topTracks'][1]['name'].length > 15 ? user['topTracks'][1]['name'].substring(0, 15)+'...' : user['topTracks'][1]['name'], 
+                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 12)),
+                ]
+              )
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image(image: emptyImage, width: 50, height: 50)
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image(image: emptyImage, width: 50, height: 50)
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image(image: emptyImage, width: 50, height: 50)
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              width: MediaQuery.of(context).size.height * 0.14,
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image(image: NetworkImage(user['topTracks'][2]['album']['images'][0]['url']), width: 70, height: 70)
+                  ),
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
+                  Text(user['topTracks'][2]['name'].length > 15 ? user['topTracks'][2]['name'].substring(0, 15)+'...' : user['topTracks'][2]['name'], 
+                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 12)),
+                ]
+              )
             ),
           ]
         ),
-        Padding(padding: const EdgeInsets.fromLTRB(0, 50, 0, 0)),
+        Padding(padding: const EdgeInsets.fromLTRB(0, 30, 0, 0)),
         Container(
           alignment: Alignment.topLeft,
           padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-          child: Text("Top 5 Artists All Time", 
+          child: Text("Top 3 Artists All Time", 
             style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 22)),
         ),
-        Padding(padding: const EdgeInsets.fromLTRB(0, 9, 0, 0)),
+        Padding(padding: const EdgeInsets.fromLTRB(0, 12, 0, 0)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image(image: emptyImage, width: 50, height: 50)
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              width: MediaQuery.of(context).size.height * 0.14,
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image(image: NetworkImage(user['topArtists'][0]['images'][0]['url']), width: 70, height: 70)
+                  ),
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
+                  Text(user['topArtists'][0]['name'].length > 15 ? user['topArtists'][0]['name'].substring(0, 15)+'...' : user['topArtists'][0]['name'], 
+                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 12)),
+                ]
+              )
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image(image: emptyImage, width: 50, height: 50)
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              width: MediaQuery.of(context).size.height * 0.14,
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image(image: NetworkImage(user['topArtists'][1]['images'][0]['url']), width: 70, height: 70)
+                  ),
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
+                  Text(user['topArtists'][1]['name'].length > 15 ? user['topArtists'][1]['name'].substring(0, 15)+'...' : user['topArtists'][1]['name'], 
+                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 12)),
+                ]
+              )
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image(image: emptyImage, width: 50, height: 50)
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image(image: emptyImage, width: 50, height: 50)
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image(image: emptyImage, width: 50, height: 50)
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              width: MediaQuery.of(context).size.height * 0.14,
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image(image: NetworkImage(user['topArtists'][2]['images'][0]['url']), width: 70, height: 70)
+                  ),
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
+                  Text(user['topArtists'][2]['name'].length > 15 ? user['topArtists'][2]['name'].substring(0, 15)+'...' : user['topArtists'][2]['name'], 
+                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 12)),
+                ]
+              )
             ),
           ]
         ),

@@ -81,10 +81,14 @@ class spotifyService {
     if (response1.body.isNotEmpty){
       final body = json.decode(response1.body);
       userId = body['id'];
+      List topArtists = await getTop3Items('artists');
+      List topTracks = await getTop3Items('tracks');
       Object obj = {
         'username': body['display_name'],
         'imageUrl': null,
         'followers': [],
+        'topTracks': topTracks,
+        'topArtist': topArtists,
       };
       dbService.register(body['id'], obj);
     }
@@ -111,6 +115,27 @@ class spotifyService {
 
     final response = await http.get(
       Uri.parse('https://api.spotify.com/v1/me/top/$itemType?time_range=$timeRange'),
+      headers: {
+        'Authorization': 'Bearer $access_token',
+        'Content-Type': 'application/json'
+      }
+    );
+
+    if (response.body.isNotEmpty){
+      final body = json.decode(response.body);
+      return body['items'];
+    }
+
+    return [];
+  }
+
+  getTop3Items(String itemType) async {
+    if (itemType != 'artists' && itemType != 'tracks') {
+      return [];
+    }
+
+    final response = await http.get(
+      Uri.parse('https://api.spotify.com/v1/me/top/$itemType?time_range=long_term&limit=3'),
       headers: {
         'Authorization': 'Bearer $access_token',
         'Content-Type': 'application/json'
