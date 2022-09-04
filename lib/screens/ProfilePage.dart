@@ -21,7 +21,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   DatabaseService dbService = DatabaseService();
-  double opacityLevel = 0;
+  double opacityLevel = 1;
   spotifyService service = locator<spotifyService>();
   NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
   List targetUserFollowing = [];
@@ -32,9 +32,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     userDoc = dbService.getUserDocument(widget.userId);
-    Timer(Duration(milliseconds: 200), () {
-      setState(() => opacityLevel = 1);
-    });
   }
 
   @override
@@ -90,7 +87,27 @@ class _ProfilePageState extends State<ProfilePage> {
                           return Container();
                       } else { 
                         DocumentSnapshot user = snapshot2.data!;
-                        return ProfileContainer(user, targetUserFollowing, isFollowed, widget.isCurrentUser, key: ObjectKey(user));
+                        return FutureBuilder(
+                          future: service.getTracks(user['topTracks']),
+                          builder: (BuildContext context, AsyncSnapshot snapshot1) {
+                            if (!snapshot1.hasData) {
+                              return Container();
+                            } else { 
+                              List topTracks = snapshot1.data!;
+                              return FutureBuilder(
+                                future: service.getArtists(user['topArtists']),
+                                builder: (BuildContext context, AsyncSnapshot snapshot1) {
+                                  if (!snapshot1.hasData) {
+                                    return Container();
+                                  } else { 
+                                    List topArtists = snapshot1.data!;
+                                    return ProfileContainer(topTracks, topArtists, user, targetUserFollowing, isFollowed, widget.isCurrentUser, key: ObjectKey(user));
+                                  }
+                                }
+                              );
+                            }
+                          }
+                        );
                       }
                     },
                   );

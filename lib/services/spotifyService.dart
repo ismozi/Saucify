@@ -83,12 +83,20 @@ class spotifyService {
       userId = body['id'];
       List topArtists = await getTop3Items('artists');
       List topTracks = await getTop3Items('tracks');
+      List topTracksIds = [];
+      List topArtistsIds = [];
+      topTracks.forEach((element) {
+        topTracksIds.add(element['id']);
+      });
+      topArtists.forEach((element) {
+        topArtistsIds.add(element['id']);
+      });
       Object obj = {
         'username': body['display_name'],
         'imageUrl': null,
         'followers': [],
-        'topTracks': topTracks,
-        'topArtist': topArtists,
+        'topTracks': topTracksIds,
+        'topArtist': topArtistsIds,
       };
       dbService.register(body['id'], obj);
     }
@@ -328,6 +336,58 @@ class spotifyService {
         }
       );
     }
+  }
+
+  getTracks(List tracksIds) async {
+    String ids = '';
+    tracksIds.forEach((element) {
+      if (element == tracksIds[tracksIds.length - 1]) {
+        ids += element;
+      } else {
+        ids += element + ',';
+      }
+    });
+
+    final response = await http.get(
+      Uri.parse('https://api.spotify.com/v1/tracks?ids=$ids'),
+      headers: {
+        'Authorization': 'Bearer $access_token',
+        'Content-Type': 'application/json'
+      }
+    );
+
+    if (response.body.isNotEmpty){
+      final body = json.decode(response.body);
+      return body['tracks'];
+    }
+
+    return [];
+  }
+
+  getArtists(List artistsIds) async {
+    String ids = '';
+    artistsIds.forEach((element) {
+      if (element == artistsIds[artistsIds.length - 1]) {
+        ids += element;
+      } else {
+        ids += element + ',';
+      }
+    });
+
+    final response = await http.get(
+      Uri.parse('https://api.spotify.com/v1/artists?ids=$ids'),
+      headers: {
+        'Authorization': 'Bearer $access_token',
+        'Content-Type': 'application/json'
+      }
+    );
+
+    if (response.body.isNotEmpty){
+      final body = json.decode(response.body);
+      return body['artists'];
+    }
+
+    return [];
   }
 }
 
