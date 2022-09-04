@@ -73,7 +73,6 @@ class _FeedPageState extends State<FeedPage> {
   Widget build(BuildContext context){
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: FeedAppBar(setItemType),
       body: isPostsActive ? PostsPage(widget.displayProfile) : PlaylistsPage()
     );
   }

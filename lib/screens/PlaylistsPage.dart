@@ -33,7 +33,7 @@ class PlaylistsPageState extends State<PlaylistsPage> {
     return Scaffold(
       body: Container(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-          color: Color.fromARGB(255, 37, 37, 37),
+          color: Color.fromARGB(255, 19, 19, 19),
       )
     );
   }

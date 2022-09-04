@@ -68,7 +68,7 @@ class _SearchPage1State extends State<SearchPage1> {
       body: 
         Container(
           padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
-          color: Color.fromARGB(255, 37, 37, 37),
+          color: Color.fromARGB(255, 19, 19, 19),
           child: AnimatedOpacity(
             opacity: 1,
             duration: const Duration(milliseconds: 300),

@@ -46,7 +46,7 @@ class PostsPageState extends State<PostsPage> {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-        color: Color.fromARGB(255, 37, 37, 37),
+        color: Color.fromARGB(255, 19, 19, 19),
         child: AnimatedOpacity(
           opacity: opacityLevel,
           duration: const Duration(milliseconds: 300),
@@ -75,6 +75,7 @@ class PostsPageState extends State<PostsPage> {
                         );
                       }
                       return ListView.builder(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 60),
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
                           DocumentSnapshot post = snapshot.data!.docs[index];

@@ -29,7 +29,7 @@ class _SearchBarState extends State<SearchBar> {
     return Container(
       width: MediaQuery.of(context).size.width*0.85,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 20, 20, 20),
+        color: Color.fromARGB(255, 12, 12, 12),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(

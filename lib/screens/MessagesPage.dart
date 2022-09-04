@@ -48,7 +48,7 @@ class _MessagesPageState extends State<MessagesPage> {
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 20, 20, 20),
+        backgroundColor: Color.fromARGB(255, 19, 19, 19),
         title: Text("Messages", style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.green),
@@ -60,7 +60,7 @@ class _MessagesPageState extends State<MessagesPage> {
       body: 
         Container(
           padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
-          color: Color.fromARGB(255, 37, 37, 37),
+          color: Color.fromARGB(255, 19, 19, 19),
         ),
       );
   }

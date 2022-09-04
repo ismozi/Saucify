@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context){
     return Scaffold(
       body: Container(
-        color: Color.fromARGB(255, 29, 29, 29),
+        color: Color.fromARGB(255, 19, 19, 19),
         padding: const EdgeInsets.all(10.0),
         child: ListView(
           children: <Widget>[
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 41, 41, 41),
+                  color: Color.fromARGB(255, 29, 29, 29),
                   borderRadius: BorderRadius.circular(12)
                 ),
                 padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),

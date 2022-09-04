@@ -8,6 +8,7 @@ import 'package:saucify/screens/FeedPage.dart';
 import 'package:saucify/screens/LibraryScreen.dart';
 import 'package:saucify/screens/MessagesPage.dart';
 import 'package:saucify/screens/NotificationsPage.dart';
+import 'package:saucify/screens/PlaylistsPage.dart';
 import 'package:saucify/screens/ProfilePage.dart';
 import 'package:saucify/screens/StatsPage.dart';
 import 'package:saucify/services/spotifyService.dart';
@@ -29,14 +30,14 @@ class MainPage extends StatefulWidget {
 
 class MainPageState extends State<MainPage> {
   spotifyService service = locator<spotifyService>();
-  bool isStatsActive = true;
-  bool isLibraryActive = false;
+  bool isFeedActive = true;
+  bool isPlaylistsActive = false;
+  bool isStatsActive = false;
   bool isProfileActive = false;
-  bool isFeedActive = false;
   bool isPostsActive = true;
 
   Container container = Container(color:Color.fromARGB(255, 41, 41, 41));
-  LibraryScreen libScreen = LibraryScreen();
+  PlaylistsPage playlistsPage = PlaylistsPage();
   StatsPage statsPage = StatsPage();
   late ProfilePage profilePage;
   late FeedPage feedPage;
@@ -46,9 +47,9 @@ class MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    activeScreen = statsPage;
     feedPage = FeedPage(setFAB, displayProfile);
     profilePage = ProfilePage(service.userId, true, true);
+    activeScreen = feedPage;
   }
 
   void setFAB(int index) {
@@ -64,33 +65,33 @@ class MainPageState extends State<MainPage> {
       setState(() {
         activeScreen = feedPage;
         isFeedActive = true;
-        isStatsActive =  false;
-        isLibraryActive = false;
+        isPlaylistsActive =  false;
+        isStatsActive = false;
         isProfileActive = false;
       });
     }
     else if (index == 1) {
       setState(() {
-        activeScreen = statsPage;
+        activeScreen = playlistsPage;
         isFeedActive = false;
-        isStatsActive =  true;
-        isLibraryActive = false;
+        isPlaylistsActive =  true;
+        isStatsActive = false;
         isProfileActive = false;
       });
     } else if (index == 2) {
       setState(() {
-        activeScreen = libScreen;
+        activeScreen = statsPage;
         isFeedActive = false;
-        isStatsActive =  false;
-        isLibraryActive = true;
+        isPlaylistsActive =  false;
+        isStatsActive = true;
         isProfileActive = false;
       });
     } else if (index == 3) {
       setState(() {
         activeScreen = profilePage;
         isFeedActive = false;
-        isStatsActive =  false;
-        isLibraryActive = false;
+        isPlaylistsActive =  false;
+        isStatsActive = false;
         isProfileActive = true;
       });
     }
@@ -107,8 +108,8 @@ class MainPageState extends State<MainPage> {
     setState(() {
       activeScreen = profilePage;
       isFeedActive = false;
-      isStatsActive =  false;
-      isLibraryActive = false;
+      isPlaylistsActive =  false;
+      isStatsActive = false;
       isProfileActive = true;
     });
   }
@@ -118,9 +119,16 @@ class MainPageState extends State<MainPage> {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 20, 20, 20),
+          backgroundColor: Color.fromARGB(255, 19, 19, 19),
           foregroundColor: Colors.green,
           automaticallyImplyLeading: false,
+          shape: Border(
+            bottom: BorderSide(
+              color: Color.fromARGB(255, 19, 19, 19),
+              width: 4
+            )
+          ),
+          elevation: 10,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -198,15 +206,15 @@ class MainPageState extends State<MainPage> {
                 onPressed: (() => {setPage(0)})
               ), 
               IconButton(
-                color: isStatsActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
-                icon: Icon(Icons.query_stats_rounded), 
-                iconSize: isStatsActive ? 32 : 27,
+                color: isPlaylistsActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
+                icon: Icon(Icons.music_note), 
+                iconSize: isPlaylistsActive ? 32 : 27,
                 onPressed: (() => {setPage(1)})
               ), 
               IconButton(
-                color: isLibraryActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
-                icon: Icon(Icons.music_note), 
-                iconSize: isLibraryActive ? 32 : 27,
+                color: isStatsActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
+                icon: Icon(Icons.query_stats_rounded), 
+                iconSize: isStatsActive ? 32 : 27,
                 onPressed: (() => {setPage(2)})
               ), 
               IconButton(
@@ -218,7 +226,7 @@ class MainPageState extends State<MainPage> {
             ],
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ),
-          color: Color.fromARGB(255, 20, 20, 20)
+          color: Color.fromARGB(255, 19, 19, 19)
         ),
       ),
       floatingActionButton: Visibility(
@@ -261,10 +269,6 @@ class MainPageState extends State<MainPage> {
         )
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked
-      // CustomFloatingActionButtonLocation(
-      //         (MediaQuery.of(context).size.width*0.5)-27.5,
-      //         728
-      // )
     );
   }
 }

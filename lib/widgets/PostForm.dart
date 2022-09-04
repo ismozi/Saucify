@@ -160,7 +160,7 @@ class _PostFormState extends State<PostForm> {
   Widget build(BuildContext context){
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-      backgroundColor: Color.fromARGB(255, 31, 31, 31),
+      backgroundColor: Color.fromARGB(255, 19, 19, 19),
       content: Form(
         child: Container(
           child: Column(
@@ -197,7 +197,7 @@ class _PostFormState extends State<PostForm> {
                             height: MediaQuery.of(context).size.height*0.175,
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 20, 20, 20),
+                                color: Color.fromARGB(255, 12, 12, 12),
                                 borderRadius: BorderRadius.circular(10)
                               ),
                               child: Padding(
