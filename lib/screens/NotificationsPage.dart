@@ -48,6 +48,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
+        shape: Border(
+          bottom: BorderSide(
+            color: Color.fromARGB(255, 19, 19, 19),
+            width: 4
+          )
+        ),
         backgroundColor: Color.fromARGB(255, 19, 19, 19),
         title: Text("Notifications", style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
         leading: IconButton(

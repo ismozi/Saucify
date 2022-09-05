@@ -88,14 +88,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       } else { 
                         DocumentSnapshot user = snapshot2.data!;
                         return FutureBuilder(
-                          future: service.getTracks(user['topTracks']),
+                          future: service.getTracks(user['topTracks']['long']),
                           builder: (BuildContext context, AsyncSnapshot snapshot1) {
                             if (!snapshot1.hasData) {
                               return Container();
                             } else { 
                               List topTracks = snapshot1.data!;
                               return FutureBuilder(
-                                future: service.getArtists(user['topArtists']),
+                                future: service.getArtists(user['topArtists']['long']),
                                 builder: (BuildContext context, AsyncSnapshot snapshot1) {
                                   if (!snapshot1.hasData) {
                                     return Container();

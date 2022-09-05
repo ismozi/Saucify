@@ -171,7 +171,7 @@ class _SongPostState extends State<SongPost> {
             ),
             Container(
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 37, 37, 37),
+                color: Color.fromARGB(255, 35, 35, 35),
                 borderRadius: BorderRadius.circular(12)
               ),
               margin: const EdgeInsets.all(10.0),
@@ -216,7 +216,7 @@ class _SongPostState extends State<SongPost> {
             )
           ]
         ),
-        color: Color.fromARGB(255, 29, 29, 29)
+        color: Color.fromARGB(255, 27, 27, 27)
       )
     );
   }

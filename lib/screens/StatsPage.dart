@@ -198,7 +198,7 @@ class StatsPageState extends State<StatsPage> {
           ],
         ),
         child: BottomAppBar(
-          color: Color.fromARGB(255, 20, 20, 20),
+          color: Color.fromARGB(255, 19, 19, 19),
           child: Container(
             padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
             child: Row(

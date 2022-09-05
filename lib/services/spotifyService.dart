@@ -81,25 +81,82 @@ class spotifyService {
     if (response1.body.isNotEmpty){
       final body = json.decode(response1.body);
       userId = body['id'];
-      List topArtists = await getTop3Items('artists');
-      List topTracks = await getTop3Items('tracks');
-      List topTracksIds = [];
-      List topArtistsIds = [];
-      topTracks.forEach((element) {
-        topTracksIds.add(element['id']);
-      });
-      topArtists.forEach((element) {
-        topArtistsIds.add(element['id']);
-      });
+      Map<String, dynamic> topTracks = await getTopTracks();
+      Map<String, dynamic> topArtists = await getTopArtists();
+
       Object obj = {
         'username': body['display_name'],
         'imageUrl': null,
         'followers': [],
-        'topTracks': topTracksIds,
-        'topArtist': topArtistsIds,
+        'topTracks': topTracks,
+        'topArtist': topArtists,
       };
-      dbService.register(body['id'], obj);
+      dbService.login(body['id'], obj);
     }
+  }
+
+  getTopTracks() async {
+    List topTracksShort = await getTopItems('tracks', 'short_term');
+    List topTracksMedium = await getTopItems('tracks', 'medium_term');
+    List topTracksLong = await getTopItems('tracks', 'long_term');
+    List topTracksIds = [];
+
+    Map<String, dynamic> topTracks = {
+      'short': [],
+      'medium': [],
+      'long': []
+    };
+
+    topTracksShort.forEach((element) {
+      topTracksIds.add(element['id']);
+    });
+    topTracks['short'] = topTracksIds;
+
+    topTracksIds = [];
+    topTracksMedium.forEach((element) {
+      topTracksIds.add(element['id']);
+    });
+    topTracks['medium'] = topTracksIds;
+
+    topTracksIds = [];
+    topTracksLong.forEach((element) {
+      topTracksIds.add(element['id']);
+    });
+    topTracks['long'] = topTracksIds;
+
+    return topTracks;
+  }
+
+  getTopArtists() async {
+    List topArtistsShort = await getTopItems('artists', 'short_term');
+    List topArtistsMedium = await getTopItems('artists', 'medium_term');
+    List topArtistsLong = await getTopItems('artists', 'long_term');
+    List topArtistsIds = [];
+
+    Map<String, dynamic> topArtists = {
+      'short': [],
+      'medium': [],
+      'long': []
+    };
+
+    topArtistsShort.forEach((element) {
+      topArtistsIds.add(element['id']);
+    });
+    topArtists['short'] = topArtistsIds;
+
+    topArtistsIds = [];
+    topArtistsMedium.forEach((element) {
+      topArtistsIds.add(element['id']);
+    });
+    topArtists['medium'] = topArtistsIds;
+
+    topArtistsIds = [];
+    topArtistsLong.forEach((element) {
+      topArtistsIds.add(element['id']);
+    });
+    topArtists['long'] = topArtistsIds;
+
+    return topArtists;
   }
 
   String generateRandomString(int length){
@@ -289,6 +346,44 @@ class spotifyService {
     }
 
     return [];
+  }
+
+  Future<void> createPlaylist1(List ids, String name) async {
+    final response1 = await http.get(
+      Uri.parse('https://api.spotify.com/v1/me'),
+      headers: {
+        'Authorization': 'Bearer $access_token',
+        'Content-Type': 'application/json'
+      }
+    );
+    
+    if (response1.body.isNotEmpty){
+      final body = json.decode(response1.body);
+      final response2 = await http.post(
+        Uri.parse('https://api.spotify.com/v1/users/${body['id']}/playlists'),
+        body: jsonEncode({'name': name}),
+        headers: {
+          'Authorization': 'Bearer $access_token',
+          'Content-Type': 'application/json'
+        }
+      );
+
+      final body1 = json.decode(response2.body);
+      List items = await getTracks(ids);
+      List uris = [];
+      items.forEach((item) async {
+        uris.add(item['uri']);
+      });
+
+      final response3 = await http.post(
+        Uri.parse('https://api.spotify.com/v1/playlists/${body1['uri'].split(':')[2]}/tracks'),
+        body: jsonEncode({'uris': uris}),
+        headers: {
+          'Authorization': 'Bearer $access_token',
+          'Content-Type': 'application/json'
+        }
+      );
+    }
   }
 
   Future<void> createPlaylist(String timeRange) async {

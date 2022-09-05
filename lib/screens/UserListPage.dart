@@ -50,6 +50,12 @@ class _UserListPageState extends State<UserListPage> {
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
+        shape: Border(
+          bottom: BorderSide(
+            color: Color.fromARGB(255, 19, 19, 19),
+            width: 4
+          )
+        ),
         backgroundColor: Color.fromARGB(255, 20, 20, 20),
         title: widget.isFollowers ? Text("Followers", style: GoogleFonts.getFont('Montserrat', color: Colors.white))
                                   : Text("Following", style: GoogleFonts.getFont('Montserrat', color: Colors.white)),

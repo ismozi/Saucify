@@ -185,7 +185,7 @@ class MainPageState extends State<MainPage> {
       ),
       body: activeScreen,
       bottomNavigationBar: Container(
-        decoration: !isStatsActive ? BoxDecoration(
+        decoration: !isStatsActive && !isPlaylistsActive ? BoxDecoration(
             boxShadow: [
               BoxShadow(
                 color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.5),

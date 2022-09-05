@@ -45,7 +45,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
       duration: const Duration(milliseconds: 300),
       child: Card(
         margin: const EdgeInsets.fromLTRB(10, 12, 10, 10),
-        color: Color.fromARGB(255, 27, 27, 27),
+        color: Color.fromARGB(255, 24, 24, 24),
         elevation: 8.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),

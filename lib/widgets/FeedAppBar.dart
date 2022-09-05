@@ -33,7 +33,7 @@ class _FeedAppBarState extends State<FeedAppBar> {
                 options = widget.callback(0);
               });
             },
-            child: Text("Feed", style: GoogleFonts.getFont(
+            child: Text("Solo", style: GoogleFonts.getFont(
               'Montserrat',
               color: options.item1 ? Colors.green : Colors.white, 
               fontWeight: options.item1 ? FontWeight.w700 : FontWeight.w400)
@@ -45,7 +45,7 @@ class _FeedAppBarState extends State<FeedAppBar> {
                 options = widget.callback(1);
               });
             },
-            child: Text("Playlists", style: GoogleFonts.getFont(
+            child: Text("Mix", style: GoogleFonts.getFont(
               'Montserrat',
               color: options.item2 ? Colors.green : Colors.white, 
               fontWeight: options.item2 ? FontWeight.w700 : FontWeight.w400)

@@ -24,7 +24,7 @@ class DatabaseService {
     await collectionRef.add(object);
   }
 
-  Future<void> register(String id, dynamic object) async {
+  Future<void> login(String id, dynamic object) async {
     CollectionReference collectionRef = FirebaseFirestore.instance.collection('users');
     DocumentReference docRef = collectionRef.doc(id);
     DocumentSnapshot docSnapshot = await docRef.get();
@@ -37,6 +37,13 @@ class DatabaseService {
       userObj['topArtists'] = object['topArtist'];
       docRef.set(userObj);
     }
+
+    // DocumentReference copyFrom = docRef;
+    // DocumentReference copyTo = FirebaseFirestore.instance.collection('users').doc('Ye');
+
+    // copyFrom.get().then((value) => {
+    //   copyTo.set(value.data())
+    // });
   }
 
   Future<void> toggleLike(String postId, String userId) async {
