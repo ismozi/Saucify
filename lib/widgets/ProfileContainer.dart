@@ -44,7 +44,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
       opacity: opacityLevel,
       duration: const Duration(milliseconds: 300),
       child: Card(
-        margin: const EdgeInsets.fromLTRB(10, 12, 10, 10),
+        margin: widget.isCurrentUser ? const EdgeInsets.fromLTRB(10, 12, 10, 65) : const EdgeInsets.fromLTRB(10, 12, 10, 10),
         color: Color.fromARGB(255, 24, 24, 24),
         elevation: 8.0,
         shape: RoundedRectangleBorder(
@@ -181,12 +181,13 @@ class _ProfileContainerState extends State<ProfileContainer> {
             ),
             Padding(padding: const EdgeInsets.fromLTRB(0, 12, 0, 0)),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                   ),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   width: MediaQuery.of(context).size.height * 0.14,
                   child: Column(
                     children: [

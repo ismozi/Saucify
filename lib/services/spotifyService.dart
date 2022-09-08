@@ -435,12 +435,14 @@ class spotifyService {
 
   getTracks(List tracksIds) async {
     String ids = '';
+    int index = 0;
     tracksIds.forEach((element) {
-      if (element == tracksIds[tracksIds.length - 1]) {
+      if (index == tracksIds.length - 1) {
         ids += element;
       } else {
         ids += element + ',';
       }
+      index++;
     });
 
     final response = await http.get(

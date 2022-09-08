@@ -96,7 +96,7 @@ class _PlaylistItemState extends State<PlaylistItem> {
               child: ListTile(
                 onTap: () async {
                   Navigator.of(context).push(PageRouteBuilder(
-                    pageBuilder: (c, a1, a2) => TracksScreen(tracksIds: widget.user['topTracks']['short'], playlistName: playlistName),
+                    pageBuilder: (c, a1, a2) => TracksScreen(tracksIds: widget.user['topTracks'][widget.timeRange.split('_')[0]], playlistName: playlistName),
                     transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
                     transitionDuration: Duration(milliseconds: 150),
                   ));

@@ -1,65 +1,45 @@
 import 'dart:async';
-import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:saucify/services/DatabaseService.dart';
+import 'package:saucify/screens/PlaylistsPage.dart';
+import 'package:saucify/screens/PostsPage.dart';
 import 'package:saucify/services/spotifyService.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:saucify/widgets/FeedAppBar.dart';
+import 'package:saucify/widgets/SongPost.dart';
+import 'package:saucify/widgets/StatsAppBar.dart';
 import 'package:tuple/tuple.dart';
 import '../app/app.locator.dart';
-import '../widgets/PlaylistItem.dart';
+import 'MixedPlaylistPage.dart';
+import 'SoloPlaylistPage.dart';
 
 class PlaylistsPage extends StatefulWidget {
-
   @override
-  State<PlaylistsPage> createState() => PlaylistsPageState();
+  State<PlaylistsPage> createState() => _PlaylistsPageState();
 }
 
-class PlaylistsPageState extends State<PlaylistsPage> {
+class _PlaylistsPageState extends State<PlaylistsPage> {
   spotifyService service = locator<spotifyService>();
-  DatabaseService dbService = DatabaseService();
+  TextEditingController controller = TextEditingController();
+  List<Widget> list = [];
+  double opacityLevel = 0;
+  final player = AudioPlayer();
+
   bool isPostsActive = true;
   bool isPlaylistsActive = false;
 
-  bool isOneMonth = true;
-  bool isFourMonths = false;
-  bool isAllTime = false;
-  String timeRange = 'short_term';
-  double opacityLevel = 0;
-
-  void setTimeRange(int index) {
-    if (index == 0) {
-      setState(() {
-        isOneMonth = true;
-        isFourMonths = false;
-        isAllTime = false;
-        timeRange = 'short_term';
-      });
-    } else if (index == 1) {
-      setState(() {
-        isOneMonth = false;
-        isFourMonths = true;
-        isAllTime = false;
-        timeRange = 'medium_term';
-      });
-    } else if (index == 2) {
-      setState(() {
-        isOneMonth = false;
-        isFourMonths = false;
-        isAllTime = true;
-        timeRange = 'long_term';
-      });
-    }
+  @override
+  void dispose() {
+    super.dispose();
+    player.dispose();
   }
- 
+
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 0), () {
-      setState(() => opacityLevel = 1);
-    });
+    opacityLevel = 1;
   }
 
   @override
@@ -67,8 +47,8 @@ class PlaylistsPageState extends State<PlaylistsPage> {
     if(mounted) {
       super.setState(fn);
     }
-  }
-
+  } 
+  
   Tuple2<bool, bool> setItemType(int index) {
     if (index == 0) {
       setState(() {
@@ -88,88 +68,9 @@ class PlaylistsPageState extends State<PlaylistsPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: FeedAppBar(setItemType),
-      body: Container(
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-        color: Color.fromARGB(255, 19, 19, 19),
-        child: AnimatedOpacity(
-          opacity: opacityLevel,
-          duration: const Duration(milliseconds: 300),
-          child: StreamBuilder(
-            stream: dbService.getFollowingSnapshot(service.userId),
-            builder:(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) {
-                  return Container();
-              }
-              List currentUserFollowing = [];
-              snapshot.data!.docs.forEach((element) {
-                currentUserFollowing.add(element.id);
-              });
-              return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot user = snapshot.data!.docs[index];
-                  return PlaylistItem(timeRange: timeRange, user: user);
-                }
-              );
-            }
-          )
-        )
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: BottomAppBar(
-          color: Color.fromARGB(255, 19, 19, 19),
-          child: Container(
-            padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  child: GestureDetector(
-                    onTap:() => {setTimeRange(0)},
-                    child: Text("1 Month", style: GoogleFonts.getFont(
-                      'Montserrat',
-                      color: isOneMonth ? Colors.green : Colors.white, 
-                      fontWeight: isOneMonth ? FontWeight.w700 : FontWeight.w400)
-                    ),
-                  ),
-                ),
-                Container(
-                  child: GestureDetector(
-                    onTap:() => {setTimeRange(1)},
-                    child: Text("6 Months", style: GoogleFonts.getFont(
-                      'Montserrat',
-                      color: isFourMonths ? Colors.green : Colors.white, 
-                      fontWeight: isFourMonths ? FontWeight.w700 : FontWeight.w400)
-                    ),
-                  ),
-                ),
-                Container(
-                  child: GestureDetector(
-                    onTap:() => {setTimeRange(2)},
-                    child: Text("All time", style: GoogleFonts.getFont(
-                      'Montserrat',
-                      color: isAllTime ? Colors.green : Colors.white, 
-                      fontWeight: isAllTime ? FontWeight.w700 : FontWeight.w400)
-                    ),
-                  ),
-                ),
-              ]
-            )
-          ),
-        ),
-      ),
+      extendBodyBehindAppBar: true,
+      body: isPostsActive ? SoloPlaylistPage() : MixedPlaylistPage()
     );
   }
 }
