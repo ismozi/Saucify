@@ -17,6 +17,8 @@ class spotifyService {
   late bool isPlaying;
   late String deviceId;
   late String userId;
+  late String refreshToken;
+  late dynamic lastTokenTime;
   DatabaseService dbService = DatabaseService();
 
   spotifyService(){
@@ -34,6 +36,8 @@ class spotifyService {
     isPlaying = false;
     deviceId = "";
     userId = "";
+    refreshToken = "";
+    lastTokenTime = DateTime.now().millisecondsSinceEpoch;
   }
   
   Future<void> logIn() async {
@@ -69,6 +73,10 @@ class spotifyService {
 
     final body = json.decode(response.body);
     access_token = body['access_token'];
+    refreshToken = body['refresh_token'];
+    lastTokenTime = DateTime.now().millisecondsSinceEpoch;
+    print('refresh: '+body['refresh_token']);
+    print("expires: $body['expires_in']");
 
     final response1 = await http.get(
       Uri.parse('https://api.spotify.com/v1/me'),
@@ -95,7 +103,29 @@ class spotifyService {
     }
   }
 
+  refreshTokenIfNeeded() async {
+    dynamic time = DateTime.now().millisecondsSinceEpoch;
+    if (time - lastTokenTime >= 3600000) {
+      final response = await http.post(
+        Uri.parse('https://accounts.spotify.com/api/token'),
+        body: {
+          'grant_type': 'refresh_token',
+          'refresh_token': refreshToken,
+        },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': 'Basic ${base64.encode(utf8.encode('$client_id:$client_secret'))}'
+        }
+      );
+
+      final body = json.decode(response.body);
+      access_token = body['access_token'];
+      lastTokenTime = DateTime.now().millisecondsSinceEpoch;
+    }
+  }
+
   getTopTracks() async {
+    await refreshTokenIfNeeded();
     List topTracksShort = await getTopItems('tracks', 'short_term');
     List topTracksMedium = await getTopItems('tracks', 'medium_term');
     List topTracksLong = await getTopItems('tracks', 'long_term');
@@ -128,6 +158,7 @@ class spotifyService {
   }
 
   getTopArtists() async {
+    await refreshTokenIfNeeded();
     List topArtistsShort = await getTopItems('artists', 'short_term');
     List topArtistsMedium = await getTopItems('artists', 'medium_term');
     List topArtistsLong = await getTopItems('artists', 'long_term');
@@ -174,6 +205,7 @@ class spotifyService {
   }
 
   Future<List> getTopItems(String itemType, String timeRange) async{
+    await refreshTokenIfNeeded();
     if (itemType != 'artists' && itemType != 'tracks') {
       return [];
     }
@@ -195,6 +227,7 @@ class spotifyService {
   }
 
   getTop3Items(String itemType) async {
+    await refreshTokenIfNeeded();
     if (itemType != 'artists' && itemType != 'tracks') {
       return [];
     }
@@ -216,6 +249,7 @@ class spotifyService {
   }
 
   Future<Tuple2<dynamic, List>> getTopItems1(String itemType, String timeRange, [String uri = '']) async {
+    await refreshTokenIfNeeded();
     dynamic body;
     List items = [];
     if (itemType != 'artists' && itemType != 'tracks') {
@@ -243,6 +277,7 @@ class spotifyService {
   }
 
   Future<Tuple2<dynamic, List>> getPlaylistTracks(String id, [String uri = '']) async {
+    await refreshTokenIfNeeded();
     dynamic body;
     List items = [];
     final response = await http.get(
@@ -266,6 +301,7 @@ class spotifyService {
   }
 
   Future<List> getPlaylists() async{
+    await refreshTokenIfNeeded();
     final response = await http.get(
       Uri.parse('https://api.spotify.com/v1/me/playlists?limit=50'),
       headers: {
@@ -283,6 +319,7 @@ class spotifyService {
   }
 
   Future<List> getDevices() async{
+    await refreshTokenIfNeeded();
     final response = await http.get(
       Uri.parse('https://api.spotify.com/v1/me/player/devices'),
       headers: {
@@ -298,6 +335,7 @@ class spotifyService {
   }
 
   Future<void> playMusic(String musicUri) async {
+    await refreshTokenIfNeeded();
     final response = await http.put(
       Uri.parse('https://api.spotify.com/v1/me/player/play?device_id=$deviceId'),
       body: jsonEncode({'uris': [musicUri]}),
@@ -311,6 +349,7 @@ class spotifyService {
   }
 
   Future<void> togglePlayer() async {
+    await refreshTokenIfNeeded();
     String url;
     if (isPlaying) {
       url = 'https://api.spotify.com/v1/me/player/pause?device_id=$deviceId';
@@ -330,6 +369,7 @@ class spotifyService {
   }
 
   Future<List> searchItems(String searchString, String itemType) async {
+    await refreshTokenIfNeeded();
     final response = await http.get(
       Uri.parse('https://api.spotify.com/v1/search?q=$searchString&type=$itemType&limit=5'),
       headers: {
@@ -349,6 +389,7 @@ class spotifyService {
   }
 
   Future<void> createPlaylist1(List ids, String name) async {
+    await refreshTokenIfNeeded();
     final response1 = await http.get(
       Uri.parse('https://api.spotify.com/v1/me'),
       headers: {
@@ -387,6 +428,7 @@ class spotifyService {
   }
 
   Future<void> createPlaylist(String timeRange) async {
+    await refreshTokenIfNeeded();
     final response1 = await http.get(
       Uri.parse('https://api.spotify.com/v1/me'),
       headers: {
@@ -434,6 +476,7 @@ class spotifyService {
   }
 
   getTracks(List tracksIds) async {
+    await refreshTokenIfNeeded();
     String ids = '';
     int index = 0;
     tracksIds.forEach((element) {
@@ -462,6 +505,7 @@ class spotifyService {
   }
 
   getArtists(List artistsIds) async {
+    await refreshTokenIfNeeded();
     String ids = '';
     artistsIds.forEach((element) {
       if (element == artistsIds[artistsIds.length - 1]) {
