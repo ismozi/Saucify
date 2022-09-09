@@ -199,30 +199,94 @@ class MainPageState extends State<MainPage> {
           shape: isFeedActive ? CircularNotchedRectangle(): null,
           child: Row(
             children: [
-              IconButton(
-                color: isFeedActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
-                icon: Icon(Icons.feed), 
-                iconSize: isFeedActive ? 32 : 27,
-                onPressed: (() => {setPage(0)})
-              ), 
-              IconButton(
-                color: isPlaylistsActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
-                icon: Icon(Icons.music_note), 
-                iconSize: isPlaylistsActive ? 32 : 27,
-                onPressed: (() => {setPage(1)})
-              ), 
-              IconButton(
-                color: isStatsActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
-                icon: Icon(Icons.query_stats_rounded), 
-                iconSize: isStatsActive ? 32 : 27,
-                onPressed: (() => {setPage(2)})
-              ), 
-              IconButton(
-                color: isProfileActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
-                icon: Icon(Icons.person), 
-                iconSize: isProfileActive ? 32 : 27,
-                onPressed: (() => {setPage(3)})
-              ), 
+              Stack(
+                children: [
+                  Container(
+                    padding: isFeedActive ? const EdgeInsets.fromLTRB(0, 0, 0, 12) : const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: IconButton(
+                      color: isFeedActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
+                      icon: Icon(Icons.feed), 
+                      iconSize: isFeedActive ? 32 : 27,
+                      onPressed: (() => {setPage(0)})
+                    ),
+                  ),
+                  isFeedActive ? Positioned(
+                    top: 38,
+                    right: 8,
+                    child: Text('Feed', style: GoogleFonts.getFont('Montserrat', color: Colors.green, fontSize: 12))
+                  ) : Positioned(
+                    top: 38,
+                    right: 6,
+                    child: Container()
+                  )
+                ]
+              ),
+              Stack(
+                children: [
+                  Container(
+                    padding: isPlaylistsActive ? const EdgeInsets.fromLTRB(0, 0, 0, 12) : const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: IconButton(
+                      color: isPlaylistsActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
+                      icon: Icon(Icons.music_note), 
+                      iconSize: isPlaylistsActive ? 32 : 27,
+                      onPressed: (() => {setPage(1)})
+                    ), 
+                  ),
+                  isPlaylistsActive ? Positioned(
+                    top: 38,
+                    right: 0,
+                    child: Text('Playlists', style: GoogleFonts.getFont('Montserrat', color: Colors.green, fontSize: 12))
+                  ) : Positioned(
+                    top: 38,
+                    right: 6,
+                    child: Container()
+                  )
+                ]
+              ),
+              Stack(
+                children: [
+                  Container(
+                    padding: isStatsActive ? const EdgeInsets.fromLTRB(0, 0, 0, 12) : const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: IconButton(
+                      color: isStatsActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
+                      icon: Icon(Icons.query_stats_rounded), 
+                      iconSize: isStatsActive ? 32 : 27,
+                      onPressed: (() => {setPage(2)})
+                    ), 
+                  ),
+                  isStatsActive ? Positioned(
+                    top: 38,
+                    right: 8,
+                    child: Text('Stats', style: GoogleFonts.getFont('Montserrat', color: Colors.green, fontSize: 12))
+                  ) : Positioned(
+                    top: 38,
+                    right: 6,
+                    child: Container()
+                  )
+                ]
+              ),
+              Stack(
+                children: [
+                  Container(
+                    padding: isProfileActive ? const EdgeInsets.fromLTRB(0, 0, 0, 12) : const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: IconButton(
+                      color: isProfileActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
+                      icon: Icon(Icons.person), 
+                      iconSize: isProfileActive ? 32 : 27,
+                      onPressed: (() => {setPage(3)})
+                    ), 
+                  ),
+                  isProfileActive ? Positioned(
+                    top: 38,
+                    right: 4,
+                    child: Text('Profile', style: GoogleFonts.getFont('Montserrat', color: Colors.green, fontSize: 12))
+                  ) : Positioned(
+                    top: 38,
+                    right: 4,
+                    child: Container()
+                  )
+                ]
+              ),
             ],
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ),

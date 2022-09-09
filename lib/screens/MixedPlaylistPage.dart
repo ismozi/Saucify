@@ -29,6 +29,11 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
   double opacityLevel = 0.0;
   List tracksIds = [];
 
+  bool isOneMonth = true;
+  bool isFourMonths = false;
+  bool isAllTime = false;
+  String timeRange = 'short';
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +50,36 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
     }
   }
 
+  void setTimeRange(int index) {
+    opacityLevel = 0;
+    Timer(Duration(milliseconds: 800), () {
+      setState(() => opacityLevel = 1);
+    });
+
+    if (index == 0) {
+      setState(() {
+        isOneMonth = true;
+        isFourMonths = false;
+        isAllTime = false;
+        timeRange = 'short';
+      });
+    } else if (index == 1) {
+      setState(() {
+        isOneMonth = false;
+        isFourMonths = true;
+        isAllTime = false;
+        timeRange = 'medium';
+      });
+    } else if (index == 2) {
+      setState(() {
+        isOneMonth = false;
+        isFourMonths = false;
+        isAllTime = true;
+        timeRange = 'long';
+      });
+    }
+  }
+
   generateMixedPlaylist() async {
     List following = await dbService.getFollowing(service.userId);
     int playlistSize = 30;
@@ -55,7 +90,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
 
     await Future.forEach(following, (userId) async { 
       DocumentSnapshot userSnap = await dbService.getUserDocument(userId as String);
-      List topTracks = userSnap['topTracks']['short'];
+      List topTracks = userSnap['topTracks'][timeRange];
 
       if (index == 0) {
         topTracks = topTracks.sublist(0, numOfTracks+remaining);
@@ -89,7 +124,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
               List items = snapshot1.data!;
               print(items.length);
               return ListView.builder(
-                padding: const EdgeInsets.fromLTRB(0, 30, 0, 110),
+                padding: const EdgeInsets.fromLTRB(0, 30, 0, 65),
                 itemCount: items.length,
                 itemBuilder: (context, index) {
                   return Container(
@@ -128,7 +163,61 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
           )
         )
       ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        child: BottomAppBar(
+          color: Color.fromARGB(255, 19, 19, 19),
+          child: Container(
+            padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  child: GestureDetector(
+                    onTap:() => {setTimeRange(0)},
+                    child: Text("1 Month", style: GoogleFonts.getFont(
+                      'Montserrat',
+                      color: isOneMonth ? Colors.green : Colors.white, 
+                      fontWeight: isOneMonth ? FontWeight.w700 : FontWeight.w400)
+                    ),
+                  ),
+                ),
+                Container(
+                  child: GestureDetector(
+                    onTap:() => {setTimeRange(1)},
+                    child: Text("6 Months", style: GoogleFonts.getFont(
+                      'Montserrat',
+                      color: isFourMonths ? Colors.green : Colors.white, 
+                      fontWeight: isFourMonths ? FontWeight.w700 : FontWeight.w400)
+                    ),
+                  ),
+                ),
+                Container(
+                  child: GestureDetector(
+                    onTap:() => {setTimeRange(2)},
+                    child: Text("All time", style: GoogleFonts.getFont(
+                      'Montserrat',
+                      color: isAllTime ? Colors.green : Colors.white, 
+                      fontWeight: isAllTime ? FontWeight.w700 : FontWeight.w400)
+                    ),
+                  ),
+                ),
+              ]
+            )
+          ),
+        ),
+      ),
       floatingActionButton: !tracksIds.isEmpty ? Container(
+        margin: EdgeInsets.fromLTRB(0, 0, 0, 70),
         child: FloatingActionButton.extended(
           label: Text('Generate playlist', style: GoogleFonts.getFont('Montserrat', 
             color: Colors.black, fontWeight: FontWeight.w600, fontSize: 17)),
@@ -138,10 +227,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
           }
         ),
       ) : null,
-      floatingActionButtonLocation: CustomFloatingActionButtonLocation(
-              (MediaQuery.of(context).size.width*0.5)-105,
-              620
-      )
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked
     );
   }
 }
