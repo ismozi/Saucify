@@ -43,13 +43,6 @@ class _ProfileContainerState extends State<ProfileContainer> {
     return AnimatedOpacity(
       opacity: opacityLevel,
       duration: const Duration(milliseconds: 300),
-      child: Card(
-        margin: widget.isCurrentUser ? const EdgeInsets.fromLTRB(10, 12, 10, 65) : const EdgeInsets.fromLTRB(10, 12, 10, 10),
-        color: Color.fromARGB(255, 24, 24, 24),
-        elevation: 8.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
         child: Column(
           children: [
             Padding(padding: const EdgeInsets.fromLTRB(0, 20, 0, 0)),
@@ -68,23 +61,13 @@ class _ProfileContainerState extends State<ProfileContainer> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Image(image: user['imageUrl'] != null ? NetworkImage(user['imageUrl']): emptyImage, width: 180, height: 180)
+                  child: Image(image: user['imageUrl'] != null ? NetworkImage(user['imageUrl']): emptyImage, width: 150, height: 150)
                 )
               )
             ),
             Padding(padding: const EdgeInsets.fromLTRB(0, 15, 0, 0)),
             Text(user['username'], 
-                style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontWeight: FontWeight.w300, fontSize: 30)),
+                style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontWeight: FontWeight.w300, fontSize: 25)),
             Padding(padding: !widget.isCurrentUser ? const EdgeInsets.fromLTRB(0, 10, 0, 0) : const EdgeInsets.fromLTRB(0, 0, 0, 0)),
             Container(
               child: !widget.isCurrentUser ? GestureDetector(
@@ -111,7 +94,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 17, 17, 17),
+                    color: Color.fromARGB(255, 12, 12, 12),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -124,10 +107,10 @@ class _ProfileContainerState extends State<ProfileContainer> {
                   ),
                   alignment: Alignment.center,
                   padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
-                  width: 120,
+                  width: 100,
                   child: GestureDetector(
                     child: Text("Followers:  ${user['followers'].length}", 
-                            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 17)),
+                            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
                     onTap: () {
                       Navigator.of(context).push(PageRouteBuilder(
                         pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, true),
@@ -140,7 +123,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                 Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0)),
                 Container(
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 17, 17, 17),
+                    color: Color.fromARGB(255, 12, 12, 12),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -153,10 +136,10 @@ class _ProfileContainerState extends State<ProfileContainer> {
                   ),
                   alignment: Alignment.center,
                   padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
-                  width: 120,
+                  width: 100,
                   child: GestureDetector(
                     child: Text("Following:  ${widget.targetUserFollowing.length}", 
-                            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 17)),
+                            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
                     onTap: () {
                       Navigator.of(context).push(PageRouteBuilder(
                         pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, false),
@@ -172,138 +155,72 @@ class _ProfileContainerState extends State<ProfileContainer> {
             Divider(
               color: Color.fromARGB(255, 77, 77, 77)
             ),
+            Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
+            Container(
+              alignment: Alignment.topLeft,
+              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+              child: Text("Top Songs All Time", 
+                style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 17)),
+            ),
+            Padding(padding: const EdgeInsets.fromLTRB(0, 12, 0, 0)),
+            GridView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: 4,
+              primary: false,
+              padding: EdgeInsets.zero,
+              itemBuilder: (context, index) => Card(
+                color: Color.fromARGB(255, 29, 29, 29),
+                child: ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image(image: NetworkImage(widget.topTracks[index]['album']['images'][0]['url']), width: 45, height: 45)
+                  ),
+                  title: Text(widget.topTracks[index]['name'].length > 15 ? widget.topTracks[index]['name'].substring(0, 15)+'...' : widget.topTracks[index]['name'], 
+                            style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 12)),
+                )
+              ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 2.8,
+                crossAxisSpacing: 1,
+                mainAxisSpacing: 1,
+              ),
+            ),
             Padding(padding: const EdgeInsets.fromLTRB(0, 15, 0, 0)),
             Container(
               alignment: Alignment.topLeft,
               padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-              child: Text("Top 3 Songs All Time", 
-                style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 20)),
+              child: Text("Top Artists All Time", 
+                style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 17)),
             ),
             Padding(padding: const EdgeInsets.fromLTRB(0, 12, 0, 0)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
+            GridView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: 4,
+              primary: false,
+              padding: EdgeInsets.zero,
+              itemBuilder: (context, index) => Card(
+                color: Color.fromARGB(255, 29, 29, 29),
+                child: ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image(image: NetworkImage(widget.topArtists[index]['images'][0]['url']), width: 45, height: 45)
                   ),
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  width: MediaQuery.of(context).size.height * 0.14,
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image(image: NetworkImage(widget.topTracks[0]['album']['images'][0]['url']), width: 60, height: 60)
-                      ),
-                      Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
-                      Text(widget.topTracks[0]['name'].length > 15 ? widget.topTracks[0]['name'].substring(0, 15)+'...' : widget.topTracks[0]['name'], 
+                  title: Text(widget.topArtists[0]['name'].length > 15 ? widget.topArtists[index]['name'].substring(0, 15)+'...' : widget.topArtists[index]['name'], 
                         style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 12)),
-                    ]
-                  )
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  width: MediaQuery.of(context).size.height * 0.14,
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image(image: NetworkImage(widget.topTracks[1]['album']['images'][0]['url']), width: 60, height: 60)
-                      ),
-                      Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
-                      Text(widget.topTracks[1]['name'].length > 15 ? widget.topTracks[1]['name'].substring(0, 15)+'...' : widget.topTracks[1]['name'], 
-                        style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 12)),
-                    ]
-                  )
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  width: MediaQuery.of(context).size.height * 0.14,
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image(image: NetworkImage(widget.topTracks[2]['album']['images'][0]['url']), width: 60, height: 60)
-                      ),
-                      Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
-                      Text(widget.topTracks[2]['name'].length > 15 ? widget.topTracks[2]['name'].substring(0, 15)+'...' : widget.topTracks[2]['name'], 
-                        style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 12)),
-                    ]
-                  )
-                ),
-              ]
-            ),
-            Padding(padding: const EdgeInsets.fromLTRB(0, 40, 0, 0)),
-            Container(
-              alignment: Alignment.topLeft,
-              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-              child: Text("Top 3 Artists All Time", 
-                style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 20)),
-            ),
-            Padding(padding: const EdgeInsets.fromLTRB(0, 12, 0, 0)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  width: MediaQuery.of(context).size.height * 0.14,
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image(image: NetworkImage(widget.topArtists[0]['images'][0]['url']), width: 60, height: 60)
-                      ),
-                      Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
-                      Text(widget.topArtists[0]['name'].length > 15 ? widget.topArtists[0]['name'].substring(0, 15)+'...' : widget.topArtists[0]['name'], 
-                        style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 12)),
-                    ]
-                  )
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  width: MediaQuery.of(context).size.height * 0.14,
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image(image: NetworkImage(widget.topArtists[1]['images'][0]['url']), width: 60, height: 60)
-                      ),
-                      Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
-                      Text(widget.topArtists[1]['name'].length > 15 ? widget.topArtists[1]['name'].substring(0, 15)+'...' : widget.topArtists[1]['name'], 
-                        style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 12)),
-                    ]
-                  )
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  width: MediaQuery.of(context).size.height * 0.14,
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image(image: NetworkImage(widget.topArtists[2]['images'][0]['url']), width: 60, height: 60)
-                      ),
-                      Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
-                      Text(widget.topArtists[2]['name'].length > 15 ? widget.topArtists[2]['name'].substring(0, 15)+'...' : widget.topArtists[2]['name'], 
-                        style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 12)),
-                    ]
-                  )
-                ),
-              ]
+                )
+              ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 2.8,
+                crossAxisSpacing: 1,
+                mainAxisSpacing: 1,
+              ),
             ),
           ]
         )
-      )
     );
   }
 }
