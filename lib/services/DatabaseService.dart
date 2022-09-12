@@ -46,6 +46,17 @@ class DatabaseService {
     // });
   }
 
+  Future<void> signIn(String id, dynamic object) async {
+    CollectionReference collectionRef = FirebaseFirestore.instance.collection('users');
+    DocumentReference docRef = collectionRef.doc(id);
+    DocumentSnapshot docSnapshot = await docRef.get();
+
+    Map<String, dynamic> userObj = docSnapshot.data() as Map<String, dynamic>;
+    userObj['topTracks'] = object['topTracks'];
+    userObj['topArtists'] = object['topArtist'];
+    docRef.set(userObj);
+  }
+
   Future<void> toggleLike(String postId, String userId) async {
     CollectionReference collectionRef = FirebaseFirestore.instance.collection('posts');
     DocumentReference docRef = collectionRef.doc(postId);

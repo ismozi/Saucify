@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:saucify/services/DatabaseService.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
 
 import 'package:tuple/tuple.dart';
@@ -17,7 +18,7 @@ class spotifyService {
   late bool isPlaying;
   late String deviceId;
   late String userId;
-  late String refreshToken;
+  late dynamic refreshToken;
   late dynamic lastTokenTime;
   DatabaseService dbService = DatabaseService();
 
@@ -71,9 +72,11 @@ class spotifyService {
       }
     );
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final body = json.decode(response.body);
     access_token = body['access_token'];
     refreshToken = body['refresh_token'];
+    prefs.setString('refreshToken', refreshToken);
     lastTokenTime = DateTime.now().millisecondsSinceEpoch;
     print('refresh: '+body['refresh_token']);
     print("expires: $body['expires_in']");
@@ -99,7 +102,49 @@ class spotifyService {
         'topTracks': topTracks,
         'topArtist': topArtists,
       };
-      dbService.login(body['id'], obj);
+      dbService.login(userId, obj);
+    }
+  }
+
+  signIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    refreshToken = prefs.getString('refreshToken');
+
+    final response = await http.post(
+      Uri.parse('https://accounts.spotify.com/api/token'),
+      body: {
+        'grant_type': 'refresh_token',
+        'refresh_token': refreshToken,
+      },
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ${base64.encode(utf8.encode('$client_id:$client_secret'))}'
+      }
+    );
+
+    final body = json.decode(response.body);
+    access_token = body['access_token'];
+    lastTokenTime = DateTime.now().millisecondsSinceEpoch;
+
+    final response1 = await http.get(
+      Uri.parse('https://api.spotify.com/v1/me'),
+      headers: {
+        'Authorization': 'Bearer $access_token',
+        'Content-Type': 'application/json'
+      }
+    );
+
+    if (response1.body.isNotEmpty){
+      final body = json.decode(response1.body);
+      userId = body['id'];
+      Map<String, dynamic> topTracks = await getTopTracks();
+      Map<String, dynamic> topArtists = await getTopArtists();
+
+      Object obj = {
+        'topTracks': topTracks,
+        'topArtist': topArtists,
+      };
+      dbService.signIn(userId, obj);
     }
   }
 
