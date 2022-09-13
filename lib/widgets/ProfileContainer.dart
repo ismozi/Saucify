@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 import 'package:saucify/app/app.locator.dart';
 import 'package:saucify/screens/UserListPage.dart';
 import 'package:saucify/services/DatabaseService.dart';
