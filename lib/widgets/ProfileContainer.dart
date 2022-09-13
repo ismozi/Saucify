@@ -9,6 +9,7 @@ import 'package:saucify/app/app.locator.dart';
 import 'package:saucify/screens/UserListPage.dart';
 import 'package:saucify/services/DatabaseService.dart';
 import 'package:tuple/tuple.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/ArtistsScreen.dart';
 import '../screens/TracksScreen.dart';
@@ -35,9 +36,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
   Map<String, dynamic> user = {};
   double opacityLevel = 0;
 
-  List topTracks = [];
   List topTracksIds = [];
-  List topArtists = [];
   List topArtistsIds = [];
 
   final tracksController = PageController(viewportFraction: 0.99);
@@ -50,8 +49,6 @@ class _ProfileContainerState extends State<ProfileContainer> {
     super.initState();
     print(widget.topTracks);
     user = widget.user.data() as Map<String, dynamic>;
-    topTracks = widget.topTracks['long'];
-    topArtists = widget.topArtists['long'];
     topTracksIds = widget.topTracksIds['long'];
     topArtistsIds = widget.topArtistsIds['long'];
     Timer(Duration(milliseconds: 0), () {
@@ -185,7 +182,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                 children: [
                   Text(tracksCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
                        tracksCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
-                       'Top Songs Last Month',
+                       'Top Songs This Month',
                     style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 17)),
                   IconButton(
                     color: Colors.green,
@@ -193,7 +190,10 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     constraints: BoxConstraints(),
                     icon: Icon(Icons.expand_circle_down), onPressed: () async {
                       Navigator.of(context).push(PageRouteBuilder(
-                        pageBuilder: (c, a1, a2) => TracksScreen(tracksIds: topTracksIds, playlistName: "Top Songs All Time"),
+                        pageBuilder: (c, a1, a2) => TracksScreen(tracksIds: topTracksIds, 
+                        playlistName: tracksCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
+                                      tracksCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
+                                      'Top Songs This Month'),
                         transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
                         transitionDuration: Duration(milliseconds: 150),
                       ));
@@ -210,13 +210,10 @@ class _ProfileContainerState extends State<ProfileContainer> {
                   setState(() {
                     tracksCurrentPageNotifier.value = index;
                     if (index == 0){
-                      topTracks = widget.topTracks['long']!;
                       topTracksIds = widget.topTracksIds['long'];
                     } else if (index == 1) {
-                      topTracks = widget.topTracks['medium']!;
                       topTracksIds = widget.topTracksIds['medium'];
                     } else {
-                      topTracks = widget.topTracks['short']!;
                       topTracksIds = widget.topTracksIds['short'];
                     }
                   });
@@ -228,36 +225,44 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     itemCount: 4,
                     primary: false,
                     padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) => Card(
-                      color: Color.fromARGB(255, 29, 29, 29),
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image(image: NetworkImage(widget.topTracks['long'][index]['album']['images'][0]['url']), width: 42, height: 42)
-                                ),
-                                Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
-                                Text(widget.topTracks['long'][index]['name'].length > 11 ? widget.topTracks['long'][index]['name'].substring(0, 11)+'...' : widget.topTracks['long'][index]['name'], 
-                                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
-                              ]
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                  child: Text('${index+1}', 
-                                          style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
-                                )
-                              ]
-                            )
-                          ]
+                    itemBuilder: (context, index) => GestureDetector(
+                      child: Card(
+                        color: Color.fromARGB(255, 29, 29, 29),
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image(image: NetworkImage(widget.topTracks['long'][index]['album']['images'][0]['url']), width: 42, height: 42)
+                                  ),
+                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
+                                  Text(widget.topTracks['long'][index]['name'].length > 11 ? widget.topTracks['long'][index]['name'].substring(0, 11)+'...' : widget.topTracks['long'][index]['name'], 
+                                      style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
+                                ]
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                    child: Text('${index+1}', 
+                                            style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
+                                  )
+                                ]
+                              )
+                            ]
+                          )
                         )
-                      )
+                      ),
+                      onTap: () async {
+                        final Uri _url = Uri.parse(widget.topTracks['long'][index]['uri']);
+                        if (!await launchUrl(_url)) {
+                          throw 'Could not launch $_url';
+                        }
+                      },
                     ),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -272,36 +277,44 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     itemCount: 4,
                     primary: false,
                     padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) => Card(
-                      color: Color.fromARGB(255, 29, 29, 29),
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image(image: NetworkImage(widget.topTracks['medium'][index]['album']['images'][0]['url']), width: 42, height: 42)
-                                ),
-                                Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
-                                Text(widget.topTracks['medium'][index]['name'].length > 11 ? widget.topTracks['medium'][index]['name'].substring(0, 11)+'...' : widget.topTracks['medium'][index]['name'], 
-                                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
-                              ]
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                  child: Text('${index+1}', 
-                                          style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
-                                )
-                              ]
-                            )
-                          ]
+                    itemBuilder: (context, index) => GestureDetector(
+                      child: Card(
+                        color: Color.fromARGB(255, 29, 29, 29),
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image(image: NetworkImage(widget.topTracks['medium'][index]['album']['images'][0]['url']), width: 42, height: 42)
+                                  ),
+                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
+                                  Text(widget.topTracks['medium'][index]['name'].length > 11 ? widget.topTracks['medium'][index]['name'].substring(0, 11)+'...' : widget.topTracks['medium'][index]['name'], 
+                                      style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
+                                ]
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                    child: Text('${index+1}', 
+                                            style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
+                                  )
+                                ]
+                              )
+                            ]
+                          )
                         )
-                      )
+                      ),
+                      onTap: () async {
+                        final Uri _url = Uri.parse(widget.topTracks['medium'][index]['uri']);
+                        if (!await launchUrl(_url)) {
+                          throw 'Could not launch $_url';
+                        }
+                      },
                     ),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -316,36 +329,44 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     itemCount: 4,
                     primary: false,
                     padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) => Card(
-                      color: Color.fromARGB(255, 29, 29, 29),
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image(image: NetworkImage(widget.topTracks['short'][index]['album']['images'][0]['url']), width: 42, height: 42)
-                                ),
-                                Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
-                                Text(widget.topTracks['short'][index]['name'].length > 11 ? widget.topTracks['short'][index]['name'].substring(0, 11)+'...' : widget.topTracks['short'][index]['name'], 
-                                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
-                              ]
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                  child: Text('${index+1}', 
-                                          style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
-                                )
-                              ]
-                            )
-                          ]
+                    itemBuilder: (context, index) => GestureDetector(
+                      child: Card(
+                        color: Color.fromARGB(255, 29, 29, 29),
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image(image: NetworkImage(widget.topTracks['short'][index]['album']['images'][0]['url']), width: 42, height: 42)
+                                  ),
+                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
+                                  Text(widget.topTracks['short'][index]['name'].length > 11 ? widget.topTracks['short'][index]['name'].substring(0, 11)+'...' : widget.topTracks['short'][index]['name'], 
+                                      style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
+                                ]
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                    child: Text('${index+1}', 
+                                            style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
+                                  )
+                                ]
+                              )
+                            ]
+                          )
                         )
-                      )
+                      ),
+                      onTap: () async {
+                        final Uri _url = Uri.parse(widget.topTracks['short'][index]['uri']);
+                        if (!await launchUrl(_url)) {
+                          throw 'Could not launch $_url';
+                        }
+                      },
                     ),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -372,7 +393,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                 children: [
                   Text(artistsCurrentPageNotifier.value == 0 ? 'Top Artists All Time' : 
                        artistsCurrentPageNotifier.value == 1 ? 'Top Artists Last 6 Months' :
-                       'Top Artists Last Month', 
+                       'Top Artists This Month', 
                     style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 17)),
                   IconButton(
                     color: Colors.green,
@@ -380,7 +401,10 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     constraints: BoxConstraints(),
                     icon: Icon(Icons.expand_circle_down), onPressed: () async {
                       Navigator.of(context).push(PageRouteBuilder(
-                        pageBuilder: (c, a1, a2) => ArtistsScreen(artistsIds: topArtistsIds, pageName: "Top Artists All Time"),
+                        pageBuilder: (c, a1, a2) => ArtistsScreen(artistsIds: topArtistsIds, 
+                        pageName: artistsCurrentPageNotifier.value == 0 ? 'Top Artists All Time' : 
+                                  artistsCurrentPageNotifier.value == 1 ? 'Top Artists Last 6 Months' :
+                                  'Top Artists This Month'),
                         transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
                         transitionDuration: Duration(milliseconds: 150),
                       ));
@@ -398,13 +422,10 @@ class _ProfileContainerState extends State<ProfileContainer> {
                   setState(() {
                     artistsCurrentPageNotifier.value = index;
                     if (index == 0){
-                      topArtists = widget.topArtists['long']!;
                       topArtistsIds = widget.topArtistsIds['long'];
                     } else if (index == 1) {
-                      topArtists = widget.topArtists['medium']!;
                       topArtistsIds = widget.topArtistsIds['medium'];
                     } else {
-                      topArtists = widget.topArtists['short']!;
                       topArtistsIds = widget.topArtistsIds['short'];
                     }
                   });
@@ -417,36 +438,44 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     itemCount: 4,
                     primary: false,
                     padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) => Card(
-                      color: Color.fromARGB(255, 29, 29, 29),
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Image(image: NetworkImage(widget.topArtists['long'][index]['images'][0]['url']), width: 42, height: 42)
-                                ),
-                                Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
-                                Text(widget.topArtists['long'][index]['name'].length > 11 ? widget.topArtists['long'][index]['name'].substring(0, 11)+'...' : widget.topArtists['long'][index]['name'], 
-                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
-                              ]
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                  child: Text('${index+1}', 
-                                          style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
-                                )
-                              ]
-                            )
-                          ]
+                    itemBuilder: (context, index) => GestureDetector(
+                      child: Card(
+                        color: Color.fromARGB(255, 29, 29, 29),
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Image(image: NetworkImage(widget.topArtists['long'][index]['images'][0]['url']), width: 42, height: 42)
+                                  ),
+                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
+                                  Text(widget.topArtists['long'][index]['name'].length > 11 ? widget.topArtists['long'][index]['name'].substring(0, 11)+'...' : widget.topArtists['long'][index]['name'], 
+                                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
+                                ]
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                    child: Text('${index+1}', 
+                                            style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
+                                  )
+                                ]
+                              )
+                            ]
+                          )
                         )
-                      )
+                      ),
+                      onTap: () async {
+                        final Uri _url = Uri.parse(widget.topArtists['long'][index]['uri']);
+                        if (!await launchUrl(_url)) {
+                          throw 'Could not launch $_url';
+                        }
+                      },
                     ),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -461,36 +490,44 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     itemCount: 4,
                     primary: false,
                     padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) => Card(
-                      color: Color.fromARGB(255, 29, 29, 29),
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Image(image: NetworkImage(widget.topArtists['medium'][index]['images'][0]['url']), width: 42, height: 42)
-                                ),
-                                Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
-                                Text(widget.topArtists['medium'][index]['name'].length > 11 ? widget.topArtists['medium'][index]['name'].substring(0, 11)+'...' : widget.topArtists['medium'][index]['name'], 
-                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
-                              ]
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                  child: Text('${index+1}', 
-                                          style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
-                                )
-                              ]
-                            )
-                          ]
+                    itemBuilder: (context, index) => GestureDetector(
+                      child: Card(
+                        color: Color.fromARGB(255, 29, 29, 29),
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Image(image: NetworkImage(widget.topArtists['medium'][index]['images'][0]['url']), width: 42, height: 42)
+                                  ),
+                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
+                                  Text(widget.topArtists['medium'][index]['name'].length > 11 ? widget.topArtists['medium'][index]['name'].substring(0, 11)+'...' : widget.topArtists['medium'][index]['name'], 
+                                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
+                                ]
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                    child: Text('${index+1}', 
+                                            style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
+                                  )
+                                ]
+                              )
+                            ]
+                          )
                         )
-                      )
+                      ),
+                      onTap: () async {
+                        final Uri _url = Uri.parse(widget.topArtists['medium'][index]['uri']);
+                        if (!await launchUrl(_url)) {
+                          throw 'Could not launch $_url';
+                        }
+                      },
                     ),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -505,36 +542,44 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     itemCount: 4,
                     primary: false,
                     padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) => Card(
-                      color: Color.fromARGB(255, 29, 29, 29),
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Image(image: NetworkImage(widget.topArtists['short'][index]['images'][0]['url']), width: 42, height: 42)
-                                ),
-                                Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
-                                Text(widget.topArtists['short'][index]['name'].length > 11 ? widget.topArtists['short'][index]['name'].substring(0, 11)+'...' : widget.topArtists['short'][index]['name'], 
-                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
-                              ]
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                  child: Text('${index+1}', 
-                                          style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
-                                )
-                              ]
-                            )
-                          ]
+                    itemBuilder: (context, index) => GestureDetector(
+                      child: Card(
+                        color: Color.fromARGB(255, 29, 29, 29),
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Image(image: NetworkImage(widget.topArtists['short'][index]['images'][0]['url']), width: 42, height: 42)
+                                  ),
+                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
+                                  Text(widget.topArtists['short'][index]['name'].length > 11 ? widget.topArtists['short'][index]['name'].substring(0, 11)+'...' : widget.topArtists['short'][index]['name'], 
+                                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
+                                ]
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                    child: Text('${index+1}', 
+                                            style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
+                                  )
+                                ]
+                              )
+                            ]
+                          )
                         )
-                      )
+                      ),
+                      onTap: () async {
+                        final Uri _url = Uri.parse(widget.topArtists['short'][index]['uri']);
+                        if (!await launchUrl(_url)) {
+                          throw 'Could not launch $_url';
+                        }
+                      },
                     ),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
