@@ -209,9 +209,9 @@ class _SongPostState extends State<SongPost> {
                   })
                 ),
                 title: Text(widget.itemName, 
-                            style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+                            style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 15)),
                 subtitle: widget.artistName != null ? Text(widget.artistName, 
-                            style: GoogleFonts.getFont('Montserrat', color: Colors.white)) : null,
+                            style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 13)) : null,
               )
             )
           ]

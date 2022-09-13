@@ -88,20 +88,20 @@ class _ProfilePageState extends State<ProfilePage> {
                       } else { 
                         DocumentSnapshot user = snapshot2.data!;
                         return FutureBuilder(
-                          future: service.getTracks(user['topTracks']['long']),
+                          future: service.getProfileTracks(user['topTracks']),
                           builder: (BuildContext context, AsyncSnapshot snapshot1) {
                             if (!snapshot1.hasData) {
                               return Container();
                             } else { 
-                              List topTracks = snapshot1.data!;
+                              Map<String, List> topTracks = snapshot1.data!;
                               return FutureBuilder(
-                                future: service.getArtists(user['topArtists']['long']),
+                                future: service.getProfileArtists(user['topArtists']),
                                 builder: (BuildContext context, AsyncSnapshot snapshot1) {
                                   if (!snapshot1.hasData) {
                                     return Container();
                                   } else { 
-                                    List topArtists = snapshot1.data!;
-                                    return ProfileContainer(topTracks, topArtists, user, targetUserFollowing, isFollowed, widget.isCurrentUser, key: ObjectKey(user));
+                                    Map<String, List> topArtists = snapshot1.data!;
+                                    return ProfileContainer(user['topTracks'], user['topArtists'], topTracks, topArtists, user, targetUserFollowing, isFollowed, widget.isCurrentUser, key: ObjectKey(user));
                                   }
                                 }
                               );

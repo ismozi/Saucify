@@ -94,6 +94,19 @@ class _SearchPage1State extends State<SearchPage1> {
                     if (!snapshot.hasData) {
                       return Container();
                     } else { 
+                      if (snapshot.data!.docs.isEmpty) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.search, size: 100, color: Colors.grey),
+                              Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                              Text('Search for users',
+                                style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontSize: 22)),
+                            ]
+                          ),
+                        );
+                      }
                       return ListView.builder(
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {

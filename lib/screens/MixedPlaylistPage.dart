@@ -28,6 +28,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
   List topTracks = [];
   double opacityLevel = 0.0;
   List tracksIds = [];
+  List userImgs = [];
 
   bool isOneMonth = true;
   bool isFourMonths = false;
@@ -87,6 +88,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
     int remaining = playlistSize % numOfTracks;
     int index = 0;
     List newTracksIds = [];
+    List newUserImgs = [];
 
     await Future.forEach(following, (userId) async { 
       DocumentSnapshot userSnap = await dbService.getUserDocument(userId as String);
@@ -100,8 +102,11 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
 
       topTracks.forEach((element) {
         newTracksIds.add(element);
+        newUserImgs.add(userSnap['imageUrl']);
       });
     });
+
+    userImgs = newUserImgs;
     tracksIds = newTracksIds;
     return service.getTracks(newTracksIds);
   }
@@ -143,6 +148,14 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                           image: NetworkImage(items[index]['album']['images'][0]['url']), 
                           width: 45, 
                           height: 45
+                        )
+                      ),
+                      trailing: ClipRRect(
+                        borderRadius: BorderRadius.circular(60),
+                        child: Image(
+                          image: NetworkImage(userImgs[index]), 
+                          width: 30, 
+                          height: 30
                         )
                       ),
                       title: Text(items[index]['name'], 

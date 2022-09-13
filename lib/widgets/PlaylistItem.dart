@@ -37,7 +37,7 @@ class _PlaylistItemState extends State<PlaylistItem> {
     // TODO: implement initState
     super.initState();
     playlistName = widget.user['username']+"'s ";
-    playlistName += widget.timeRange == 'short_term' ? 'Daily playlist' : widget.timeRange == 'medium_term' ? '6 months playlist' : 'All time playlist';
+    playlistName += widget.timeRange == 'short_term' ? 'Monthly Playlist' : widget.timeRange == 'medium_term' ? '6 Months Playlist' : 'All Time Playlist';
   }
 
   @override
@@ -82,7 +82,7 @@ class _PlaylistItemState extends State<PlaylistItem> {
                 },
               ),
               trailing: IconButton(
-                icon: Icon(Icons.star_border , 
+                icon: Icon(Icons.push_pin_outlined , 
                       color: Colors.grey),
                 onPressed: () {
                 },

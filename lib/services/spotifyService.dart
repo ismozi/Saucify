@@ -549,6 +549,41 @@ class spotifyService {
     return [];
   }
 
+  getProfileTracks(Map<String, dynamic> tracks) async {
+    await refreshTokenIfNeeded();
+    Map<String, List> tracksMap = {};
+    String ids = '';
+    int index = 0;
+
+    tracks.keys.forEach((key) {
+      tracks[key].sublist(0, 4).forEach((element) {
+        if (index == 11) {
+          ids += element;
+        } else {
+          ids += element + ',';
+        }
+        index++;
+      });
+    });
+
+    final response = await http.get(
+      Uri.parse('https://api.spotify.com/v1/tracks?ids=$ids'),
+      headers: {
+        'Authorization': 'Bearer $access_token',
+        'Content-Type': 'application/json'
+      }
+    );
+
+    if (response.body.isNotEmpty){
+      final body = json.decode(response.body);
+      tracksMap['short'] = body['tracks'].sublist(0, 4);
+      tracksMap['medium'] = body['tracks'].sublist(4, 8);
+      tracksMap['long'] = body['tracks'].sublist(8, 12);
+    }
+
+    return tracksMap;
+  }
+
   getArtists(List artistsIds) async {
     await refreshTokenIfNeeded();
     String ids = '';
@@ -574,6 +609,41 @@ class spotifyService {
     }
 
     return [];
+  }
+
+  getProfileArtists(Map<String, dynamic> artists) async {
+    await refreshTokenIfNeeded();
+    Map<String, List> artistsMap = {};
+    String ids = '';
+    int index = 0;
+
+    artists.keys.forEach((key) {
+      artists[key].sublist(0, 4).forEach((element) {
+        if (index == 11) {
+          ids += element;
+        } else {
+          ids += element + ',';
+        }
+        index++;
+      });
+    });
+
+    final response = await http.get(
+      Uri.parse('https://api.spotify.com/v1/artists?ids=$ids'),
+      headers: {
+        'Authorization': 'Bearer $access_token',
+        'Content-Type': 'application/json'
+      }
+    );
+
+    if (response.body.isNotEmpty){
+      final body = json.decode(response.body);
+      artistsMap['short'] = body['artists'].sublist(0, 4);
+      artistsMap['medium'] = body['artists'].sublist(4, 8);
+      artistsMap['long'] = body['artists'].sublist(8, 12);
+    }
+
+    return artistsMap;
   }
 }
 
