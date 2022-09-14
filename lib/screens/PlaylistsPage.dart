@@ -27,8 +27,8 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
   double opacityLevel = 0;
   final player = AudioPlayer();
 
-  bool isPostsActive = true;
-  bool isPlaylistsActive = false;
+  bool isPostsActive = false;
+  bool isPlaylistsActive = true;
 
   @override
   void dispose() {

@@ -42,7 +42,11 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     if (refreshToken != null) {
       await service.signIn();
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MainPage()), (Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(PageRouteBuilder(
+        pageBuilder: (c, a1, a2) => MainPage(),
+        transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+        transitionDuration: Duration(milliseconds: 150),
+      ), (Route<dynamic> route) => false);
     }
   }
 

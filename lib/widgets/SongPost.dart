@@ -174,7 +174,7 @@ class _SongPostState extends State<SongPost> {
                 color: Color.fromARGB(255, 35, 35, 35),
                 borderRadius: BorderRadius.circular(12)
               ),
-              margin: const EdgeInsets.all(10.0),
+              margin: const EdgeInsets.all(5.0),
               child: ListTile(
                 onTap: () async {
                   final Uri _url = Uri.parse(widget.itemUrl);
@@ -212,6 +212,56 @@ class _SongPostState extends State<SongPost> {
                             style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 15)),
                 subtitle: widget.artistName != null ? Text(widget.artistName, 
                             style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 13)) : null,
+              )
+            ),
+            Divider(
+              color: Color.fromARGB(255, 51, 51, 51)
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    child: Container(
+                      padding: const EdgeInsets.all(5.0),
+                      margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
+                      child: Row(
+                        children: [
+                          Icon(Icons.add_reaction_outlined, color: Colors.grey, size: 18),
+                          Padding(padding: const EdgeInsets.fromLTRB(5, 0, 0, 0)),
+                          Text('React', style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontSize: 13))
+                        ]
+                      )
+                    )
+                  ),
+                  GestureDetector(
+                    child: Container(
+
+                      padding: const EdgeInsets.all(5.0),
+                      margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
+                      child: Row(
+                        children: [
+                          Icon(Icons.comment_outlined, color: Colors.grey, size: 18),
+                          Padding(padding: const EdgeInsets.fromLTRB(5, 0, 0, 0)),
+                          Text('Comment', style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontSize: 13))
+                        ]
+                      )
+                    )
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      padding: const EdgeInsets.all(5.0),
+                      margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
+                      child: Row(
+                        children: [
+                          Icon(Icons.send_outlined, color: Colors.grey, size: 18),
+                          Padding(padding: const EdgeInsets.fromLTRB(5, 0, 0, 0)),
+                          Text('Share', style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontSize: 13))
+                        ]
+                      )
+                    )
+                  )
+                ]
               )
             )
           ]

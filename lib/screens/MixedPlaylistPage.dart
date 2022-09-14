@@ -39,7 +39,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
   void initState() {
     super.initState();
     generateMixedPlaylist();
-    Timer(Duration(milliseconds: 800), () {
+    Timer(Duration(milliseconds: 400), () {
       setState(() => opacityLevel = 1);
     });
   }

@@ -14,7 +14,7 @@ class FeedAppBar extends StatefulWidget implements PreferredSizeWidget{
 }
 
 class _FeedAppBarState extends State<FeedAppBar> {
-  Tuple2<bool, bool> options = Tuple2<bool, bool>(true, false);
+  Tuple2<bool, bool> options = Tuple2<bool, bool>(false, true);
 
   @override
   Widget build(BuildContext context) {

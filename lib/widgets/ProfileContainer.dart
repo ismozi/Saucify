@@ -170,7 +170,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
             ),
             Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
             Divider(
-              color: Color.fromARGB(255, 77, 77, 77)
+              color: Color.fromARGB(255, 61, 61, 61)
             ),
             Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
             Container(
