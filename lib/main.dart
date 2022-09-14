@@ -14,7 +14,7 @@ Future<void> main() async {
   setupLocator();
   runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Color.fromARGB(255, 19, 19, 19),
+    systemNavigationBarColor: Colors.black,
   ));
 }
 

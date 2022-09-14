@@ -1,5 +1,6 @@
  import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +11,7 @@ import '../app/app.locator.dart';
 import 'package:saucify/widgets/SongPost.dart';
 
 import '../services/DatabaseService.dart';
+import '../widgets/PostForm.dart';
 
 class PostsPage extends StatefulWidget {
   final Function displayProfile;
@@ -46,8 +48,9 @@ class PostsPageState extends State<PostsPage> {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-        color: Color.fromARGB(255, 19, 19, 19),
-        child: AnimatedOpacity(
+        color: Color.fromARGB(255, 10, 10, 10),
+        child: Stack(children: [
+        AnimatedOpacity(
           opacity: opacityLevel,
           duration: const Duration(milliseconds: 300),
           child: StreamBuilder(
@@ -75,10 +78,50 @@ class PostsPageState extends State<PostsPage> {
                         );
                       }
                       return ListView.builder(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 60),
+                        padding: const EdgeInsets.fromLTRB(0, 80, 0, 80),
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
                           DocumentSnapshot post = snapshot.data!.docs[index];
+                          if (index == 0){
+                            return Container(
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                child: Card(
+                                  color: Color.fromARGB(255, 19, 19, 19),
+                                  elevation: 8.0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: ListTile(
+                                    leading: ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: Image(
+                                        image: NetworkImage(post['profileImgUrl']), 
+                                        width: 45, 
+                                        height: 45
+                                      )
+                                    ),
+                                    title: Card(
+                                      color: Color.fromARGB(255, 26, 26, 26),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.search, color: Colors.green),
+                                            Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                                            Text('Search and share something!', style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 185, 185, 185), fontWeight: FontWeight.w300, fontSize: 13))
+                                          ]
+                                        )
+                                      )
+                                    ),
+                                  )
+                                )
+                              )
+                            );
+                          }
                           return SongPost(
                             displayProfile: widget.displayProfile,
                             userId: post['postedBy'],
@@ -102,7 +145,52 @@ class PostsPageState extends State<PostsPage> {
                 );
               }
             )
-          )
+          ),
+          // Positioned(
+          //   top: MediaQuery.of(context).size.height * 0.888,
+          //   left: MediaQuery.of(context).size.width * 0.5 - 60,
+          //   child: Container(
+          //     width: 100.0,
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(20),
+          //       boxShadow: [
+          //         BoxShadow(
+          //           color: Color.fromARGB(255, 2, 2, 2).withOpacity(1),
+          //           spreadRadius: 5,
+          //           blurRadius: 7,
+          //           offset: Offset(0, 3), // changes position of shadow
+          //         ),
+          //       ],
+          //     ),
+          //     child: FittedBox(
+          //       child: Container(
+          //         child: FloatingActionButton.extended(
+          //           label: Text('Add post', style: GoogleFonts.getFont('Montserrat', 
+          //             color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)),
+          //           backgroundColor: Colors.green,
+          //           onPressed: () {
+          //             showGeneralDialog(
+          //               barrierDismissible: true,
+          //               barrierLabel:
+          //                   MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          //               transitionDuration: Duration(milliseconds: 200),
+          //               context: context,
+          //               pageBuilder: (ctx, anim1, anim2) => PostForm(),
+          //               transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
+          //                 filter: ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
+          //                 child: FadeTransition(
+          //                   child: child,
+          //                   opacity: anim1,
+          //                 ),
+          //               ),
+          //             );
+          //           }
+          //         ),
+          //       )
+          //     ),
+          //   ),
+          // )
+        ])
       ),
     );
   }

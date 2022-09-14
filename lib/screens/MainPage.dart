@@ -118,17 +118,23 @@ class MainPageState extends State<MainPage> {
   Widget build(BuildContext context){
     return Scaffold(
       extendBody: true,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 19, 19, 19),
+        backgroundColor: Colors.transparent,
           foregroundColor: Colors.green,
           automaticallyImplyLeading: false,
-          shape: Border(
-            bottom: BorderSide(
-              color: Color.fromARGB(255, 19, 19, 19),
-              width: 4
-            )
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[Colors.black.withOpacity(1.0),
+                                Colors.black.withOpacity(1.0), 
+                                Colors.black.withOpacity(1.0),
+                                Colors.black.withOpacity(0.0)]),
+            ),
           ),
-          elevation: 10,
+          elevation: 0,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -186,14 +192,13 @@ class MainPageState extends State<MainPage> {
       body: activeScreen,
       bottomNavigationBar: Container(
         decoration: !isStatsActive && !isPlaylistsActive ? BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: Offset(0, 3), // changes position of shadow
-              ),
-            ],
+            gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: <Color>[Colors.black.withOpacity(1.0),
+                                  Colors.black.withOpacity(1.0), 
+                                  Colors.black.withOpacity(1.0),
+                                  Colors.black.withOpacity(0.0)]),
           ): null,
         child: BottomAppBar( 
           shape: isFeedActive ? CircularNotchedRectangle(): null,
@@ -290,14 +295,13 @@ class MainPageState extends State<MainPage> {
             ],
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ),
-          color: Color.fromARGB(255, 19, 19, 19)
+          color: Colors.transparent
         ),
       ),
       floatingActionButton: Visibility(
-        visible: isFeedActive,
+        visible: false,
         child: Container(
-          height: 40.0,
-          width: 40.0,
+          width: 100.0,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             boxShadow: [
@@ -310,25 +314,30 @@ class MainPageState extends State<MainPage> {
             ],
           ),
           child: FittedBox(
-            child: FloatingActionButton(
-              child: Icon(Icons.add, color: Colors.black),
-              onPressed: () {
-                showGeneralDialog(
-                  barrierDismissible: true,
-                  barrierLabel:
-                      MaterialLocalizations.of(context).modalBarrierDismissLabel,
-                  transitionDuration: Duration(milliseconds: 200),
-                  context: context,
-                  pageBuilder: (ctx, anim1, anim2) => isPostsActive ? PostForm() : PlaylistForm(),
-                  transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
-                    child: FadeTransition(
-                      child: child,
-                      opacity: anim1,
+            child: Container(
+              child: FloatingActionButton.extended(
+                label: Text('Add post', style: GoogleFonts.getFont('Montserrat', 
+                  color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)),
+                backgroundColor: Colors.green,
+                onPressed: () {
+                  showGeneralDialog(
+                    barrierDismissible: true,
+                    barrierLabel:
+                        MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                    transitionDuration: Duration(milliseconds: 200),
+                    context: context,
+                    pageBuilder: (ctx, anim1, anim2) => isPostsActive ? PostForm() : PlaylistForm(),
+                    transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
+                      child: FadeTransition(
+                        child: child,
+                        opacity: anim1,
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }
+              ),
+            )
           ),
         )
       ),
