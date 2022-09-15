@@ -191,7 +191,7 @@ class MainPageState extends State<MainPage> {
       ),
       body: activeScreen,
       bottomNavigationBar: Container(
-        decoration: !isStatsActive && !isPlaylistsActive ? BoxDecoration(
+        decoration: BoxDecoration(
             gradient: LinearGradient(
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
@@ -199,9 +199,8 @@ class MainPageState extends State<MainPage> {
                                   Colors.black.withOpacity(1.0), 
                                   Colors.black.withOpacity(1.0),
                                   Colors.black.withOpacity(0.0)]),
-          ): null,
+          ),
         child: BottomAppBar( 
-          shape: isFeedActive ? CircularNotchedRectangle(): null,
           child: Row(
             children: [
               Stack(

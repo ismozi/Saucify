@@ -62,7 +62,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
       duration: const Duration(milliseconds: 300),
         child: Column(
           children: [
-            Padding(padding: const EdgeInsets.fromLTRB(0, 15, 0, 0)),
+            Padding(padding: const EdgeInsets.fromLTRB(0, 85, 0, 0)),
             Container( 
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
@@ -111,7 +111,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 12, 12, 12),
+                    color: Color.fromARGB(255, 19, 19, 19),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -140,7 +140,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                 Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0)),
                 Container(
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 12, 12, 12),
+                    color: Color.fromARGB(255, 19, 19, 19),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -226,7 +226,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) => GestureDetector(
                       child: Card(
-                        color: Color.fromARGB(255, 29, 29, 29),
+                        color: Color.fromARGB(255, 19, 19, 19),
                         child: Container(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -278,7 +278,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) => GestureDetector(
                       child: Card(
-                        color: Color.fromARGB(255, 29, 29, 29),
+                        color: Color.fromARGB(255, 19, 19, 19),
                         child: Container(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -330,7 +330,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) => GestureDetector(
                       child: Card(
-                        color: Color.fromARGB(255, 29, 29, 29),
+                        color: Color.fromARGB(255, 19, 19, 19),
                         child: Container(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -439,7 +439,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) => GestureDetector(
                       child: Card(
-                        color: Color.fromARGB(255, 29, 29, 29),
+                        color: Color.fromARGB(255, 19, 19, 19),
                         child: Container(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -491,7 +491,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) => GestureDetector(
                       child: Card(
-                        color: Color.fromARGB(255, 29, 29, 29),
+                        color: Color.fromARGB(255, 19, 19, 19),
                         child: Container(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -543,7 +543,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) => GestureDetector(
                       child: Card(
-                        color: Color.fromARGB(255, 29, 29, 29),
+                        color: Color.fromARGB(255, 19, 19, 19),
                         child: Container(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -120,4 +120,8 @@ class DatabaseService {
   getFollowingSnapshot(String userId) {
     return FirebaseFirestore.instance.collection('users').where('followers', arrayContains: userId).snapshots();
   }
+
+  deletePost(String postId){
+    FirebaseFirestore.instance.collection('posts').doc(postId).delete();
+  }
 }

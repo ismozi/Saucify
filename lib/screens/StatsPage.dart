@@ -129,7 +129,7 @@ class StatsPageState extends State<StatsPage> {
       newList.add(
         Container(
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 29, 29, 29),
+            color: Color.fromARGB(255, 19, 19, 19),
             borderRadius: BorderRadius.circular(12)
           ),
           margin: const EdgeInsets.all(3.0),
@@ -176,7 +176,7 @@ class StatsPageState extends State<StatsPage> {
       extendBodyBehindAppBar: true,
       appBar: StatsAppBar(setItemType, getOptionsState),
       body: Container(
-       color: Color.fromARGB(255, 19, 19, 19),
+       color: Color.fromARGB(255, 10, 10, 10),
         padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),
         child: AnimatedOpacity(
           opacity: opacityLevel,
@@ -198,7 +198,7 @@ class StatsPageState extends State<StatsPage> {
           ],
         ),
         child: BottomAppBar(
-          color: Color.fromARGB(255, 19, 19, 19),
+          color: Color.fromARGB(255, 0, 0, 0),
           child: Container(
             padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
             child: Row(

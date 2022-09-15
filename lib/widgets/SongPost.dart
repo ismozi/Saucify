@@ -142,12 +142,24 @@ class _SongPostState extends State<SongPost> {
                   )),
                 },
               ),
-              trailing: IconButton(
-                icon: Icon(!widget.isLiked ? Icons.star_border : Icons.star, 
-                      color: !widget.isLiked ? Colors.grey : Colors.green),
-                onPressed: () {
-                  toggleLike();
-                },
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.delete_outline, 
+                          color: Colors.grey),
+                    onPressed: () {
+                      dbService.deletePost(widget.postId);
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(!widget.isLiked ? Icons.star_border : Icons.star, 
+                          color: !widget.isLiked ? Colors.grey : Colors.green),
+                    onPressed: () {
+                      toggleLike();
+                    },
+                  )
+                ]
               ),
               title: GestureDetector(
                 child: Text(widget.profileName,

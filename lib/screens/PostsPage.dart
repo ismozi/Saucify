@@ -49,8 +49,7 @@ class PostsPageState extends State<PostsPage> {
       body: Container(
         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
         color: Color.fromARGB(255, 10, 10, 10),
-        child: Stack(children: [
-        AnimatedOpacity(
+        child: AnimatedOpacity(
           opacity: opacityLevel,
           duration: const Duration(milliseconds: 300),
           child: StreamBuilder(
@@ -81,47 +80,66 @@ class PostsPageState extends State<PostsPage> {
                         padding: const EdgeInsets.fromLTRB(0, 80, 0, 80),
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
-                          DocumentSnapshot post = snapshot.data!.docs[index];
                           if (index == 0){
-                            return Container(
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                child: Card(
-                                  color: Color.fromARGB(255, 19, 19, 19),
-                                  elevation: 8.0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
+                            return GestureDetector(
+                              onTap: () {
+                                showGeneralDialog(
+                                  barrierDismissible: true,
+                                  barrierLabel:
+                                      MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                                  transitionDuration: Duration(milliseconds: 200),
+                                  context: context,
+                                  pageBuilder: (ctx, anim1, anim2) => PostForm(),
+                                  transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
+                                    filter: ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
+                                    child: FadeTransition(
+                                      child: child,
+                                      opacity: anim1,
+                                    ),
                                   ),
-                                  child: ListTile(
-                                    leading: ClipRRect(
-                                      borderRadius: BorderRadius.circular(50),
-                                      child: Image(
-                                        image: NetworkImage(post['profileImgUrl']), 
-                                        width: 45, 
-                                        height: 45
-                                      )
+                                );
+                              },
+                              child: Container(
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                  child: Card(
+                                    color: Color.fromARGB(255, 19, 19, 19),
+                                    elevation: 8.0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
-                                    title: Card(
-                                      color: Color.fromARGB(255, 26, 26, 26),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.search, color: Colors.green),
-                                            Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                                            Text('Search and share something!', style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 185, 185, 185), fontWeight: FontWeight.w300, fontSize: 13))
-                                          ]
+                                    child: ListTile(
+                                      leading: ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: Image(
+                                          image: NetworkImage('https://scontent.fymq2-1.fna.fbcdn.net/v/t1.6435-9/49509493_2220570931333084_9073185916800991232_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=YFjTkrpSIjEAX-jPn8z&_nc_oc=AQlOprkDFtF0mkGFe_9mLW8YLx3Ll9g3ri5LJirC_qCXG3FOfhnA6SccOkbYvVEPNc4&_nc_ht=scontent.fymq2-1.fna&oh=00_AT-QsZe9PqKI15-hXXmqCyCsJC1Of6e-OZNRritSd81S0A&oe=632C2A80'), 
+                                          width: 45, 
+                                          height: 45
                                         )
-                                      )
-                                    ),
+                                      ),
+                                      title: Card(
+                                        color: Color.fromARGB(255, 26, 26, 26),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.search, color: Colors.green),
+                                              Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                                              Text('Share your new discovery!', style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 185, 185, 185), fontWeight: FontWeight.w300, fontSize: 13))
+                                            ]
+                                          )
+                                        )
+                                      ),
+                                    )
                                   )
                                 )
                               )
                             );
                           }
+                          DocumentSnapshot post = snapshot.data!.docs[index-1];
                           return SongPost(
                             displayProfile: widget.displayProfile,
                             userId: post['postedBy'],
@@ -138,59 +156,14 @@ class PostsPageState extends State<PostsPage> {
                             previewUrl: post['postType'] == 'track' ? post['previewUrl'] : null,
                             player: player
                           );
-                        }
-                      );
-                    }
+                      }
+                    );
                   }
-                );
-              }
-            )
-          ),
-          // Positioned(
-          //   top: MediaQuery.of(context).size.height * 0.888,
-          //   left: MediaQuery.of(context).size.width * 0.5 - 60,
-          //   child: Container(
-          //     width: 100.0,
-          //     decoration: BoxDecoration(
-          //       borderRadius: BorderRadius.circular(20),
-          //       boxShadow: [
-          //         BoxShadow(
-          //           color: Color.fromARGB(255, 2, 2, 2).withOpacity(1),
-          //           spreadRadius: 5,
-          //           blurRadius: 7,
-          //           offset: Offset(0, 3), // changes position of shadow
-          //         ),
-          //       ],
-          //     ),
-          //     child: FittedBox(
-          //       child: Container(
-          //         child: FloatingActionButton.extended(
-          //           label: Text('Add post', style: GoogleFonts.getFont('Montserrat', 
-          //             color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)),
-          //           backgroundColor: Colors.green,
-          //           onPressed: () {
-          //             showGeneralDialog(
-          //               barrierDismissible: true,
-          //               barrierLabel:
-          //                   MaterialLocalizations.of(context).modalBarrierDismissLabel,
-          //               transitionDuration: Duration(milliseconds: 200),
-          //               context: context,
-          //               pageBuilder: (ctx, anim1, anim2) => PostForm(),
-          //               transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
-          //                 filter: ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
-          //                 child: FadeTransition(
-          //                   child: child,
-          //                   opacity: anim1,
-          //                 ),
-          //               ),
-          //             );
-          //           }
-          //         ),
-          //       )
-          //     ),
-          //   ),
-          // )
-        ])
+                }
+              );
+            }
+          )
+        ),
       ),
     );
   }

@@ -55,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
         width: MediaQuery.of(context).size.width,
         padding: !widget.isCurrentUser || !widget.fromDashboard ? const EdgeInsets.fromLTRB(10, 80, 10, 0)
                                                                 : const EdgeInsets.fromLTRB(10, 3, 10, 0),
-        color: Color.fromARGB(255, 19, 19, 19),
+        color: Color.fromARGB(255, 10, 10, 10),
         child: AnimatedOpacity(
           opacity: opacityLevel,
           duration: const Duration(milliseconds: 300),
