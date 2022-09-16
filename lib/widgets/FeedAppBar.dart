@@ -57,14 +57,14 @@ class _FeedAppBarState extends State<FeedAppBar> {
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 0, 0, 0),
             borderRadius: BorderRadius.only(
-              topRight: Radius.circular(0),
+              topRight: Radius.circular(40.0),
               bottomRight: Radius.circular(40.0),
-              topLeft: Radius.circular(0),
+              topLeft: Radius.circular(40.0),
               bottomLeft: Radius.circular(40.0)
             ),
             boxShadow: [
               BoxShadow(
-                color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.2),
+                color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.6),
                 spreadRadius: 5,
                 blurRadius: 7,
                 offset: Offset(0, 3), // changes position of shadow

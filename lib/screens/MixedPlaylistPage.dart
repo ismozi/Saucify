@@ -39,7 +39,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
   void initState() {
     super.initState();
     generateMixedPlaylist();
-    Timer(Duration(milliseconds: 400), () {
+    Timer(Duration(milliseconds: 800), () {
       setState(() => opacityLevel = 1);
     });
   }
@@ -114,147 +114,163 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-        color: Color.fromARGB(255, 10, 10, 10),
-        child: AnimatedOpacity(
-          opacity: opacityLevel,
-          duration: const Duration(milliseconds: 300),
-          child: FutureBuilder(
-            future: generateMixedPlaylist(),
-            builder: (BuildContext context, AsyncSnapshot snapshot1) {
-              if (!snapshot1.hasData) {
-                return Container();
-              }
-              List items = snapshot1.data!;
-              return ListView.builder(
-                padding: const EdgeInsets.fromLTRB(0, 110, 0, 65),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  if (index == 0){
-                    return GestureDetector(
-                      onTap: () {
-                        service.createPlaylist1(tracksIds, 'Mixed playlist');
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(12),
+      body: Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            color: Color.fromARGB(255, 10, 10, 10),
+            child: AnimatedOpacity(
+              opacity: opacityLevel,
+              duration: const Duration(milliseconds: 300),
+              child: FutureBuilder(
+                future: generateMixedPlaylist(),
+                builder: (BuildContext context, AsyncSnapshot snapshot1) {
+                  if (!snapshot1.hasData) {
+                    return Container();
+                  }
+                  List items = snapshot1.data!;
+                  return ListView.builder(
+                    padding: const EdgeInsets.fromLTRB(0, 75, 0, 65),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      if (index == 0){
+                        return GestureDetector(
+                          onTap: () {
+                            service.createPlaylist1(tracksIds, 'Mixed playlist');
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 26, 26, 26),
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.6),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            margin: const EdgeInsets.fromLTRB(28, 7, 28, 7),
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Generate playlist', style: GoogleFonts.getFont('Montserrat', 
+                                  color: Colors.white, fontWeight: FontWeight.w300, fontSize: 17)),
+                                Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                                ImageIcon(
+                                    AssetImage("assets/images/Spotify_Icon_RGB_White.png"),
+                                    color: Colors.green,
+                                ),
+                              ]
+                            ),
+                          )
+                        );
+                      }
+                      return Container(
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 26, 26, 26),
+                          color: Color.fromARGB(255, 19, 19, 19),
                           borderRadius: BorderRadius.all(Radius.circular(12))
                         ),
                         margin: const EdgeInsets.all(5.0),
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.music_note, color: Colors.white),
-                            Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                            Text('Generate playlist', style: GoogleFonts.getFont('Montserrat', 
-                              color: Colors.white, fontWeight: FontWeight.w300, fontSize: 17)),
-                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 10, 0)),
-                            Icon(Icons.music_note, color: Colors.white)
-                          ]
+                        child: ListTile(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15) 
+                          ),
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image(
+                              image: NetworkImage(items[index-1]['album']['images'][0]['url']), 
+                              width: 45, 
+                              height: 45
+                            )
+                          ),
+                          trailing: ClipRRect(
+                            borderRadius: BorderRadius.circular(60),
+                            child: Image(
+                              image: NetworkImage(userImgs[index-1]), 
+                              width: 30, 
+                              height: 30
+                            )
+                          ),
+                          title: Text(items[index-1]['name'], 
+                                      style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+                          subtitle: Text(items[index-1]['artists'][0]['name'], 
+                                      style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+                          onTap: () async {
+                            final Uri _url = Uri.parse(items[index-1]['uri']);
+                            if (!await launchUrl(_url)) {
+                              throw 'Could not launch $_url';
+                            }
+                          },
                         ),
-                      )
-                    );
-                  }
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 19, 19, 19),
-                      borderRadius: BorderRadius.all(Radius.circular(12))
-                    ),
-                    margin: const EdgeInsets.all(5.0),
-                    child: ListTile(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15) 
-                      ),
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image(
-                          image: NetworkImage(items[index-1]['album']['images'][0]['url']), 
-                          width: 45, 
-                          height: 45
-                        )
-                      ),
-                      trailing: ClipRRect(
-                        borderRadius: BorderRadius.circular(60),
-                        child: Image(
-                          image: NetworkImage(userImgs[index-1]), 
-                          width: 30, 
-                          height: 30
-                        )
-                      ),
-                      title: Text(items[index-1]['name'], 
-                                  style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
-                      subtitle: Text(items[index-1]['artists'][0]['name'], 
-                                  style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
-                      onTap: () async {
-                        final Uri _url = Uri.parse(items[index-1]['uri']);
-                        if (!await launchUrl(_url)) {
-                          throw 'Could not launch $_url';
-                        }
-                      },
-                    ),
+                      );
+                    }
                   );
                 }
-              );
-            }
-          )
-        )
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: BottomAppBar(
-          color: Color.fromARGB(255, 0, 0, 0),
-          child: Container(
-            padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  child: GestureDetector(
-                    onTap:() => {setTimeRange(0)},
-                    child: Text("1 Month", style: GoogleFonts.getFont(
-                      'Montserrat',
-                      color: isOneMonth ? Colors.green : Colors.white, 
-                      fontWeight: isOneMonth ? FontWeight.w700 : FontWeight.w400)
-                    ),
-                  ),
-                ),
-                Container(
-                  child: GestureDetector(
-                    onTap:() => {setTimeRange(1)},
-                    child: Text("6 Months", style: GoogleFonts.getFont(
-                      'Montserrat',
-                      color: isFourMonths ? Colors.green : Colors.white, 
-                      fontWeight: isFourMonths ? FontWeight.w700 : FontWeight.w400)
-                    ),
-                  ),
-                ),
-                Container(
-                  child: GestureDetector(
-                    onTap:() => {setTimeRange(2)},
-                    child: Text("All time", style: GoogleFonts.getFont(
-                      'Montserrat',
-                      color: isAllTime ? Colors.green : Colors.white, 
-                      fontWeight: isAllTime ? FontWeight.w700 : FontWeight.w400)
-                    ),
-                  ),
-                ),
-              ]
+              )
             )
           ),
-        ),
-      ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.88,
+            right: MediaQuery.of(context).size.width * 0.14,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    child: GestureDetector(
+                      onTap:() => {setTimeRange(0)},
+                      child: Text("1 Month", style: GoogleFonts.getFont(
+                        'Montserrat',
+                        color: isOneMonth ? Colors.green : Colors.white, 
+                        fontWeight: isOneMonth ? FontWeight.w700 : FontWeight.w400)
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(7, 0, 5, 0)),
+                  Container(
+                    child: GestureDetector(
+                      onTap:() => {setTimeRange(1)},
+                      child: Text("6 Months", style: GoogleFonts.getFont(
+                        'Montserrat',
+                        color: isFourMonths ? Colors.green : Colors.white, 
+                        fontWeight: isFourMonths ? FontWeight.w700 : FontWeight.w400)
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(5, 0, 7, 0)),
+                  Container(
+                    child: GestureDetector(
+                      onTap:() => {setTimeRange(2)},
+                      child: Text("All time", style: GoogleFonts.getFont(
+                        'Montserrat',
+                        color: isAllTime ? Colors.green : Colors.white, 
+                        fontWeight: isAllTime ? FontWeight.w700 : FontWeight.w400)
+                      ),
+                    ),
+                  ),
+                ]
+              )
+            )
+          )
+        ]
+      )
     );
   }
 }

@@ -175,69 +175,76 @@ class StatsPageState extends State<StatsPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: StatsAppBar(setItemType, getOptionsState),
-      body: Container(
-       color: Color.fromARGB(255, 10, 10, 10),
-        padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),
-        child: AnimatedOpacity(
-          opacity: opacityLevel,
-          duration: const Duration(milliseconds: 300),
-          child: ListView(
-            children: list
-            ) 
-          )
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: BottomAppBar(
-          color: Color.fromARGB(255, 0, 0, 0),
-          child: Container(
-            padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  child: GestureDetector(
-                    onTap:() => {setTimeRange(0)},
-                    child: Text("1 Month", style: GoogleFonts.getFont(
-                      'Montserrat',
-                      color: isOneMonth ? Colors.green : Colors.white, 
-                      fontWeight: isOneMonth ? FontWeight.w700 : FontWeight.w400)
-                    ),
-                  ),
-                ),
-                Container(
-                  child: GestureDetector(
-                    onTap:() => {setTimeRange(1)},
-                    child: Text("6 Months", style: GoogleFonts.getFont(
-                      'Montserrat',
-                      color: isFourMonths ? Colors.green : Colors.white, 
-                      fontWeight: isFourMonths ? FontWeight.w700 : FontWeight.w400)
-                    ),
-                  ),
-                ),
-                Container(
-                  child: GestureDetector(
-                    onTap:() => {setTimeRange(2)},
-                    child: Text("All time", style: GoogleFonts.getFont(
-                      'Montserrat',
-                      color: isAllTime ? Colors.green : Colors.white, 
-                      fontWeight: isAllTime ? FontWeight.w700 : FontWeight.w400)
-                    ),
-                  ),
-                ),
-              ]
-            )
+      body: Stack(
+        children: [
+          Container(
+          color: Color.fromARGB(255, 10, 10, 10),
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            child: AnimatedOpacity(
+              opacity: opacityLevel,
+              duration: const Duration(milliseconds: 300),
+              child: ListView(
+                children: list
+                ) 
+              )
           ),
-        ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.88,
+            right: MediaQuery.of(context).size.width * 0.14,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    child: GestureDetector(
+                      onTap:() => {setTimeRange(0)},
+                      child: Text("1 Month", style: GoogleFonts.getFont(
+                        'Montserrat',
+                        color: isOneMonth ? Colors.green : Colors.white, 
+                        fontWeight: isOneMonth ? FontWeight.w700 : FontWeight.w400)
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(7, 0, 5, 0)),
+                  Container(
+                    child: GestureDetector(
+                      onTap:() => {setTimeRange(1)},
+                      child: Text("6 Months", style: GoogleFonts.getFont(
+                        'Montserrat',
+                        color: isFourMonths ? Colors.green : Colors.white, 
+                        fontWeight: isFourMonths ? FontWeight.w700 : FontWeight.w400)
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(5, 0, 7, 0)),
+                  Container(
+                    child: GestureDetector(
+                      onTap:() => {setTimeRange(2)},
+                      child: Text("All time", style: GoogleFonts.getFont(
+                        'Montserrat',
+                        color: isAllTime ? Colors.green : Colors.white, 
+                        fontWeight: isAllTime ? FontWeight.w700 : FontWeight.w400)
+                      ),
+                    ),
+                  ),
+                ]
+              )
+            )
+          )
+        ]
       )
     );
   }

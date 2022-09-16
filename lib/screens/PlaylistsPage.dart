@@ -68,7 +68,6 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: FeedAppBar(setItemType),
       extendBodyBehindAppBar: true,
       body: isPostsActive ? SoloPlaylistPage() : MixedPlaylistPage()
     );

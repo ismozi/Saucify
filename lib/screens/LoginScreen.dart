@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context){
     return Scaffold(
       body: Container(
-        color: Color.fromARGB(255, 19, 19, 19),
+        color: Color.fromARGB(255, 10, 10, 10),
         padding: const EdgeInsets.all(10.0),
         child: 
           refreshToken == null ? ListView(
@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ]
           ) : 
           Container(
-            color: Color.fromARGB(255, 19, 19, 19),
+            color: Color.fromARGB(255, 10, 10, 10),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

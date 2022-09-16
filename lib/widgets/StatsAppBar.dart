@@ -22,7 +22,7 @@ class _StatsAppBarState extends State<StatsAppBar> {
     return Align(
       alignment: Alignment.center,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(0, 65, 0, 0),
+        padding: EdgeInsets.fromLTRB(0, 70, 0, 0),
         child: Container(
           alignment: Alignment.center,
           width: 275,
@@ -59,12 +59,7 @@ class _StatsAppBarState extends State<StatsAppBar> {
           ]),
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 0, 0, 0),
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(0),
-              bottomRight: Radius.circular(40.0),
-              topLeft: Radius.circular(0),
-              bottomLeft: Radius.circular(40.0)
-            ),
+            borderRadius: BorderRadius.circular(30),
             boxShadow: [
               BoxShadow(
                 color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.2),

@@ -238,8 +238,8 @@ class MainPageState extends State<MainPage> {
                   ),
                   isPlaylistsActive ? Positioned(
                     top: 38,
-                    right: 0,
-                    child: Text('Playlists', style: GoogleFonts.getFont('Montserrat', color: Colors.green, fontSize: 12))
+                    right: 14,
+                    child: Text('Mix', style: GoogleFonts.getFont('Montserrat', color: Colors.green, fontSize: 12))
                   ) : Positioned(
                     top: 38,
                     right: 6,
