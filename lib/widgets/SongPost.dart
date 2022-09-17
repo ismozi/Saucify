@@ -250,7 +250,7 @@ class _SongPostState extends State<SongPost> {
                   GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(PageRouteBuilder(
-                          pageBuilder: (c, a1, a2) => CommentsPage(),
+                          pageBuilder: (c, a1, a2) => CommentsPage(postId: widget.postId),
                           transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
                           transitionDuration: Duration(milliseconds: 150),
                         ));

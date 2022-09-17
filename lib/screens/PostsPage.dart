@@ -71,15 +71,15 @@ class PostsPageState extends State<PostsPage> {
                       return Container(
                       );
                     } else { 
-                      if (snapshot.data!.docs.isEmpty){
-                        return Center(
-                          child: Text('Follow your friends to see their posts!', 
-                                style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 185, 185, 185), fontWeight: FontWeight.w300, fontSize: 17)),
-                        );
-                      }
+                      // if (snapshot.data!.docs.isEmpty){
+                      //   return Center(
+                      //     child: Text('Follow your friends to see their posts!', 
+                      //           style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 185, 185, 185), fontWeight: FontWeight.w300, fontSize: 17)),
+                      //   );
+                      // }
                       return ListView.builder(
                         padding: const EdgeInsets.fromLTRB(0, 80, 0, 80),
-                        itemCount: snapshot.data!.docs.length,
+                        itemCount: snapshot.data!.docs.length+1,
                         itemBuilder: (context, index) {
                           if (index == 0){
                             return GestureDetector(

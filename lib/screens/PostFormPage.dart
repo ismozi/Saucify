@@ -115,6 +115,7 @@ class _PostFormPageState extends State<PostFormPage> {
         'itemName': selectedItem['name'],
         'artistName': selectedItem['artists'][0]['name'],
         'previewUrl': selectedItem['preview_url'],
+        'comments': []
       };
     } else if (categoryState[1]) {
       post = {
@@ -129,6 +130,7 @@ class _PostFormPageState extends State<PostFormPage> {
         'itemImgUrl': selectedItem['images'][0]['url'],
         'itemName': selectedItem['name'],
         'artistName': selectedItem['artists'][0]['name'],
+        'comments': []
       };
     } else if (categoryState[2]) {
       post = {
@@ -142,6 +144,7 @@ class _PostFormPageState extends State<PostFormPage> {
         'itemUrl': selectedItem['uri'],
         'itemImgUrl': selectedItem['images'][0]['url'],
         'itemName': selectedItem['name'],
+        'comments': []
       };
     }
 

@@ -124,4 +124,21 @@ class DatabaseService {
   deletePost(String postId){
     FirebaseFirestore.instance.collection('posts').doc(postId).delete();
   }
+
+  getPostStream(String postId) {
+    // TODO: Manage friends list
+    return FirebaseFirestore.instance.collection('posts').doc(postId).snapshots();
+  }
+
+  Future<void> addComment(String postId, Map<String, dynamic> comment) async {
+    DocumentReference docRef = FirebaseFirestore.instance.collection('posts').doc(postId);
+    DocumentSnapshot docSnapshot = await docRef.get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic> postObj = docSnapshot.data() as Map<String, dynamic>;
+      List comments = postObj['comments'];
+      comments.add(comment);
+      postObj['comments'] = comments;
+      docRef.set(postObj);
+    }
+  }
 }

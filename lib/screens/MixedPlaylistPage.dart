@@ -131,7 +131,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                   List items = snapshot1.data!;
                   return ListView.builder(
                     padding: const EdgeInsets.fromLTRB(0, 75, 0, 65),
-                    itemCount: items.length,
+                    itemCount: items.length+1,
                     itemBuilder: (context, index) {
                       if (index == 0){
                         return GestureDetector(
