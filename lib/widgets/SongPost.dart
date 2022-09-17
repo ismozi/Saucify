@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saucify/screens/CommentsPage.dart';
 import 'package:saucify/services/DatabaseService.dart';
 import 'package:saucify/widgets/ChooseOption.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -247,8 +248,14 @@ class _SongPostState extends State<SongPost> {
                     )
                   ),
                   GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(PageRouteBuilder(
+                          pageBuilder: (c, a1, a2) => CommentsPage(),
+                          transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                          transitionDuration: Duration(milliseconds: 150),
+                        ));
+                      },
                     child: Container(
-
                       padding: const EdgeInsets.all(5.0),
                       margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
                       child: Row(

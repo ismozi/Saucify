@@ -46,14 +46,22 @@ class ArtistsScreenState extends State<ArtistsScreen> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        shape: Border(
-          bottom: BorderSide(
-            color: Color.fromARGB(255, 19, 19, 19),
-            width: 4
-          )
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.green,
+        automaticallyImplyLeading: false,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[Colors.black.withOpacity(1.0),
+                              Colors.black.withOpacity(1.0), 
+                              Colors.black.withOpacity(1.0),
+                              Colors.black.withOpacity(0.0)]),
+          ),
         ),
-        backgroundColor: Color.fromARGB(255, 19, 19, 19),
         title: Text(widget.pageName, style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.green),
@@ -64,7 +72,7 @@ class ArtistsScreenState extends State<ArtistsScreen> {
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-        color: Color.fromARGB(255, 19, 19, 19),
+        color: Color.fromARGB(255, 10, 10, 10),
         child: AnimatedOpacity(
           opacity: opacityLevel,
           duration: const Duration(milliseconds: 300),
@@ -81,7 +89,7 @@ class ArtistsScreenState extends State<ArtistsScreen> {
                 itemBuilder: (context, index) {
                   return Container(
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 29, 29, 29),
+                      color: Color.fromARGB(255, 19, 19, 19),
                       borderRadius: BorderRadius.all(Radius.circular(12))
                     ),
                     margin: const EdgeInsets.all(5.0),

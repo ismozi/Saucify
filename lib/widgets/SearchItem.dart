@@ -31,7 +31,7 @@ class _SearchItemState extends State<SearchItem> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 29, 29, 29),
+        color: Color.fromARGB(255, 19, 19, 19),
         borderRadius: BorderRadius.circular(12)
       ),
       alignment: Alignment.center,

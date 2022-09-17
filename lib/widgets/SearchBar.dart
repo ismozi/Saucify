@@ -29,12 +29,13 @@ class _SearchBarState extends State<SearchBar> {
     return Container(
       width: MediaQuery.of(context).size.width*0.85,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 12, 12, 12),
+        color: Color.fromARGB(255, 19, 19, 19),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: TextField(
+          autofocus: true,
           decoration: InputDecoration(
             icon: Icon(Icons.search, color: Colors.green),
             border: InputBorder.none

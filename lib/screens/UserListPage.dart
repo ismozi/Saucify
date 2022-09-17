@@ -49,14 +49,22 @@ class _UserListPageState extends State<UserListPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        shape: Border(
-          bottom: BorderSide(
-            color: Color.fromARGB(255, 19, 19, 19),
-            width: 4
-          )
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.green,
+        automaticallyImplyLeading: false,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[Colors.black.withOpacity(1.0),
+                              Colors.black.withOpacity(1.0), 
+                              Colors.black.withOpacity(1.0),
+                              Colors.black.withOpacity(0.0)]),
+          ),
         ),
-        backgroundColor: Color.fromARGB(255, 20, 20, 20),
         title: widget.isFollowers ? Text("Followers", style: GoogleFonts.getFont('Montserrat', color: Colors.white))
                                   : Text("Following", style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
         leading: IconButton(
@@ -69,7 +77,7 @@ class _UserListPageState extends State<UserListPage> {
       body: 
         Container(
           padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
-          color: Color.fromARGB(255, 19, 19, 19),
+          color: Color.fromARGB(255, 10, 10, 10),
           child: AnimatedOpacity(
             opacity: 1,
             duration: const Duration(milliseconds: 300),

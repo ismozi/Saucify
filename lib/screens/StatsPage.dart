@@ -125,6 +125,44 @@ class StatsPageState extends State<StatsPage> {
     List<Widget> newList = [];
     int itemPosition = 1;
 
+    if (isTracksActive) {
+      newList.add(
+        GestureDetector(
+          onTap: () {
+          },
+          child: Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 26, 26, 26),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.6),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            margin: const EdgeInsets.fromLTRB(28, 2, 28, 7),
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Generate playlist', style: GoogleFonts.getFont('Montserrat', 
+                  color: Colors.white, fontWeight: FontWeight.w300, fontSize: 17)),
+                Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                ImageIcon(
+                    AssetImage("assets/images/Spotify_Icon_RGB_White.png"),
+                    color: Colors.green,
+                ),
+              ]
+            ),
+          )
+        )
+      );
+    }
+
     topItems.forEach((item) { 
       newList.add(
         Container(
@@ -139,7 +177,18 @@ class StatsPageState extends State<StatsPage> {
               child: isTracksActive ? Image(image: item['album']['images'] != null ? NetworkImage(item['album']['images'][0]['url']) : emptyImage, width: 45, height: 45) :
                                       Image(image: item['images'] != null ? NetworkImage(item['images'][0]['url']) : emptyImage, width: 45, height: 45)
             ),
-            trailing: Text('#$itemPosition', style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontWeight: FontWeight.w700)),
+            trailing: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Container(
+                height: MediaQuery.of(context).size.width * 0.06,
+                width: MediaQuery.of(context).size.width * 0.06,
+                color: Color.fromARGB(255, 46, 46, 46),
+                padding: EdgeInsets.all(2),
+                child: Center(
+                  child: Text('$itemPosition', style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontWeight: FontWeight.w300))
+                )
+              )
+            ),
             title: Text(item['name'], 
                         style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
             subtitle: isTracksActive ? Text(item['artists'][0]['name'], 

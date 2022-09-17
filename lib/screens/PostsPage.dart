@@ -6,6 +6,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saucify/screens/PostFormPage.dart';
 import 'package:saucify/services/spotifyService.dart';
 import '../app/app.locator.dart';
 import 'package:saucify/widgets/SongPost.dart';
@@ -83,21 +84,11 @@ class PostsPageState extends State<PostsPage> {
                           if (index == 0){
                             return GestureDetector(
                               onTap: () {
-                                showGeneralDialog(
-                                  barrierDismissible: true,
-                                  barrierLabel:
-                                      MaterialLocalizations.of(context).modalBarrierDismissLabel,
-                                  transitionDuration: Duration(milliseconds: 200),
-                                  context: context,
-                                  pageBuilder: (ctx, anim1, anim2) => PostForm(),
-                                  transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
-                                    filter: ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
-                                    child: FadeTransition(
-                                      child: child,
-                                      opacity: anim1,
-                                    ),
-                                  ),
-                                );
+                                Navigator.of(context).push(PageRouteBuilder(
+                                  pageBuilder: (c, a1, a2) => PostFormPage(),
+                                  transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                                  transitionDuration: Duration(milliseconds: 150),
+                                ));
                               },
                               child: Container(
                                 child: Padding(

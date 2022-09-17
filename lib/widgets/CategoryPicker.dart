@@ -19,8 +19,9 @@ class _CategoryPickerState extends State<CategoryPicker> {
   @override
   Widget build(BuildContext context){
     return Container(
+      margin: EdgeInsets.fromLTRB(25, 0, 25, 0),
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 12, 12, 12),
+        color: Color.fromARGB(255, 19, 19, 19),
         borderRadius: BorderRadius.circular(12)
       ),
       child: Padding(

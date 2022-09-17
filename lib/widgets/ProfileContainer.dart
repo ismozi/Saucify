@@ -62,7 +62,8 @@ class _ProfileContainerState extends State<ProfileContainer> {
       duration: const Duration(milliseconds: 300),
         child: Column(
           children: [
-            Padding(padding: const EdgeInsets.fromLTRB(0, 85, 0, 0)),
+            widget.isCurrentUser ? Padding(padding: const EdgeInsets.fromLTRB(0, 85, 0, 0)) :
+            Padding(padding: const EdgeInsets.fromLTRB(0, 20, 0, 0)), 
             Container( 
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
@@ -111,7 +112,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 19, 19, 19),
+                    color: Color.fromARGB(255, 26, 26, 26),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -140,7 +141,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                 Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0)),
                 Container(
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 19, 19, 19),
+                    color: Color.fromARGB(255, 26, 26, 26),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -170,7 +171,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
             ),
             Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
             Divider(
-              color: Color.fromARGB(255, 61, 61, 61)
+              color: Color.fromARGB(255, 49, 49, 49)
             ),
             Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
             Container(
