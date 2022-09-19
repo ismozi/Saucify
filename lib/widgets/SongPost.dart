@@ -19,6 +19,7 @@ class SongPost extends StatefulWidget {
             required this.userId, 
             required this.postId,
             required this.isLiked,
+            required this.likedBy,
             required this.timestamp,
             required this.profileImgUrl,
             required this.profileName,
@@ -28,12 +29,14 @@ class SongPost extends StatefulWidget {
             required this.itemName, 
             required this.artistName,
             required this.previewUrl,
+            required this.comments,
             required this.player});
 
   Function displayProfile;
   String userId;
   String postId;
   bool isLiked;
+  List likedBy;
   dynamic timestamp;
   dynamic profileImgUrl;
   String profileName;
@@ -43,6 +46,7 @@ class SongPost extends StatefulWidget {
   String itemName;
   dynamic artistName;
   dynamic previewUrl;
+  List comments;
   final player;
 
   @override
@@ -54,6 +58,12 @@ class _SongPostState extends State<SongPost> {
   spotifyService service = locator<spotifyService>();
   DatabaseService dbService = DatabaseService();
   NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   // TODO : manage listeners to remove
   void play() async {
@@ -106,6 +116,7 @@ class _SongPostState extends State<SongPost> {
   }
 
   void toggleLike(){
+    !widget.isLiked ? widget.likedBy.add(service.userId) : widget.likedBy.remove(service.userId);
     dbService.toggleLike(widget.postId, service.userId);
     setState(() {
       widget.isLiked = !widget.isLiked;
@@ -151,13 +162,6 @@ class _SongPostState extends State<SongPost> {
                           color: Colors.grey),
                     onPressed: () {
                       dbService.deletePost(widget.postId);
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(!widget.isLiked ? Icons.star_border : Icons.star, 
-                          color: !widget.isLiked ? Colors.grey : Colors.green),
-                    onPressed: () {
-                      toggleLike();
                     },
                   )
                 ]
@@ -227,6 +231,32 @@ class _SongPostState extends State<SongPost> {
                             style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 13)) : null,
               )
             ),
+            Row(
+              children: [
+                !widget.likedBy.isEmpty ? GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(15, 5, 0, 5),
+                    child: Text(widget.likedBy.length == 1 ? '1 like' : '${widget.likedBy.length} like', 
+                      style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w200, fontSize: 13))
+                  )
+                ) : Container(),
+                !widget.comments.isEmpty ? GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                      pageBuilder: (c, a1, a2) => CommentsPage(isCommenting: false, postId: widget.postId),
+                      transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                      transitionDuration: Duration(milliseconds: 150),
+                    ));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(15, 5, 0, 5),
+                    child: Text(widget.comments.length == 1 ? '1 comment' : '${widget.comments.length} comments', 
+                      style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w200, fontSize: 13))
+                  )
+                ) : Container(),
+              ]
+            ),
             Divider(
               color: Color.fromARGB(255, 51, 51, 51)
             ),
@@ -235,14 +265,17 @@ class _SongPostState extends State<SongPost> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
+                    onTap: () {
+                      toggleLike();
+                    },
                     child: Container(
                       padding: const EdgeInsets.all(5.0),
                       margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
                       child: Row(
                         children: [
-                          Icon(Icons.add_reaction_outlined, color: Colors.grey, size: 18),
+                          Icon(widget.isLiked ? Icons.thumb_up : Icons.thumb_up_outlined, color: widget.isLiked ? Colors.green : Colors.grey, size: 18),
                           Padding(padding: const EdgeInsets.fromLTRB(5, 0, 0, 0)),
-                          Text('React', style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontSize: 13))
+                          Text(widget.isLiked ? 'Unlike' : 'Like', style: GoogleFonts.getFont('Montserrat', color: widget.isLiked ? Colors.green : Colors.grey, fontSize: 13))
                         ]
                       )
                     )
@@ -250,7 +283,7 @@ class _SongPostState extends State<SongPost> {
                   GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(PageRouteBuilder(
-                          pageBuilder: (c, a1, a2) => CommentsPage(postId: widget.postId),
+                          pageBuilder: (c, a1, a2) => CommentsPage(isCommenting: true, postId: widget.postId),
                           transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
                           transitionDuration: Duration(milliseconds: 150),
                         ));

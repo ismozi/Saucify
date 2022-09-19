@@ -15,8 +15,12 @@ import '../app/app.locator.dart';
 import 'LibraryScreen.dart';
 
 class CommentsPage extends StatefulWidget {
-  CommentsPage({required this.postId});
+  CommentsPage({
+    required this.postId,
+    required this.isCommenting
+  });
   String postId;
+  bool isCommenting;
   @override
   State<CommentsPage> createState() => _CommentsPageState();
 }
@@ -159,7 +163,7 @@ class _CommentsPageState extends State<CommentsPage> {
                     child: TextField(
                       controller: controller,
                       textCapitalization: TextCapitalization.sentences,
-                      autofocus: true,
+                      autofocus: widget.isCommenting,
                       decoration: InputDecoration(
                         hintText: 'Share your tought!',
                         hintStyle: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 185, 185, 185), fontWeight: FontWeight.w300, fontSize: 14.5),

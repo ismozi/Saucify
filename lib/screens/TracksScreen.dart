@@ -93,7 +93,7 @@ class TracksScreenState extends State<TracksScreen> {
                         service.createPlaylist1(widget.tracksIds, widget.playlistName);;
                       },
                       child: Container(
-                        padding: EdgeInsets.all(12),
+                        padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: Color.fromARGB(255, 26, 26, 26),
                           borderRadius: BorderRadius.all(Radius.circular(12)),

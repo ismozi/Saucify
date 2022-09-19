@@ -136,6 +136,7 @@ class PostsPageState extends State<PostsPage> {
                             userId: post['postedBy'],
                             postId: post.id,
                             isLiked: post['likedBy'].contains(service.userId),
+                            likedBy: post['likedBy'],
                             timestamp: post['timestamp'],
                             profileImgUrl: post['profileImgUrl'],
                             profileName: post['profileName'],
@@ -145,6 +146,7 @@ class PostsPageState extends State<PostsPage> {
                             itemName: post['itemName'],
                             artistName: post['postType'] == 'artist' ? null : post['artistName'],
                             previewUrl: post['postType'] == 'track' ? post['previewUrl'] : null,
+                            comments: post['comments'],
                             player: player
                           );
                       }

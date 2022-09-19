@@ -134,39 +134,65 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                     itemCount: items.length+1,
                     itemBuilder: (context, index) {
                       if (index == 0){
-                        return GestureDetector(
-                          onTap: () {
-                            service.createPlaylist1(tracksIds, 'Mixed playlist');
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 26, 26, 26),
-                              borderRadius: BorderRadius.all(Radius.circular(12)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.6),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: Offset(0, 3), // changes position of shadow
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 26, 26, 26),
+                                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.6),
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 3), // changes position of shadow
+                                    ),
+                                  ],
                                 ),
-                              ],
+                                margin: const EdgeInsets.fromLTRB(28, 7, 4, 7),
+                                alignment: Alignment.center,
+                                child: Icon(Icons.tune, color: Colors.white),
+                              )
                             ),
-                            margin: const EdgeInsets.fromLTRB(28, 7, 28, 7),
-                            alignment: Alignment.center,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('Generate playlist', style: GoogleFonts.getFont('Montserrat', 
-                                  color: Colors.white, fontWeight: FontWeight.w300, fontSize: 17)),
-                                Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                                ImageIcon(
-                                    AssetImage("assets/images/Spotify_Icon_RGB_White.png"),
-                                    color: Colors.green,
+                            GestureDetector(
+                              onTap: () {
+                                service.createPlaylist1(tracksIds, 'Mixed playlist');
+                              },
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(32, 8, 32, 8),
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 26, 26, 26),
+                                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.6),
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 3), // changes position of shadow
+                                    ),
+                                  ],
                                 ),
-                              ]
-                            ),
-                          )
+                                margin: const EdgeInsets.fromLTRB(4, 7, 28, 7),
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Generate playlist', style: GoogleFonts.getFont('Montserrat', 
+                                      color: Colors.white, fontWeight: FontWeight.w300, fontSize: 17)),
+                                    Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                                    ImageIcon(
+                                        AssetImage("assets/images/Spotify_Icon_RGB_White.png"),
+                                        color: Colors.green,
+                                    ),
+                                  ]
+                                ),
+                              )
+                            )
+                          ]
                         );
                       }
                       return Container(
