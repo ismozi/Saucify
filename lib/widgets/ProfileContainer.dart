@@ -59,7 +59,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
   Widget build(BuildContext context) {
     return AnimatedOpacity(
       opacity: opacityLevel,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 250),
         child: Column(
           children: [
             widget.isCurrentUser ? Padding(padding: const EdgeInsets.fromLTRB(0, 85, 0, 0)) :

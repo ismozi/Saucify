@@ -52,7 +52,7 @@ class PostsPageState extends State<PostsPage> {
         color: Color.fromARGB(255, 10, 10, 10),
         child: AnimatedOpacity(
           opacity: opacityLevel,
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 250),
           child: StreamBuilder(
             stream: dbService.getFollowingSnapshot(service.userId),
             builder:(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot1) {

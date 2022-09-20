@@ -231,7 +231,7 @@ class StatsPageState extends State<StatsPage> {
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 40),
             child: AnimatedOpacity(
               opacity: opacityLevel,
-              duration: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 250),
               child: ListView(
                 children: list
                 ) 

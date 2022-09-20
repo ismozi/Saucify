@@ -141,4 +141,31 @@ class DatabaseService {
       docRef.set(postObj);
     }
   }
+
+  getUserImgs(List userIds) async {
+    List users = [];
+    List imgs = [];
+    List chunks = splitUserIdsArray(userIds);
+
+    await Future.forEach(chunks, (ids) async { 
+      QuerySnapshot snap = await FirebaseFirestore.instance.collection('users').where(FieldPath.documentId, whereIn: ids as List).get();
+      users.addAll(snap.docs);
+    });
+
+    for(int i = 0 ; i < userIds.length ; i++) {
+      dynamic user = users.firstWhere((user) => user.id == userIds[i]);
+      imgs.add(user['imageUrl']);
+    }
+
+    return imgs;
+  }
+
+  splitUserIdsArray(List userIds){
+    List chunks = [];
+    for(int i = 0 ; i < userIds.length; i=i+10) {
+      int sublistEnd = (userIds.length - i) < 10 ? userIds.length - i : 10;
+      chunks.add(userIds.sublist(i, i + sublistEnd));
+    }
+    return chunks;
+  }
 }
