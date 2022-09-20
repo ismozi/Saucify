@@ -130,7 +130,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                   }
                   List items = snapshot1.data!;
                   return ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(0, 75, 0, 65),
+                    padding: const EdgeInsets.fromLTRB(0, 75, 0, 100),
                     itemCount: items.length+1,
                     itemBuilder: (context, index) {
                       if (index == 0){

@@ -236,7 +236,7 @@ class _SongPostState extends State<SongPost> {
                 !widget.likedBy.isEmpty ? GestureDetector(
                   onTap: () {},
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(15, 5, 0, 5),
+                    margin: EdgeInsets.fromLTRB(15, 5, 0, 10),
                     child: Text(widget.likedBy.length == 1 ? '1 like' : '${widget.likedBy.length} like', 
                       style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w200, fontSize: 13))
                   )
@@ -250,7 +250,7 @@ class _SongPostState extends State<SongPost> {
                     ));
                   },
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(15, 5, 0, 5),
+                    margin: EdgeInsets.fromLTRB(15, 5, 0, 10),
                     child: Text(widget.comments.length == 1 ? '1 comment' : '${widget.comments.length} comments', 
                       style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w200, fontSize: 13))
                   )
@@ -258,7 +258,8 @@ class _SongPostState extends State<SongPost> {
               ]
             ),
             Divider(
-              color: Color.fromARGB(255, 51, 51, 51)
+              color: Color.fromARGB(255, 51, 51, 51),
+              height: 1
             ),
             Container(
               child: Row(
@@ -269,11 +270,11 @@ class _SongPostState extends State<SongPost> {
                       toggleLike();
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(5.0),
-                      margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
+                      decoration: BoxDecoration(border: Border.all(width: 0.000001, color: const Color(0xFFFFFFFF))),
+                      padding: EdgeInsets.fromLTRB(25, 13, 22, 13),
                       child: Row(
                         children: [
-                          Icon(widget.isLiked ? Icons.thumb_up : Icons.thumb_up_outlined, color: widget.isLiked ? Colors.green : Colors.grey, size: 18),
+                          Icon(widget.isLiked ? Icons.thumb_up : Icons.thumb_up_outlined, color: widget.isLiked ? Colors.green : Colors.grey, size: 19),
                           Padding(padding: const EdgeInsets.fromLTRB(5, 0, 0, 0)),
                           Text(widget.isLiked ? 'Unlike' : 'Like', style: GoogleFonts.getFont('Montserrat', color: widget.isLiked ? Colors.green : Colors.grey, fontSize: 13))
                         ]
@@ -289,11 +290,11 @@ class _SongPostState extends State<SongPost> {
                         ));
                       },
                     child: Container(
-                      padding: const EdgeInsets.all(5.0),
-                      margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
+                      decoration: BoxDecoration(border: Border.all(width: 0.000001, color: const Color(0xFFFFFFFF))),
+                      padding: EdgeInsets.fromLTRB(16, 13, 16, 13),
                       child: Row(
                         children: [
-                          Icon(Icons.comment_outlined, color: Colors.grey, size: 18),
+                          Icon(Icons.comment_outlined, color: Colors.grey, size: 19),
                           Padding(padding: const EdgeInsets.fromLTRB(5, 0, 0, 0)),
                           Text('Comment', style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontSize: 13))
                         ]
@@ -302,11 +303,11 @@ class _SongPostState extends State<SongPost> {
                   ),
                   GestureDetector(
                     child: Container(
-                      padding: const EdgeInsets.all(5.0),
-                      margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
+                      decoration: BoxDecoration(border: Border.all(width: 0.000001, color: const Color(0xFFFFFFFF))),
+                      padding: EdgeInsets.fromLTRB(22, 13, 25, 13),
                       child: Row(
                         children: [
-                          Icon(Icons.send_outlined, color: Colors.grey, size: 18),
+                          Icon(Icons.send_outlined, color: Colors.grey, size: 19),
                           Padding(padding: const EdgeInsets.fromLTRB(5, 0, 0, 0)),
                           Text('Share', style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontSize: 13))
                         ]

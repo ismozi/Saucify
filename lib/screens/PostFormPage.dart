@@ -268,7 +268,7 @@ class _PostFormPageState extends State<PostFormPage> {
                     ),
                   ],
                 ),
-              margin: const EdgeInsets.fromLTRB(28, 50, 28, 7),
+              margin: const EdgeInsets.fromLTRB(28, 40, 28, 7),
               alignment: Alignment.center,
               child: Text('Share post', style: GoogleFonts.getFont('Montserrat', 
                     color: Colors.white, fontWeight: FontWeight.w300, fontSize: 17)),

@@ -228,7 +228,7 @@ class StatsPageState extends State<StatsPage> {
         children: [
           Container(
           color: Color.fromARGB(255, 10, 10, 10),
-            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 40),
             child: AnimatedOpacity(
               opacity: opacityLevel,
               duration: const Duration(milliseconds: 300),
