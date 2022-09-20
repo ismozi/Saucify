@@ -28,6 +28,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
   dynamic bottomAppBar = BottomAppBar();
   double opacityLevel = 0.0;
   List tracksIdsPlaylist = [];
+  List trackItemsList = [];
 
   bool isOneMonth = true;
   bool isFourMonths = false;
@@ -37,6 +38,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
   @override
   void initState() {
     super.initState();
+    getTrackItems();
   }
 
   @override
@@ -47,9 +49,8 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
   }
 
   void setTimeRange(int index) {
-    opacityLevel = 0;
-    Timer(Duration(milliseconds: 800), () {
-      setState(() => opacityLevel = 1);
+    setState(() {
+      opacityLevel = 0;
     });
 
     if (index == 0) {
@@ -74,6 +75,9 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
         timeRange = 'long';
       });
     }
+
+    trackItemsList = [];
+    getTrackItems();
   }
 
   getTrackItems() async {
@@ -106,11 +110,10 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
       });
     }
 
-    setState(() {
+    setState(() { 
+      trackItemsList =  trackItems;
       opacityLevel = 1;
     });
-
-    return trackItems;
   }
 
   @override
@@ -124,118 +127,109 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
             child: AnimatedOpacity(
               opacity: opacityLevel,
               duration: const Duration(milliseconds: 250),
-              child: FutureBuilder(
-                future: getTrackItems(),
-                builder: (BuildContext context, AsyncSnapshot snapshot1) {
-                  if (!snapshot1.hasData) {
-                    return Container();
-                  }
-                  List items = snapshot1.data!;
-                  return ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(0, 75, 0, 100),
-                    itemCount: items.length+1,
-                    itemBuilder: (context, index) {
-                      if (index == 0){
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 26, 26, 26),
-                                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.6),
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
-                                      offset: Offset(0, 3), // changes position of shadow
-                                    ),
-                                  ],
+              child: ListView.builder(
+                padding: const EdgeInsets.fromLTRB(0, 75, 0, 100),
+                itemCount: trackItemsList.length+1,
+                itemBuilder: (context, index) {
+                  if (index == 0){
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 26, 26, 26),
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.6),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3), // changes position of shadow
                                 ),
-                                margin: const EdgeInsets.fromLTRB(28, 7, 4, 7),
-                                alignment: Alignment.center,
-                                child: Icon(Icons.tune, color: Colors.white),
-                              )
+                              ],
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                service.createPlaylist1(tracksIdsPlaylist, 'Mixed playlist');
-                              },
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(32, 8, 32, 8),
-                                decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 26, 26, 26),
-                                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.6),
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
-                                      offset: Offset(0, 3), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
-                                margin: const EdgeInsets.fromLTRB(4, 7, 28, 7),
-                                alignment: Alignment.center,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('Generate playlist', style: GoogleFonts.getFont('Montserrat', 
-                                      color: Colors.white, fontWeight: FontWeight.w300, fontSize: 17)),
-                                    Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                                    ImageIcon(
-                                        AssetImage("assets/images/Spotify_Icon_RGB_White.png"),
-                                        color: Colors.green,
-                                    ),
-                                  ]
-                                ),
-                              )
-                            )
-                          ]
-                        );
-                      }
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 19, 19, 19),
-                          borderRadius: BorderRadius.all(Radius.circular(12))
+                            margin: const EdgeInsets.fromLTRB(28, 7, 4, 7),
+                            alignment: Alignment.center,
+                            child: Icon(Icons.tune, color: Colors.white),
+                          )
                         ),
-                        margin: const EdgeInsets.all(5.0),
-                        child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15) 
-                          ),
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image(
-                              image: NetworkImage(items[index-1]['track']['album']['images'][0]['url']), 
-                              width: 45, 
-                              height: 45
-                            )
-                          ),
-                          trailing: ClipRRect(
-                            borderRadius: BorderRadius.circular(60),
-                            child: Image(
-                              image: NetworkImage(items[index-1]['imageUrl']), 
-                              width: 30, 
-                              height: 30
-                            )
-                          ), 
-                          title: Text(items[index-1]['track']['name'], 
-                                      style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
-                          subtitle: Text(items[index-1]['track']['artists'][0]['name'], 
-                                      style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
-                          onTap: () async {
-                            final Uri _url = Uri.parse(items[index-1]['track']['uri']);
-                            if (!await launchUrl(_url)) {
-                              throw 'Could not launch $_url';
-                            }
+                        GestureDetector(
+                          onTap: () {
+                            service.createPlaylist1(tracksIdsPlaylist, 'Mixed playlist');
                           },
-                        ),
-                      );
-                    }
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(32, 8, 32, 8),
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 26, 26, 26),
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.6),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            margin: const EdgeInsets.fromLTRB(4, 7, 28, 7),
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Generate playlist', style: GoogleFonts.getFont('Montserrat', 
+                                  color: Colors.white, fontWeight: FontWeight.w300, fontSize: 17)),
+                                Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                                ImageIcon(
+                                    AssetImage("assets/images/Spotify_Icon_RGB_White.png"),
+                                    color: Colors.green,
+                                ),
+                              ]
+                            ),
+                          )
+                        )
+                      ]
+                    );
+                  }
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 19, 19, 19),
+                      borderRadius: BorderRadius.all(Radius.circular(12))
+                    ),
+                    margin: const EdgeInsets.all(5.0),
+                    child: ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15) 
+                      ),
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image(
+                          image: NetworkImage(trackItemsList[index-1]['track']['album']['images'][0]['url']), 
+                          width: 45, 
+                          height: 45
+                        )
+                      ),
+                      trailing: ClipRRect(
+                        borderRadius: BorderRadius.circular(60),
+                        child: Image(
+                          image: NetworkImage(trackItemsList[index-1]['imageUrl']), 
+                          width: 30, 
+                          height: 30
+                        )
+                      ), 
+                      title: Text(trackItemsList[index-1]['track']['name'], 
+                                  style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+                      subtitle: Text(trackItemsList[index-1]['track']['artists'][0]['name'], 
+                                  style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+                      onTap: () async {
+                        final Uri _url = Uri.parse(trackItemsList[index-1]['track']['uri']);
+                        if (!await launchUrl(_url)) {
+                          throw 'Could not launch $_url';
+                        }
+                      },
+                    ),
                   );
                 }
               )
