@@ -5,6 +5,7 @@ import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saucify/screens/MixFilterPage.dart';
 import 'package:saucify/services/DatabaseService.dart';
 import 'package:saucify/services/spotifyService.dart';
 import 'package:saucify/widgets/bottomPlayer.dart';
@@ -80,6 +81,13 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
     getTrackItems();
   }
 
+  refresh(){
+    setState(() {
+      trackItemsList = [];
+    });
+    getTrackItems();
+  }
+
   getTrackItems() async {
     DocumentSnapshot userSnap = await dbService.getUserDocument(service.userId);
     List trackItems = [];
@@ -111,7 +119,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
     }
 
     setState(() { 
-      trackItemsList =  trackItems;
+      trackItemsList = trackItems;
       opacityLevel = 1;
     });
   }
@@ -136,7 +144,13 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(PageRouteBuilder(
+                              pageBuilder: (c, a1, a2) => MixFilterPage(refresh),
+                              transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                              transitionDuration: Duration(milliseconds: 150),
+                            ));
+                          },
                           child: Container(
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
@@ -211,12 +225,18 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                           height: 45
                         )
                       ),
-                      trailing: ClipRRect(
-                        borderRadius: BorderRadius.circular(60),
-                        child: Image(
-                          image: NetworkImage(trackItemsList[index-1]['imageUrl']), 
-                          width: 30, 
-                          height: 30
+                      trailing: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 0.8, color: Colors.black),
+                          borderRadius: BorderRadius.circular(60)
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(60),
+                          child: Image(
+                            image: NetworkImage(trackItemsList[index-1]['imageUrl']), 
+                            width: 28, 
+                            height: 28
+                          )
                         )
                       ), 
                       title: Text(trackItemsList[index-1]['track']['name'], 
