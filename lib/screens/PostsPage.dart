@@ -114,12 +114,12 @@ class PostsPageState extends State<PostsPage> {
                                           borderRadius: BorderRadius.circular(10.0),
                                         ),
                                         child: Padding(
-                                          padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+                                          padding: EdgeInsets.fromLTRB(8, 12, 8, 12),
                                           child: Row(
                                             children: [
-                                              Icon(Icons.search, color: Colors.green),
-                                              Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                                              Text('Share your new discovery!', style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 185, 185, 185), fontWeight: FontWeight.w300, fontSize: 13))
+                                              Icon(Icons.search, color: Colors.green, size: 20),
+                                              Padding(padding: EdgeInsets.fromLTRB(0, 0, 5, 0)),
+                                              Text('Search and share your new discovery!', style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 185, 185, 185), fontWeight: FontWeight.w300, fontSize: 11.5))
                                             ]
                                           )
                                         )

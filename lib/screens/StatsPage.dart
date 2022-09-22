@@ -192,7 +192,7 @@ class StatsPageState extends State<StatsPage> {
             title: Text(item['name'], 
                         style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
             subtitle: isTracksActive ? Text(item['artists'][0]['name'], 
-                        style: GoogleFonts.getFont('Montserrat', color: Colors.white)) : null,
+                        style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 187, 187, 187))) : null,
             onTap: () async {
               final Uri _url = Uri.parse(item['uri']);
               if (!await launchUrl(_url)) {

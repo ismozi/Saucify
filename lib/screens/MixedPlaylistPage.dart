@@ -175,7 +175,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                             service.createPlaylist1(tracksIdsPlaylist, 'Mixed playlist');
                           },
                           child: Container(
-                            padding: EdgeInsets.fromLTRB(32, 8, 32, 8),
+                            padding: EdgeInsets.fromLTRB(42, 8, 42, 8),
                             decoration: BoxDecoration(
                               color: Color.fromARGB(255, 26, 26, 26),
                               borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -212,7 +212,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                       color: Color.fromARGB(255, 19, 19, 19),
                       borderRadius: BorderRadius.all(Radius.circular(12))
                     ),
-                    margin: const EdgeInsets.all(5.0),
+                    margin: const EdgeInsets.all(4.0),
                     child: ListTile(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15) 
@@ -242,7 +242,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                       title: Text(trackItemsList[index-1]['track']['name'], 
                                   style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
                       subtitle: Text(trackItemsList[index-1]['track']['artists'][0]['name'], 
-                                  style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 187, 187, 187))),
                       onTap: () async {
                         final Uri _url = Uri.parse(trackItemsList[index-1]['track']['uri']);
                         if (!await launchUrl(_url)) {

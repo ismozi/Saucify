@@ -29,6 +29,7 @@ class _MixFilterPageState extends State<MixFilterPage> {
   NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
   TextEditingController sizeController = TextEditingController();
   bool isLoading = false;
+  int val = 3;
 
   @override
   void initState() {
@@ -46,7 +47,7 @@ class _MixFilterPageState extends State<MixFilterPage> {
     List userFollowing = await dbService.getFollowing(service.userId);
     final queryParameters = {
       'targetUserId': service.userId,
-      'size': int.parse((sizeController.text)),
+      'size': val * 10,
       'following': userFollowing,
     };
     setState(() {
@@ -94,27 +95,129 @@ class _MixFilterPageState extends State<MixFilterPage> {
           child: !isLoading ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Playlist size", style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 18, fontWeight: FontWeight.w200)),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 200, 0),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height*0.05,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 19, 19, 19),
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: TextField(
-                        controller: sizeController,
-                        style: TextStyle(color: Colors.white),
-                        expands: true,
-                        maxLines: null,
-                      )
-                    )
-                  )
-                )
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                child: Text("Playlist size", style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 18, fontWeight: FontWeight.w200)),
+              ),
+              Padding(padding: EdgeInsets.all(5)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Radio(
+                        value: 1, 
+                        groupValue: val, 
+                        onChanged: (value) {
+                          setState(() {
+                            val = value as int;
+                          });
+                        },
+                        visualDensity: const VisualDensity(
+                          horizontal: VisualDensity.minimumDensity,
+                          vertical: VisualDensity.minimumDensity,
+                        ),
+                      ),
+                      Text('10', style: GoogleFonts.getFont('Montserrat', 
+                        color: Colors.white, fontWeight: FontWeight.w300, fontSize: 12)),
+                    ]
+                  ),
+                  Column(
+                    children: [
+                      Radio(
+                        value: 2, 
+                        groupValue: val, 
+                        onChanged: (value) {
+                          setState(() {
+                            val = value as int;
+                          });
+                        },
+                        visualDensity: const VisualDensity(
+                          horizontal: VisualDensity.minimumDensity,
+                          vertical: VisualDensity.minimumDensity,
+                        ),
+                      ),
+                      Text('20', style: GoogleFonts.getFont('Montserrat', 
+                        color: Colors.white, fontWeight: FontWeight.w300, fontSize: 12)),
+                    ]
+                  ),
+                  Column(
+                    children: [
+                      Radio(
+                        value: 3, 
+                        groupValue: val, 
+                        onChanged: (value) {
+                          setState(() {
+                            val = value as int;
+                          });
+                        },
+                        visualDensity: const VisualDensity(
+                          horizontal: VisualDensity.minimumDensity,
+                          vertical: VisualDensity.minimumDensity,
+                        ),
+                      ),
+                      Text('30', style: GoogleFonts.getFont('Montserrat', 
+                        color: Colors.white, fontWeight: FontWeight.w300, fontSize: 12)),
+                    ]
+                  ),
+                  Column(
+                    children: [
+                      Radio(
+                        value: 4, 
+                        groupValue: val, 
+                        onChanged: (value) {
+                          setState(() {
+                            val = value as int;
+                          });
+                        },
+                        visualDensity: const VisualDensity(
+                          horizontal: VisualDensity.minimumDensity,
+                          vertical: VisualDensity.minimumDensity,
+                        ),
+                      ),
+                      Text('40', style: GoogleFonts.getFont('Montserrat', 
+                        color: Colors.white, fontWeight: FontWeight.w300, fontSize: 12)),
+                    ]
+                  ),
+                  Column(
+                    children: [
+                      Radio(
+                        value: 5, 
+                        groupValue: val, 
+                        onChanged: (value) {
+                          setState(() {
+                            val = value as int;
+                          });
+                        },
+                        visualDensity: const VisualDensity(
+                          horizontal: VisualDensity.minimumDensity,
+                          vertical: VisualDensity.minimumDensity,
+                        ),
+                      ),
+                      Text('50', style: GoogleFonts.getFont('Montserrat', 
+                        color: Colors.white, fontWeight: FontWeight.w300, fontSize: 12)),
+                    ]
+                  ),
+                  Column(
+                    children: [
+                      Radio(
+                        value: 6, 
+                        groupValue: val, 
+                        onChanged: (value) {
+                          setState(() {
+                            val = value as int;
+                          });
+                        },
+                        visualDensity: const VisualDensity(
+                          horizontal: VisualDensity.minimumDensity,
+                          vertical: VisualDensity.minimumDensity,
+                        ),
+                      ),
+                      Text('60', style: GoogleFonts.getFont('Montserrat', 
+                        color: Colors.white, fontWeight: FontWeight.w300, fontSize: 12)),
+                    ]
+                  ),
+                ]
               ),
               GestureDetector(
                 onTap: () {
