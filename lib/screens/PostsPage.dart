@@ -103,7 +103,7 @@ class PostsPageState extends State<PostsPage> {
                                       leading: ClipRRect(
                                         borderRadius: BorderRadius.circular(50),
                                         child: Image(
-                                          image: NetworkImage('https://scontent.fymq2-1.fna.fbcdn.net/v/t1.6435-9/49509493_2220570931333084_9073185916800991232_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=YFjTkrpSIjEAX-jPn8z&_nc_oc=AQlOprkDFtF0mkGFe_9mLW8YLx3Ll9g3ri5LJirC_qCXG3FOfhnA6SccOkbYvVEPNc4&_nc_ht=scontent.fymq2-1.fna&oh=00_AT-QsZe9PqKI15-hXXmqCyCsJC1Of6e-OZNRritSd81S0A&oe=632C2A80'), 
+                                          image: NetworkImage('https://scontent-lga3-2.xx.fbcdn.net/v/t1.6435-9/49509493_2220570931333084_9073185916800991232_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=hw2IsM4iAWgAX-1zwIx&_nc_oc=AQl2TFp6DGxQ9CQz_RMB5RV5qKZ1qtk5M89GCNHiwibgWYHj8izY-5hrdEvNABBAgCA&_nc_ht=scontent-lga3-2.xx&oh=00_AT8_paZq2Xa1JgiuwicBcohOTGf_8hfFtnVqzlxk1yw9og&oe=6353B780'), 
                                           width: 45, 
                                           height: 45
                                         )

@@ -14,6 +14,7 @@ import 'package:saucify/widgets/searchItem.dart';
 import 'package:http/http.dart' as http;
 
 import '../app/app.locator.dart';
+import '../widgets/SearchBar.dart';
 import 'LibraryScreen.dart';
 
 class MixFilterPage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _MixFilterPageState extends State<MixFilterPage> {
   spotifyService service = locator<spotifyService>();
   DatabaseService dbService = DatabaseService();
   NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
-  TextEditingController sizeController = TextEditingController();
+  TextEditingController controller = TextEditingController();
   bool isLoading = false;
   int val = 3;
 
@@ -63,6 +64,7 @@ class _MixFilterPageState extends State<MixFilterPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -97,7 +99,13 @@ class _MixFilterPageState extends State<MixFilterPage> {
             children: [
               Padding(
                 padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text("Playlist size", style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 18, fontWeight: FontWeight.w200)),
+                child: Row(
+                  children: [
+                    Text("Playlist size limit", style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 18, fontWeight: FontWeight.w200)),
+                    Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                    Icon(Icons.info, color: Color.fromARGB(255, 172, 172, 172), size: 18)
+                  ]
+                )
               ),
               Padding(padding: EdgeInsets.all(5)),
               Row(
@@ -218,6 +226,80 @@ class _MixFilterPageState extends State<MixFilterPage> {
                     ]
                   ),
                 ]
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 20, 0, 0),
+                child: Row(
+                  children: [
+                    Text("Users", style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 18, fontWeight: FontWeight.w200)),
+                    Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                    Icon(Icons.info, color: Color.fromARGB(255, 172, 172, 172), size: 18)
+                  ]
+                )
+              ),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width*0.85,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 19, 19, 19),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.search, color: Colors.green),
+                          border: InputBorder.none
+                        ),
+                        controller: controller,
+                        style: TextStyle(color: Colors.white),
+                        onChanged: (text) {
+                          setState(() {
+                          });
+                        },
+                      ),
+                    )
+                  )
+                )
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 20, 0, 0),
+                child: Row(
+                  children: [
+                    Text("Genres", style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 18, fontWeight: FontWeight.w200)),
+                    Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                    Icon(Icons.info, color: Color.fromARGB(255, 172, 172, 172), size: 18)
+                  ]
+                )
+              ),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width*0.85,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 19, 19, 19),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.search, color: Colors.green),
+                          border: InputBorder.none
+                        ),
+                        controller: controller,
+                        style: TextStyle(color: Colors.white),
+                        onChanged: (text) {
+                          setState(() {
+                          });
+                        },
+                      ),
+                    )
+                  )
+                )
               ),
               GestureDetector(
                 onTap: () {

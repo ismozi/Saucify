@@ -191,7 +191,7 @@ class _SongPostState extends State<SongPost> {
                 color: Color.fromARGB(255, 26, 26, 26),
                 borderRadius: BorderRadius.circular(12)
               ),
-              margin: const EdgeInsets.all(5.0),
+              margin: const EdgeInsets.fromLTRB(8, 5, 8, 10),
               child: ListTile(
                 onTap: () async {
                   final Uri _url = Uri.parse(widget.itemUrl);
@@ -228,7 +228,7 @@ class _SongPostState extends State<SongPost> {
                 title: Text(widget.itemName, 
                             style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 15)),
                 subtitle: widget.artistName != null ? Text(widget.artistName, 
-                            style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 13)) : null,
+                            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 187, 187, 187), fontSize: 13)) : null,
               )
             ),
             Row(
@@ -236,7 +236,7 @@ class _SongPostState extends State<SongPost> {
                 !widget.likedBy.isEmpty ? GestureDetector(
                   onTap: () {},
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(15, 5, 0, 10),
+                    margin: EdgeInsets.fromLTRB(15, 0, 0, 10),
                     child: Text(widget.likedBy.length == 1 ? '1 like' : '${widget.likedBy.length} like', 
                       style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w200, fontSize: 13))
                   )
@@ -250,7 +250,7 @@ class _SongPostState extends State<SongPost> {
                     ));
                   },
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(15, 5, 0, 10),
+                    margin: EdgeInsets.fromLTRB(15, 0, 0, 10),
                     child: Text(widget.comments.length == 1 ? '1 comment' : '${widget.comments.length} comments', 
                       style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w200, fontSize: 13))
                   )
