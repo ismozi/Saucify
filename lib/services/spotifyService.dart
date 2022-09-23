@@ -256,7 +256,7 @@ class spotifyService {
     }
 
     final response = await http.get(
-      Uri.parse('https://api.spotify.com/v1/me/top/$itemType?time_range=$timeRange'),
+      Uri.parse('https://api.spotify.com/v1/me/top/$itemType?time_range=$timeRange&limit=60'),
       headers: {
         'Authorization': 'Bearer $access_token',
         'Content-Type': 'application/json'
