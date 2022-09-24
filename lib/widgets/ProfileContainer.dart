@@ -185,15 +185,19 @@ class _ProfileContainerState extends State<ProfileContainer> {
                        'Top Songs This Month',
                     style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 17)),
                   IconButton(
-                    color: Colors.green,
+                    color: Color.fromARGB(255, 104, 104, 104),
                     padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
                     constraints: BoxConstraints(),
                     icon: Icon(Icons.expand_circle_down), onPressed: () async {
                       Navigator.of(context).push(PageRouteBuilder(
-                        pageBuilder: (c, a1, a2) => TracksScreen(tracksIds: topTracksIds, 
-                        playlistName: tracksCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
-                                      tracksCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
-                                      'Top Songs This Month'),
+                        pageBuilder: (c, a1, a2) => TracksScreen(
+                          userId: widget.user.id, 
+                          playlistName: tracksCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
+                                        tracksCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
+                                        'Top Songs This Month',
+                          timeRange: tracksCurrentPageNotifier.value == 0 ? 'long' : 
+                                     tracksCurrentPageNotifier.value == 1 ? 'medium' :
+                                     'short'),
                         transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
                         transitionDuration: Duration(milliseconds: 150),
                       ));
@@ -396,15 +400,19 @@ class _ProfileContainerState extends State<ProfileContainer> {
                        'Top Artists This Month', 
                     style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 17)),
                   IconButton(
-                    color: Colors.green,
+                    color: Color.fromARGB(255, 104, 104, 104),
                     padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
                     constraints: BoxConstraints(),
                     icon: Icon(Icons.expand_circle_down), onPressed: () async {
                       Navigator.of(context).push(PageRouteBuilder(
-                        pageBuilder: (c, a1, a2) => ArtistsScreen(artistsIds: topArtistsIds, 
-                        pageName: artistsCurrentPageNotifier.value == 0 ? 'Top Artists All Time' : 
-                                  artistsCurrentPageNotifier.value == 1 ? 'Top Artists Last 6 Months' :
-                                  'Top Artists This Month'),
+                        pageBuilder: (c, a1, a2) => ArtistsScreen(
+                                userId: widget.user.id, 
+                                pageName: artistsCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
+                                              artistsCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
+                                              'Top Songs This Month',
+                                timeRange: artistsCurrentPageNotifier.value == 0 ? 'long' : 
+                                          artistsCurrentPageNotifier.value == 1 ? 'medium' :
+                                          'short'),
                         transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
                         transitionDuration: Duration(milliseconds: 150),
                       ));

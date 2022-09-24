@@ -250,7 +250,7 @@ class _MixFilterPageState extends State<MixFilterPage> {
                       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: TextField(
                         decoration: InputDecoration(
-                          icon: Icon(Icons.search, color: Colors.green),
+                          icon: Icon(Icons.expand_more, color: Colors.green),
                           border: InputBorder.none
                         ),
                         controller: controller,
@@ -287,7 +287,7 @@ class _MixFilterPageState extends State<MixFilterPage> {
                       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: TextField(
                         decoration: InputDecoration(
-                          icon: Icon(Icons.search, color: Colors.green),
+                          icon: Icon(Icons.expand_more, color: Colors.green),
                           border: InputBorder.none
                         ),
                         controller: controller,

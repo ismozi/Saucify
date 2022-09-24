@@ -13,7 +13,6 @@ import 'package:saucify/widgets/StatsAppBar.dart';
 import 'package:tuple/tuple.dart';
 import '../app/app.locator.dart';
 import 'MixedPlaylistPage.dart';
-import 'SoloPlaylistPage.dart';
 
 class PlaylistsPage extends StatefulWidget {
   @override
@@ -48,28 +47,12 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
       super.setState(fn);
     }
   } 
-  
-  Tuple2<bool, bool> setItemType(int index) {
-    if (index == 0) {
-      setState(() {
-        isPostsActive = true;
-        isPlaylistsActive = false;
-      });
-    } else if (index == 1) {
-      setState(() {
-        isPostsActive = false;
-        isPlaylistsActive = true;
-      });
-    }
-
-    return Tuple2<bool, bool>(isPostsActive, isPlaylistsActive);
-  }
 
   @override
   Widget build(BuildContext context){
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: isPostsActive ? SoloPlaylistPage() : MixedPlaylistPage()
+      body: MixedPlaylistPage()
     );
   }
 }

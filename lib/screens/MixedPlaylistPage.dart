@@ -240,9 +240,9 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                         )
                       ), 
                       title: Text(trackItemsList[index-1]['track']['name'], 
-                                  style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+                                  style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 15)),
                       subtitle: Text(trackItemsList[index-1]['track']['artists'][0]['name'], 
-                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 187, 187, 187))),
+                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 187, 187, 187), fontSize: 13)),
                       onTap: () async {
                         final Uri _url = Uri.parse(trackItemsList[index-1]['track']['uri']);
                         if (!await launchUrl(_url)) {
@@ -265,7 +265,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                 boxShadow: [
                   BoxShadow(
                     color: Color.fromARGB(255, 2, 2, 2).withOpacity(0.5),
-                    spreadRadius: 5,
+                    spreadRadius: 8,
                     blurRadius: 7,
                     offset: Offset(0, 3), // changes position of shadow
                   ),
