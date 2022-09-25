@@ -46,15 +46,30 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: !widget.isCurrentUser || !widget.fromDashboard ? AppBar(
-        title: Text("Profile", style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+        backgroundColor: Colors.transparent,
         foregroundColor: Colors.green,
-        backgroundColor: Color(0x44000000),
-        elevation: 0,
+        automaticallyImplyLeading: false,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[Colors.black.withOpacity(1.0),
+                              Colors.black.withOpacity(1.0), 
+                              Colors.black.withOpacity(1.0),
+                              Colors.black.withOpacity(0.0)]),
+          ),
+        ),
+        title: Text("Profile", style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.green),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ) : null,
       body: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: !widget.isCurrentUser || !widget.fromDashboard ? const EdgeInsets.fromLTRB(10, 80, 10, 0)
-                                                                : const EdgeInsets.fromLTRB(10, 3, 10, 0),
+        padding: const EdgeInsets.fromLTRB(0, 3, 0, 0),
         color: Color.fromARGB(255, 10, 10, 10),
         child: AnimatedOpacity(
           opacity: opacityLevel,

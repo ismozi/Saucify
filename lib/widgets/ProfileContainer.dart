@@ -62,548 +62,562 @@ class _ProfileContainerState extends State<ProfileContainer> {
       duration: const Duration(milliseconds: 250),
         child: Column(
           children: [
-            widget.isCurrentUser ? Padding(padding: const EdgeInsets.fromLTRB(0, 85, 0, 0)) :
-            Padding(padding: const EdgeInsets.fromLTRB(0, 20, 0, 0)), 
-            Container( 
+            Container(
               decoration: BoxDecoration(
+                color: Color.fromARGB(255, 13, 13, 13),
                 borderRadius: BorderRadius.circular(50),
                 boxShadow: [
                   BoxShadow(
-                    color: Color.fromARGB(255, 27, 27, 27).withOpacity(0.5),
+                    color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
                     spreadRadius: 5,
                     blurRadius: 7,
                     offset: Offset(0, 3), // changes position of shadow
                   ),
                 ],
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: Container(
-                  child: Image(image: user['imageUrl'] != null ? NetworkImage(user['imageUrl']): emptyImage, width: 150, height: 150)
-                )
+              child: Column(
+                children: [
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 90, 0, 0)),
+                  Container( 
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(60),
+                      child: Container(
+                        child: Image(image: user['imageUrl'] != null ? NetworkImage(user['imageUrl']): emptyImage, width: 125, height: 125)
+                      )
+                    )
+                  ),
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 15, 0, 0)),
+                  Text(user['username'], 
+                      style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontWeight: FontWeight.w300, fontSize: 25)),
+                  Padding(padding: !widget.isCurrentUser ? const EdgeInsets.fromLTRB(0, 10, 0, 0) : const EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                  Container(
+                    child: !widget.isCurrentUser ? GestureDetector(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: widget.isFollowed ? Colors.green :Colors.grey),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        padding: EdgeInsets.all(5),
+                        child: Text(widget.isFollowed ? 'Following' : 'Follow',
+                        style: GoogleFonts.getFont('Montserrat', color: widget.isFollowed ? Colors.green :Colors.grey))
+                      ), 
+                      onTap: () async {
+                        await dbService.toggleFollow(service.userId, widget.user.id);
+                        setState(() {
+                          widget.isFollowed = !widget.isFollowed;
+                        });
+                      },
+                    ) : null,
+                  ),
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 15, 0, 0)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 26, 26, 26),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromARGB(255, 14, 14, 14).withOpacity(0.2),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
+                        width: 100,
+                        child: GestureDetector(
+                          child: Text("Followers:  ${user['followers'].length}", 
+                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
+                          onTap: () {
+                            Navigator.of(context).push(PageRouteBuilder(
+                              pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, true),
+                              transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                              transitionDuration: Duration(milliseconds: 150),
+                            ));
+                          },
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0)),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 26, 26, 26),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromARGB(255, 14, 14, 14).withOpacity(0.2),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
+                        width: 100,
+                        child: GestureDetector(
+                          child: Text("Following:  ${widget.targetUserFollowing.length}", 
+                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
+                          onTap: () {
+                            Navigator.of(context).push(PageRouteBuilder(
+                              pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, false),
+                              transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                              transitionDuration: Duration(milliseconds: 150),
+                            ));
+                          },
+                        )
+                      )
+                    ]
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(0, 25, 0, 0)),
+                ]
               )
             ),
-            Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
-            Text(user['username'], 
-                style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontWeight: FontWeight.w300, fontSize: 25)),
-            Padding(padding: !widget.isCurrentUser ? const EdgeInsets.fromLTRB(0, 10, 0, 0) : const EdgeInsets.fromLTRB(0, 0, 0, 0)),
-            Container(
-              child: !widget.isCurrentUser ? GestureDetector(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: widget.isFollowed ? Colors.green :Colors.grey),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  padding: EdgeInsets.all(5),
-                  child: Text(widget.isFollowed ? 'Following' : 'Follow',
-                  style: GoogleFonts.getFont('Montserrat', color: widget.isFollowed ? Colors.green :Colors.grey))
-                ), 
-                onTap: () async {
-                  await dbService.toggleFollow(service.userId, widget.user.id);
-                  setState(() {
-                    widget.isFollowed = !widget.isFollowed;
-                  });
-                },
-              ) : null,
-            ),
-            Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 26, 26, 26),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(255, 14, 14, 14).withOpacity(0.2),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
-                  width: 100,
-                  child: GestureDetector(
-                    child: Text("Followers:  ${user['followers'].length}", 
-                            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
-                    onTap: () {
-                      Navigator.of(context).push(PageRouteBuilder(
-                        pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, true),
-                        transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
-                        transitionDuration: Duration(milliseconds: 150),
-                      ));
-                    },
-                  ),
-                ),
-                Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0)),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 26, 26, 26),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(255, 14, 14, 14).withOpacity(0.2),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
-                  width: 100,
-                  child: GestureDetector(
-                    child: Text("Following:  ${widget.targetUserFollowing.length}", 
-                            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
-                    onTap: () {
-                      Navigator.of(context).push(PageRouteBuilder(
-                        pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, false),
-                        transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
-                        transitionDuration: Duration(milliseconds: 150),
-                      ));
-                    },
-                  )
-                )
-              ]
-            ),
-            Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
-            Divider(
-              color: Color.fromARGB(255, 49, 49, 49)
-            ),
-            Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
-            Container(
-              alignment: Alignment.topLeft,
-              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
+              child: Column(
                 children: [
-                  Text(tracksCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
-                       tracksCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
-                       'Top Songs This Month',
-                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 17)),
-                  IconButton(
-                    color: Color.fromARGB(255, 104, 104, 104),
-                    padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-                    constraints: BoxConstraints(),
-                    icon: Icon(Icons.expand_circle_down), onPressed: () async {
-                      Navigator.of(context).push(PageRouteBuilder(
-                        pageBuilder: (c, a1, a2) => TracksScreen(
-                          userId: widget.user.id, 
-                          playlistName: tracksCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
-                                        tracksCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
-                                        'Top Songs This Month',
-                          timeRange: tracksCurrentPageNotifier.value == 0 ? 'long' : 
-                                     tracksCurrentPageNotifier.value == 1 ? 'medium' :
-                                     'short'),
-                        transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
-                        transitionDuration: Duration(milliseconds: 150),
-                      ));
-                    }
-                  )
-                ],
-              )
-            ),
-            Padding(padding: const EdgeInsets.fromLTRB(0, 12, 0, 0)),
-            SizedBox(
-              height: MediaQuery.of(context).size.height*0.16,
-              child: PageView(
-                onPageChanged: (int index) {
-                  setState(() {
-                    tracksCurrentPageNotifier.value = index;
-                    if (index == 0){
-                      topTracksIds = widget.topTracksIds['long'];
-                    } else if (index == 1) {
-                      topTracksIds = widget.topTracksIds['medium'];
-                    } else {
-                      topTracksIds = widget.topTracksIds['short'];
-                    }
-                  });
-                },
-                children: [
-                  GridView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: 4,
-                    primary: false,
-                    padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) => GestureDetector(
-                      child: Card(
-                        color: Color.fromARGB(255, 19, 19, 19),
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image(image: NetworkImage(widget.topTracks['long'][index]['album']['images'][0]['url']), width: 42, height: 42)
-                                  ),
-                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
-                                  Text(widget.topTracks['long'][index]['name'].length > 11 ? widget.topTracks['long'][index]['name'].substring(0, 11)+'...' : widget.topTracks['long'][index]['name'], 
-                                      style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
-                                ]
-                              ),
-                              Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                    child: Text('${index+1}', 
-                                            style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
-                                  )
-                                ]
-                              )
-                            ]
-                          )
-                        )
-                      ),
-                      onTap: () async {
-                        final Uri _url = Uri.parse(widget.topTracks['long'][index]['uri']);
-                        if (!await launchUrl(_url)) {
-                          throw 'Could not launch $_url';
-                        }
-                      },
-                    ),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 2.8,
-                      crossAxisSpacing: 1,
-                      mainAxisSpacing: 1,
-                    ),
-                  ),
-                  GridView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: 4,
-                    primary: false,
-                    padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) => GestureDetector(
-                      child: Card(
-                        color: Color.fromARGB(255, 19, 19, 19),
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image(image: NetworkImage(widget.topTracks['medium'][index]['album']['images'][0]['url']), width: 42, height: 42)
-                                  ),
-                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
-                                  Text(widget.topTracks['medium'][index]['name'].length > 11 ? widget.topTracks['medium'][index]['name'].substring(0, 11)+'...' : widget.topTracks['medium'][index]['name'], 
-                                      style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
-                                ]
-                              ),
-                              Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                    child: Text('${index+1}', 
-                                            style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
-                                  )
-                                ]
-                              )
-                            ]
-                          )
-                        )
-                      ),
-                      onTap: () async {
-                        final Uri _url = Uri.parse(widget.topTracks['medium'][index]['uri']);
-                        if (!await launchUrl(_url)) {
-                          throw 'Could not launch $_url';
-                        }
-                      },
-                    ),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 2.8,
-                      crossAxisSpacing: 1,
-                      mainAxisSpacing: 1,
-                    ),
-                  ),
-                  GridView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: 4,
-                    primary: false,
-                    padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) => GestureDetector(
-                      child: Card(
-                        color: Color.fromARGB(255, 19, 19, 19),
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image(image: NetworkImage(widget.topTracks['short'][index]['album']['images'][0]['url']), width: 42, height: 42)
-                                  ),
-                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
-                                  Text(widget.topTracks['short'][index]['name'].length > 11 ? widget.topTracks['short'][index]['name'].substring(0, 11)+'...' : widget.topTracks['short'][index]['name'], 
-                                      style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
-                                ]
-                              ),
-                              Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                    child: Text('${index+1}', 
-                                            style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
-                                  )
-                                ]
-                              )
-                            ]
-                          )
-                        )
-                      ),
-                      onTap: () async {
-                        final Uri _url = Uri.parse(widget.topTracks['short'][index]['uri']);
-                        if (!await launchUrl(_url)) {
-                          throw 'Could not launch $_url';
-                        }
-                      },
-                    ),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 2.8,
-                      crossAxisSpacing: 1,
-                      mainAxisSpacing: 1,
-                    ),
-                  ),
-                ], // Can be null
-              ),
-            ),
-            Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
-            CirclePageIndicator(
-              size: 3,
-              itemCount: 3,
-              currentPageNotifier: tracksCurrentPageNotifier,
-            ),
-            Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
-            Container(
-              alignment: Alignment.topLeft,
-              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(artistsCurrentPageNotifier.value == 0 ? 'Top Artists All Time' : 
-                       artistsCurrentPageNotifier.value == 1 ? 'Top Artists Last 6 Months' :
-                       'Top Artists This Month', 
-                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 17)),
-                  IconButton(
-                    color: Color.fromARGB(255, 104, 104, 104),
-                    padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-                    constraints: BoxConstraints(),
-                    icon: Icon(Icons.expand_circle_down), onPressed: () async {
-                      Navigator.of(context).push(PageRouteBuilder(
-                        pageBuilder: (c, a1, a2) => ArtistsScreen(
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(tracksCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
+                            tracksCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
+                            'Top Songs This Month',
+                          style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 17)),
+                        IconButton(
+                          color: Color.fromARGB(255, 104, 104, 104),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                          constraints: BoxConstraints(),
+                          icon: Icon(Icons.expand_circle_down_outlined), onPressed: () async {
+                            Navigator.of(context).push(PageRouteBuilder(
+                              pageBuilder: (c, a1, a2) => TracksScreen(
                                 userId: widget.user.id, 
-                                pageName: artistsCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
-                                              artistsCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
+                                playlistName: tracksCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
+                                              tracksCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
                                               'Top Songs This Month',
-                                timeRange: artistsCurrentPageNotifier.value == 0 ? 'long' : 
-                                          artistsCurrentPageNotifier.value == 1 ? 'medium' :
+                                timeRange: tracksCurrentPageNotifier.value == 0 ? 'long' : 
+                                          tracksCurrentPageNotifier.value == 1 ? 'medium' :
                                           'short'),
-                        transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
-                        transitionDuration: Duration(milliseconds: 150),
-                      ));
-                    }
-                  )
-                ],
-              )
-            ),
-            Padding(padding: const EdgeInsets.fromLTRB(0, 12, 0, 0)),
-            SizedBox(
-              height: MediaQuery.of(context).size.height*0.16,
-              child: PageView(
-                physics: AlwaysScrollableScrollPhysics(),
-                onPageChanged: (int index) {
-                  setState(() {
-                    artistsCurrentPageNotifier.value = index;
-                    if (index == 0){
-                      topArtistsIds = widget.topArtistsIds['long'];
-                    } else if (index == 1) {
-                      topArtistsIds = widget.topArtistsIds['medium'];
-                    } else {
-                      topArtistsIds = widget.topArtistsIds['short'];
-                    }
-                  });
-                },
-                controller: artistsController,
-                children: [
-                  GridView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: 4,
-                    primary: false,
-                    padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) => GestureDetector(
-                      child: Card(
-                        color: Color.fromARGB(255, 19, 19, 19),
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: Image(image: NetworkImage(widget.topArtists['long'][index]['images'][0]['url']), width: 42, height: 42)
-                                  ),
-                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
-                                  Text(widget.topArtists['long'][index]['name'].length > 11 ? widget.topArtists['long'][index]['name'].substring(0, 11)+'...' : widget.topArtists['long'][index]['name'], 
-                                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
-                                ]
-                              ),
-                              Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                    child: Text('${index+1}', 
-                                            style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
-                                  )
-                                ]
-                              )
-                            ]
-                          )
+                              transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                              transitionDuration: Duration(milliseconds: 150),
+                            ));
+                          }
                         )
-                      ),
-                      onTap: () async {
-                        final Uri _url = Uri.parse(widget.topArtists['long'][index]['uri']);
-                        if (!await launchUrl(_url)) {
-                          throw 'Could not launch $_url';
-                        }
+                      ],
+                    )
+                  ),
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 12, 0, 0)),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height*0.16,
+                    child: PageView(
+                      onPageChanged: (int index) {
+                        setState(() {
+                          tracksCurrentPageNotifier.value = index;
+                          if (index == 0){
+                            topTracksIds = widget.topTracksIds['long'];
+                          } else if (index == 1) {
+                            topTracksIds = widget.topTracksIds['medium'];
+                          } else {
+                            topTracksIds = widget.topTracksIds['short'];
+                          }
+                        });
                       },
-                    ),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 2.8,
-                      crossAxisSpacing: 1,
-                      mainAxisSpacing: 1,
+                      children: [
+                        GridView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: 4,
+                          primary: false,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) => GestureDetector(
+                            child: Card(
+                              color: Color.fromARGB(255, 19, 19, 19),
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(10),
+                                          child: Image(image: NetworkImage(widget.topTracks['long'][index]['album']['images'][0]['url']), width: 42, height: 42)
+                                        ),
+                                        Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
+                                        Text(widget.topTracks['long'][index]['name'].length > 11 ? widget.topTracks['long'][index]['name'].substring(0, 11)+'...' : widget.topTracks['long'][index]['name'], 
+                                            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
+                                      ]
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                          child: Text('${index+1}', 
+                                                  style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              )
+                            ),
+                            onTap: () async {
+                              final Uri _url = Uri.parse(widget.topTracks['long'][index]['uri']);
+                              if (!await launchUrl(_url)) {
+                                throw 'Could not launch $_url';
+                              }
+                            },
+                          ),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 2.8,
+                            crossAxisSpacing: 1,
+                            mainAxisSpacing: 1,
+                          ),
+                        ),
+                        GridView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: 4,
+                          primary: false,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) => GestureDetector(
+                            child: Card(
+                              color: Color.fromARGB(255, 19, 19, 19),
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(10),
+                                          child: Image(image: NetworkImage(widget.topTracks['medium'][index]['album']['images'][0]['url']), width: 42, height: 42)
+                                        ),
+                                        Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
+                                        Text(widget.topTracks['medium'][index]['name'].length > 11 ? widget.topTracks['medium'][index]['name'].substring(0, 11)+'...' : widget.topTracks['medium'][index]['name'], 
+                                            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
+                                      ]
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                          child: Text('${index+1}', 
+                                                  style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              )
+                            ),
+                            onTap: () async {
+                              final Uri _url = Uri.parse(widget.topTracks['medium'][index]['uri']);
+                              if (!await launchUrl(_url)) {
+                                throw 'Could not launch $_url';
+                              }
+                            },
+                          ),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 2.8,
+                            crossAxisSpacing: 1,
+                            mainAxisSpacing: 1,
+                          ),
+                        ),
+                        GridView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: 4,
+                          primary: false,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) => GestureDetector(
+                            child: Card(
+                              color: Color.fromARGB(255, 19, 19, 19),
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(10),
+                                          child: Image(image: NetworkImage(widget.topTracks['short'][index]['album']['images'][0]['url']), width: 42, height: 42)
+                                        ),
+                                        Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
+                                        Text(widget.topTracks['short'][index]['name'].length > 11 ? widget.topTracks['short'][index]['name'].substring(0, 11)+'...' : widget.topTracks['short'][index]['name'], 
+                                            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
+                                      ]
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                          child: Text('${index+1}', 
+                                                  style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              )
+                            ),
+                            onTap: () async {
+                              final Uri _url = Uri.parse(widget.topTracks['short'][index]['uri']);
+                              if (!await launchUrl(_url)) {
+                                throw 'Could not launch $_url';
+                              }
+                            },
+                          ),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 2.8,
+                            crossAxisSpacing: 1,
+                            mainAxisSpacing: 1,
+                          ),
+                        ),
+                      ], // Can be null
                     ),
                   ),
-                  GridView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: 4,
-                    primary: false,
-                    padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) => GestureDetector(
-                      child: Card(
-                        color: Color.fromARGB(255, 19, 19, 19),
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: Image(image: NetworkImage(widget.topArtists['medium'][index]['images'][0]['url']), width: 42, height: 42)
-                                  ),
-                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
-                                  Text(widget.topArtists['medium'][index]['name'].length > 11 ? widget.topArtists['medium'][index]['name'].substring(0, 11)+'...' : widget.topArtists['medium'][index]['name'], 
-                                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
-                                ]
-                              ),
-                              Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                    child: Text('${index+1}', 
-                                            style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
-                                  )
-                                ]
-                              )
-                            ]
-                          )
-                        )
-                      ),
-                      onTap: () async {
-                        final Uri _url = Uri.parse(widget.topArtists['medium'][index]['uri']);
-                        if (!await launchUrl(_url)) {
-                          throw 'Could not launch $_url';
-                        }
-                      },
-                    ),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 2.8,
-                      crossAxisSpacing: 1,
-                      mainAxisSpacing: 1,
-                    ),
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
+                  CirclePageIndicator(
+                    size: 3,
+                    itemCount: 3,
+                    currentPageNotifier: tracksCurrentPageNotifier,
                   ),
-                  GridView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: 4,
-                    primary: false,
-                    padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) => GestureDetector(
-                      child: Card(
-                        color: Color.fromARGB(255, 19, 19, 19),
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: Image(image: NetworkImage(widget.topArtists['short'][index]['images'][0]['url']), width: 42, height: 42)
-                                  ),
-                                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
-                                  Text(widget.topArtists['short'][index]['name'].length > 11 ? widget.topArtists['short'][index]['name'].substring(0, 11)+'...' : widget.topArtists['short'][index]['name'], 
-                                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
-                                ]
-                              ),
-                              Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                    child: Text('${index+1}', 
-                                            style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
-                                  )
-                                ]
-                              )
-                            ]
-                          )
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(artistsCurrentPageNotifier.value == 0 ? 'Top Artists All Time' : 
+                            artistsCurrentPageNotifier.value == 1 ? 'Top Artists Last 6 Months' :
+                            'Top Artists This Month', 
+                          style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 17)),
+                        IconButton(
+                          color: Color.fromARGB(255, 104, 104, 104),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                          constraints: BoxConstraints(),
+                          icon: Icon(Icons.expand_circle_down_outlined), onPressed: () async {
+                            Navigator.of(context).push(PageRouteBuilder(
+                              pageBuilder: (c, a1, a2) => ArtistsScreen(
+                                      userId: widget.user.id, 
+                                      pageName: artistsCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
+                                                    artistsCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
+                                                    'Top Songs This Month',
+                                      timeRange: artistsCurrentPageNotifier.value == 0 ? 'long' : 
+                                                artistsCurrentPageNotifier.value == 1 ? 'medium' :
+                                                'short'),
+                              transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                              transitionDuration: Duration(milliseconds: 150),
+                            ));
+                          }
                         )
-                      ),
-                      onTap: () async {
-                        final Uri _url = Uri.parse(widget.topArtists['short'][index]['uri']);
-                        if (!await launchUrl(_url)) {
-                          throw 'Could not launch $_url';
-                        }
+                      ],
+                    )
+                  ),
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 12, 0, 0)),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height*0.16,
+                    child: PageView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      onPageChanged: (int index) {
+                        setState(() {
+                          artistsCurrentPageNotifier.value = index;
+                          if (index == 0){
+                            topArtistsIds = widget.topArtistsIds['long'];
+                          } else if (index == 1) {
+                            topArtistsIds = widget.topArtistsIds['medium'];
+                          } else {
+                            topArtistsIds = widget.topArtistsIds['short'];
+                          }
+                        });
                       },
-                    ),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 2.8,
-                      crossAxisSpacing: 1,
-                      mainAxisSpacing: 1,
-                    ),
-                  )                                                         
-                ],
+                      controller: artistsController,
+                      children: [
+                        GridView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: 4,
+                          primary: false,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) => GestureDetector(
+                            child: Card(
+                              color: Color.fromARGB(255, 19, 19, 19),
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(15),
+                                          child: Image(image: NetworkImage(widget.topArtists['long'][index]['images'][0]['url']), width: 42, height: 42)
+                                        ),
+                                        Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
+                                        Text(widget.topArtists['long'][index]['name'].length > 11 ? widget.topArtists['long'][index]['name'].substring(0, 11)+'...' : widget.topArtists['long'][index]['name'], 
+                                          style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
+                                      ]
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                          child: Text('${index+1}', 
+                                                  style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              )
+                            ),
+                            onTap: () async {
+                              final Uri _url = Uri.parse(widget.topArtists['long'][index]['uri']);
+                              if (!await launchUrl(_url)) {
+                                throw 'Could not launch $_url';
+                              }
+                            },
+                          ),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 2.8,
+                            crossAxisSpacing: 1,
+                            mainAxisSpacing: 1,
+                          ),
+                        ),
+                        GridView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: 4,
+                          primary: false,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) => GestureDetector(
+                            child: Card(
+                              color: Color.fromARGB(255, 19, 19, 19),
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(15),
+                                          child: Image(image: NetworkImage(widget.topArtists['medium'][index]['images'][0]['url']), width: 42, height: 42)
+                                        ),
+                                        Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
+                                        Text(widget.topArtists['medium'][index]['name'].length > 11 ? widget.topArtists['medium'][index]['name'].substring(0, 11)+'...' : widget.topArtists['medium'][index]['name'], 
+                                          style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
+                                      ]
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                          child: Text('${index+1}', 
+                                                  style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              )
+                            ),
+                            onTap: () async {
+                              final Uri _url = Uri.parse(widget.topArtists['medium'][index]['uri']);
+                              if (!await launchUrl(_url)) {
+                                throw 'Could not launch $_url';
+                              }
+                            },
+                          ),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 2.8,
+                            crossAxisSpacing: 1,
+                            mainAxisSpacing: 1,
+                          ),
+                        ),
+                        GridView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: 4,
+                          primary: false,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) => GestureDetector(
+                            child: Card(
+                              color: Color.fromARGB(255, 19, 19, 19),
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0)),
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(15),
+                                          child: Image(image: NetworkImage(widget.topArtists['short'][index]['images'][0]['url']), width: 42, height: 42)
+                                        ),
+                                        Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0)),
+                                        Text(widget.topArtists['short'][index]['name'].length > 11 ? widget.topArtists['short'][index]['name'].substring(0, 11)+'...' : widget.topArtists['short'][index]['name'], 
+                                          style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontSize: 11)),
+                                      ]
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                          child: Text('${index+1}', 
+                                                  style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 11)),
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              )
+                            ),
+                            onTap: () async {
+                              final Uri _url = Uri.parse(widget.topArtists['short'][index]['uri']);
+                              if (!await launchUrl(_url)) {
+                                throw 'Could not launch $_url';
+                              }
+                            },
+                          ),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 2.8,
+                            crossAxisSpacing: 1,
+                            mainAxisSpacing: 1,
+                          ),
+                        )                                                         
+                      ],
+                    )
+                  ),
+                  Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
+                  CirclePageIndicator(
+                    size: 3,
+                    itemCount: 3,
+                    currentPageNotifier: artistsCurrentPageNotifier,
+                  ),
+
+
+                ]
               )
-            ),
-            Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
-            CirclePageIndicator(
-              size: 3,
-              itemCount: 3,
-              currentPageNotifier: artistsCurrentPageNotifier,
             ),
           ]
         )

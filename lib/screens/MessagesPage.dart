@@ -47,30 +47,6 @@ class _MessagesPageState extends State<MessagesPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.green,
-        automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: <Color>[Colors.black.withOpacity(1.0),
-                              Colors.black.withOpacity(1.0), 
-                              Colors.black.withOpacity(1.0),
-                              Colors.black.withOpacity(0.0)]),
-          ),
-        ),
-        title: Text("Messages", style: GoogleFonts.getFont('Montserrat', color: Colors.white)),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.green),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
       body: 
         Container(
           padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),

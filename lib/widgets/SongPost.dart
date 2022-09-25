@@ -258,7 +258,7 @@ class _SongPostState extends State<SongPost> {
               ]
             ),
             Divider(
-              color: Color.fromARGB(255, 51, 51, 51),
+              color: Color.fromARGB(255, 39, 39, 39),
               height: 1
             ),
             Container(

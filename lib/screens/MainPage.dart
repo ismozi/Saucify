@@ -10,7 +10,6 @@ import 'package:saucify/screens/MessagesPage.dart';
 import 'package:saucify/screens/NotificationsPage.dart';
 import 'package:saucify/screens/PlaylistsPage.dart';
 import 'package:saucify/screens/ProfilePage.dart';
-import 'package:saucify/screens/StatsPage.dart';
 import 'package:saucify/services/spotifyService.dart';
 import 'package:saucify/widgets/PostForm.dart';
 import 'package:saucify/widgets/bottomPlayer.dart';
@@ -32,13 +31,13 @@ class MainPageState extends State<MainPage> {
   spotifyService service = locator<spotifyService>();
   bool isFeedActive = true;
   bool isPlaylistsActive = false;
-  bool isStatsActive = false;
+  bool isChatsActive = false;
   bool isProfileActive = false;
   bool isPostsActive = true;
 
   Container container = Container(color:Color.fromARGB(255, 41, 41, 41));
   PlaylistsPage playlistsPage = PlaylistsPage();
-  StatsPage statsPage = StatsPage();
+  MessagesPage messagesPage = MessagesPage();
   late ProfilePage profilePage;
   late FeedPage feedPage;
 
@@ -66,7 +65,7 @@ class MainPageState extends State<MainPage> {
         activeScreen = feedPage;
         isFeedActive = true;
         isPlaylistsActive =  false;
-        isStatsActive = false;
+        isChatsActive = false;
         isProfileActive = false;
       });
     }
@@ -75,15 +74,15 @@ class MainPageState extends State<MainPage> {
         activeScreen = playlistsPage;
         isFeedActive = false;
         isPlaylistsActive =  true;
-        isStatsActive = false;
+        isChatsActive = false;
         isProfileActive = false;
       });
     } else if (index == 2) {
       setState(() {
-        activeScreen = statsPage;
+        activeScreen = messagesPage;
         isFeedActive = false;
         isPlaylistsActive =  false;
-        isStatsActive = true;
+        isChatsActive = true;
         isProfileActive = false;
       });
     } else if (index == 3) {
@@ -91,7 +90,7 @@ class MainPageState extends State<MainPage> {
         activeScreen = profilePage;
         isFeedActive = false;
         isPlaylistsActive =  false;
-        isStatsActive = false;
+        isChatsActive = false;
         isProfileActive = true;
       });
     }
@@ -109,7 +108,7 @@ class MainPageState extends State<MainPage> {
       activeScreen = profilePage;
       isFeedActive = false;
       isPlaylistsActive =  false;
-      isStatsActive = false;
+      isChatsActive = false;
       isProfileActive = true;
     });
   }
@@ -175,7 +174,7 @@ class MainPageState extends State<MainPage> {
                   ), 
                   IconButton(
                     color: Color.fromARGB(255, 212, 212, 212),
-                    icon: Icon(Icons.message_rounded), 
+                    icon: Icon(Icons.settings), 
                     onPressed: (() => {
                       Navigator.of(context).push(PageRouteBuilder(
                         pageBuilder: (c, a1, a2) => MessagesPage(),
@@ -250,18 +249,18 @@ class MainPageState extends State<MainPage> {
               Stack(
                 children: [
                   Container(
-                    padding: isStatsActive ? const EdgeInsets.fromLTRB(0, 0, 0, 12) : const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    padding: isChatsActive ? const EdgeInsets.fromLTRB(0, 0, 0, 12) : const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: IconButton(
-                      color: isStatsActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
-                      icon: Icon(Icons.query_stats_rounded), 
-                      iconSize: isStatsActive ? 32 : 27,
+                      color: isChatsActive ? Colors.green : Color.fromARGB(255, 212, 212, 212),
+                      icon: Icon(Icons.message), 
+                      iconSize: isChatsActive ? 32 : 27,
                       onPressed: (() => {setPage(2)})
                     ), 
                   ),
-                  isStatsActive ? Positioned(
+                  isChatsActive ? Positioned(
                     top: 38,
-                    right: 8,
-                    child: Text('Stats', style: GoogleFonts.getFont('Montserrat', color: Colors.green, fontSize: 12))
+                    right: 6,
+                    child: Text('Chats', style: GoogleFonts.getFont('Montserrat', color: Colors.green, fontSize: 12))
                   ) : Positioned(
                     top: 38,
                     right: 6,
