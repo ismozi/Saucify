@@ -7,6 +7,7 @@ import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:saucify/app/app.locator.dart';
 import 'package:saucify/screens/UserListPage.dart';
 import 'package:saucify/services/DatabaseService.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -118,23 +119,32 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 26, 26, 26),
+                          border: Border.all(color:Color.fromARGB(255, 100, 100, 100)),
                           borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 14, 14, 14).withOpacity(0.2),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
                         ),
                         alignment: Alignment.center,
-                        padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
                         width: 100,
                         child: GestureDetector(
-                          child: Text("Followers:  ${user['followers'].length}", 
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.fromLTRB(0, 7, 5, 7),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    right: BorderSide(color: Color.fromARGB(255, 100, 100, 100))
+                                  )
+                                ),
+                                child: Text("Followers", 
                                   style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
+                              ),
+                              Container(
+                                padding: EdgeInsets.fromLTRB(5, 7, 0, 7),
+                                child: Text("${user['followers'].length}", 
+                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
+                              )
+                            ]
+                          ),
                           onTap: () {
                             Navigator.of(context).push(PageRouteBuilder(
                               pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, true),
@@ -147,23 +157,32 @@ class _ProfileContainerState extends State<ProfileContainer> {
                       Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0)),
                       Container(
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 26, 26, 26),
+                          border: Border.all(color:Color.fromARGB(255, 100, 100, 100)),
                           borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 14, 14, 14).withOpacity(0.2),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
                         ),
                         alignment: Alignment.center,
-                        padding: EdgeInsets.fromLTRB(0, 7, 0, 7),
                         width: 100,
                         child: GestureDetector(
-                          child: Text("Following:  ${widget.targetUserFollowing.length}", 
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.fromLTRB(0, 7, 5, 7),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    right: BorderSide(color: Color.fromARGB(255, 100, 100, 100))
+                                  )
+                                ),
+                                child: Text("Following", 
                                   style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
+                              ),
+                              Container(
+                                padding: EdgeInsets.fromLTRB(5, 7, 0, 7),
+                                child: Text("${widget.targetUserFollowing.length}", 
+                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
+                              )
+                            ]
+                          ),
                           onTap: () {
                             Navigator.of(context).push(PageRouteBuilder(
                               pageBuilder: (c, a1, a2) => UserListPage(widget.user.id, false),
@@ -185,33 +204,41 @@ class _ProfileContainerState extends State<ProfileContainer> {
                 children: [
                   Container(
                     alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(tracksCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
                             tracksCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
                             'Top Songs This Month',
-                          style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 17)),
-                        IconButton(
-                          color: Color.fromARGB(255, 104, 104, 104),
-                          padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-                          constraints: BoxConstraints(),
-                          icon: Icon(Icons.expand_circle_down_outlined), onPressed: () async {
-                            Navigator.of(context).push(PageRouteBuilder(
-                              pageBuilder: (c, a1, a2) => TracksScreen(
-                                userId: widget.user.id, 
-                                playlistName: tracksCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
-                                              tracksCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
-                                              'Top Songs This Month',
-                                timeRange: tracksCurrentPageNotifier.value == 0 ? 'long' : 
-                                          tracksCurrentPageNotifier.value == 1 ? 'medium' :
-                                          'short'),
-                              transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
-                              transitionDuration: Duration(milliseconds: 150),
-                            ));
-                          }
-                        )
+                          style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 17)),
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color:Color.fromARGB(255, 100, 100, 100)),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.fromLTRB(0, 3, 0, 3),
+                          width: 75,
+                          child: GestureDetector(
+                            child: Text("See more", 
+                                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 12)),
+                            onTap: () {
+                              Navigator.of(context).push(PageRouteBuilder(
+                                pageBuilder: (c, a1, a2) => TracksScreen(
+                                  userId: widget.user.id, 
+                                  playlistName: tracksCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
+                                                tracksCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
+                                                'Top Songs This Month',
+                                  timeRange: tracksCurrentPageNotifier.value == 0 ? 'long' : 
+                                            tracksCurrentPageNotifier.value == 1 ? 'medium' :
+                                            'short'),
+                                transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                                transitionDuration: Duration(milliseconds: 150),
+                              ));
+                            },
+                          ),
+                        ),
                       ],
                     )
                   ),
@@ -219,6 +246,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height*0.16,
                     child: PageView(
+                      controller: tracksController,
                       onPageChanged: (int index) {
                         setState(() {
                           tracksCurrentPageNotifier.value = index;
@@ -392,41 +420,54 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     ),
                   ),
                   Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                  CirclePageIndicator(
-                    size: 3,
-                    itemCount: 3,
-                    currentPageNotifier: tracksCurrentPageNotifier,
+                  SmoothPageIndicator(
+                    controller: tracksController,
+                    count: 3,
+                    effect: ExpandingDotsEffect(
+                      dotColor: Colors.grey,
+                      activeDotColor: Colors.green,
+                      dotHeight: 5,
+                      dotWidth: 5,
+                    ),
                   ),
                   Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
                   Container(
                     alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(artistsCurrentPageNotifier.value == 0 ? 'Top Artists All Time' : 
                             artistsCurrentPageNotifier.value == 1 ? 'Top Artists Last 6 Months' :
                             'Top Artists This Month', 
-                          style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w500, fontSize: 17)),
-                        IconButton(
-                          color: Color.fromARGB(255, 104, 104, 104),
-                          padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-                          constraints: BoxConstraints(),
-                          icon: Icon(Icons.expand_circle_down_outlined), onPressed: () async {
-                            Navigator.of(context).push(PageRouteBuilder(
-                              pageBuilder: (c, a1, a2) => ArtistsScreen(
-                                      userId: widget.user.id, 
-                                      pageName: artistsCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
-                                                    artistsCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
-                                                    'Top Songs This Month',
-                                      timeRange: artistsCurrentPageNotifier.value == 0 ? 'long' : 
-                                                artistsCurrentPageNotifier.value == 1 ? 'medium' :
-                                                'short'),
-                              transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
-                              transitionDuration: Duration(milliseconds: 150),
-                            ));
-                          }
-                        )
+                          style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 17)),
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color:Color.fromARGB(255, 100, 100, 100)),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.fromLTRB(0, 3, 0, 3),
+                          width: 75,
+                          child: GestureDetector(
+                            child: Text("See more", 
+                                    style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 12)),
+                            onTap: () {
+                              Navigator.of(context).push(PageRouteBuilder(
+                                pageBuilder: (c, a1, a2) => ArtistsScreen(
+                                        userId: widget.user.id, 
+                                        pageName: artistsCurrentPageNotifier.value == 0 ? 'Top Songs All Time' : 
+                                                      artistsCurrentPageNotifier.value == 1 ? 'Top Songs Last 6 Months' :
+                                                      'Top Songs This Month',
+                                        timeRange: artistsCurrentPageNotifier.value == 0 ? 'long' : 
+                                                  artistsCurrentPageNotifier.value == 1 ? 'medium' :
+                                                  'short'),
+                                transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+                                transitionDuration: Duration(milliseconds: 150),
+                              ));
+                            },
+                          ),
+                        ),
                       ],
                     )
                   ),
@@ -609,13 +650,16 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     )
                   ),
                   Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                  CirclePageIndicator(
-                    size: 3,
-                    itemCount: 3,
-                    currentPageNotifier: artistsCurrentPageNotifier,
+                  SmoothPageIndicator(
+                    controller: artistsController,
+                    count: 3,
+                    effect: ExpandingDotsEffect(
+                      dotColor: Colors.grey,
+                      activeDotColor: Colors.green,
+                      dotHeight: 5,
+                      dotWidth: 5,
+                    ),
                   ),
-
-
                 ]
               )
             ),
