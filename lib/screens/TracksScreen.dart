@@ -219,7 +219,7 @@ class TracksScreenState extends State<TracksScreen> {
                           )
                         )
                       ),
-                      title: Text(trackItemsList[index-1]['track']['name'], 
+                      title: Text(trackItemsList[index-1]['track']['name'].length > 24 ? trackItemsList[index-1]['track']['name'].substring(0, 24)+'...' : trackItemsList[index-1]['track']['name'],
                                   style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 15)),
                       subtitle: Text(trackItemsList[index-1]['track']['artists'][0]['name'], 
                                   style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 187, 187, 187), fontSize: 13)),

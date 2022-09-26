@@ -69,7 +69,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                 borderRadius: BorderRadius.circular(50),
                 boxShadow: [
                   BoxShadow(
-                    color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                    color: Color.fromARGB(255, 0, 0, 0).withOpacity(1),
                     spreadRadius: 5,
                     blurRadius: 7,
                     offset: Offset(0, 3), // changes position of shadow
@@ -119,7 +119,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color:Color.fromARGB(255, 100, 100, 100)),
+                          border: Border.all(width: 0.5, color:Color.fromARGB(255, 100, 100, 100)),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         alignment: Alignment.center,
@@ -132,16 +132,16 @@ class _ProfileContainerState extends State<ProfileContainer> {
                                 padding: EdgeInsets.fromLTRB(0, 7, 5, 7),
                                 decoration: BoxDecoration(
                                   border: Border(
-                                    right: BorderSide(color: Color.fromARGB(255, 100, 100, 100))
+                                    right: BorderSide(width: 0.5, color: Color.fromARGB(255, 100, 100, 100))
                                   )
                                 ),
                                 child: Text("Followers", 
-                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
+                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 173, 173, 173), fontWeight: FontWeight.w300, fontSize: 14)),
                               ),
                               Container(
                                 padding: EdgeInsets.fromLTRB(5, 7, 0, 7),
                                 child: Text("${user['followers'].length}", 
-                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
+                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 173, 173, 173), fontWeight: FontWeight.w300, fontSize: 14)),
                               )
                             ]
                           ),
@@ -157,7 +157,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                       Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0)),
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color:Color.fromARGB(255, 100, 100, 100)),
+                          border: Border.all(width: 0.5, color:Color.fromARGB(255, 100, 100, 100)),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         alignment: Alignment.center,
@@ -170,16 +170,16 @@ class _ProfileContainerState extends State<ProfileContainer> {
                                 padding: EdgeInsets.fromLTRB(0, 7, 5, 7),
                                 decoration: BoxDecoration(
                                   border: Border(
-                                    right: BorderSide(color: Color.fromARGB(255, 100, 100, 100))
+                                    right: BorderSide(width: 0.5, color: Color.fromARGB(255, 100, 100, 100))
                                   )
                                 ),
                                 child: Text("Following", 
-                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
+                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 173, 173, 173), fontWeight: FontWeight.w300, fontSize: 14)),
                               ),
                               Container(
                                 padding: EdgeInsets.fromLTRB(5, 7, 0, 7),
                                 child: Text("${widget.targetUserFollowing.length}", 
-                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 212, 212, 212), fontWeight: FontWeight.w300, fontSize: 14)),
+                                  style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 173, 173, 173), fontWeight: FontWeight.w300, fontSize: 14)),
                               )
                             ]
                           ),

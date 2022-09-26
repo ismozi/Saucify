@@ -189,7 +189,15 @@ class _SongPostState extends State<SongPost> {
             Container(
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 26, 26, 26),
-                borderRadius: BorderRadius.circular(12)
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.03),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
               ),
               margin: const EdgeInsets.fromLTRB(8, 5, 8, 10),
               child: ListTile(
@@ -225,7 +233,7 @@ class _SongPostState extends State<SongPost> {
                     );
                   })
                 ),
-                title: Text(widget.itemName, 
+                title: Text(widget.itemName.length > 21 ? widget.itemName.substring(0, 21)+'...' : widget.itemName, 
                             style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 15)),
                 subtitle: widget.artistName != null ? Text(widget.artistName, 
                             style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 187, 187, 187), fontSize: 13)) : null,
@@ -274,9 +282,9 @@ class _SongPostState extends State<SongPost> {
                       padding: EdgeInsets.fromLTRB(25, 13, 22, 13),
                       child: Row(
                         children: [
-                          Icon(widget.isLiked ? Icons.thumb_up : Icons.thumb_up_outlined, color: widget.isLiked ? Colors.green : Colors.grey, size: 19),
+                          Icon(widget.isLiked ? Icons.thumb_up : Icons.thumb_up_outlined, color: widget.isLiked ? Colors.green : Colors.grey, size: 15),
                           Padding(padding: const EdgeInsets.fromLTRB(5, 0, 0, 0)),
-                          Text(widget.isLiked ? 'Unlike' : 'Like', style: GoogleFonts.getFont('Montserrat', color: widget.isLiked ? Colors.green : Colors.grey, fontSize: 13))
+                          Text(widget.isLiked ? 'Unlike' : 'Like', style: GoogleFonts.getFont('Montserrat', color: widget.isLiked ? Colors.green : Colors.grey, fontSize: 12))
                         ]
                       )
                     )
@@ -294,9 +302,9 @@ class _SongPostState extends State<SongPost> {
                       padding: EdgeInsets.fromLTRB(16, 13, 16, 13),
                       child: Row(
                         children: [
-                          Icon(Icons.comment_outlined, color: Colors.grey, size: 19),
+                          Icon(Icons.comment_outlined, color: Colors.grey, size: 15),
                           Padding(padding: const EdgeInsets.fromLTRB(5, 0, 0, 0)),
-                          Text('Comment', style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontSize: 13))
+                          Text('Comment', style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontSize: 12))
                         ]
                       )
                     )
@@ -307,9 +315,9 @@ class _SongPostState extends State<SongPost> {
                       padding: EdgeInsets.fromLTRB(22, 13, 25, 13),
                       child: Row(
                         children: [
-                          Icon(Icons.send_outlined, color: Colors.grey, size: 19),
+                          Icon(Icons.send_outlined, color: Colors.grey, size: 15),
                           Padding(padding: const EdgeInsets.fromLTRB(5, 0, 0, 0)),
-                          Text('Share', style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontSize: 13))
+                          Text('Share', style: GoogleFonts.getFont('Montserrat', color: Colors.grey, fontSize: 12))
                         ]
                       )
                     )
@@ -319,7 +327,7 @@ class _SongPostState extends State<SongPost> {
             )
           ]
         ),
-        color: Color.fromARGB(255, 19, 19, 19)
+        color: Color.fromARGB(255, 18, 18, 18)
       )
     );
   }
