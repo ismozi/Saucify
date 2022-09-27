@@ -158,10 +158,103 @@ class _SongPostState extends State<SongPost> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.delete_outline, 
+                    icon: Icon(Icons.more_horiz, 
                           color: Colors.grey),
                     onPressed: () {
-                      dbService.deletePost(widget.postId);
+                      showModalBottomSheet<void>(
+                        context: context,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(40),
+                          ),
+                        ),
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        backgroundColor: Color.fromARGB(255, 12, 12, 12),
+                        builder: (BuildContext context) {
+                          return Container(
+                            height: 250,
+                            color: Color.fromARGB(255, 17, 17, 17),    
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                GestureDetector(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(width: 0.5, color:Color.fromARGB(255, 112, 112, 112)),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    padding: EdgeInsets.all(10),
+                                    margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.share, color: Color.fromARGB(255, 112, 112, 112)),
+                                        Padding(padding: EdgeInsets.fromLTRB(2.5, 0, 2.5, 0)),
+                                        Text(
+                                          'Share',
+                                          style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 112, 112, 112), fontWeight: FontWeight.w600)
+                                        ),
+                                      ]
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  }
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(width: 0.5, color:Color.fromARGB(255, 100, 100, 100)),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    padding: EdgeInsets.all(10),
+                                    margin: EdgeInsets.fromLTRB(60, 20, 60, 0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.person_remove, color: Color.fromARGB(255, 100, 100, 100)),
+                                        Padding(padding: EdgeInsets.fromLTRB(2.5, 0, 2.5, 0)),
+                                        Text(
+                                          'Unfollow',
+                                          style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 100, 100, 100), fontWeight: FontWeight.w600)
+                                        ),
+                                      ]
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  }
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(width: 0.5, color:Color.fromARGB(255, 100, 100, 100)),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    padding: EdgeInsets.all(10),
+                                    margin: EdgeInsets.fromLTRB(60, 20, 60, 0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.delete, color: Color.fromARGB(255, 100, 100, 100)),
+                                        Text(
+                                          'Delete post',
+                                          style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 100, 100, 100), fontWeight: FontWeight.w600)
+                                        ),
+                                      ]
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    dbService.deletePost(widget.postId);
+                                    Navigator.pop(context);
+                                  }
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
                     },
                   )
                 ]
@@ -199,7 +292,8 @@ class _SongPostState extends State<SongPost> {
                   ),
                 ],
               ),
-              margin: const EdgeInsets.fromLTRB(8, 5, 8, 10),
+              margin: widget.likedBy.isEmpty && widget.comments.isEmpty ? const EdgeInsets.fromLTRB(8, 5, 8, 20) :
+                      const EdgeInsets.fromLTRB(8, 5, 8, 10),
               child: ListTile(
                 onTap: () async {
                   final Uri _url = Uri.parse(widget.itemUrl);
@@ -211,28 +305,28 @@ class _SongPostState extends State<SongPost> {
                   borderRadius: BorderRadius.circular(10),
                   child: Image(image: NetworkImage(widget.itemImgUrl), width: 45, height: 45)
                 ),
-                trailing: IconButton(
-                  icon:Icon(!isPlaying ? Icons.more_horiz : Icons.pause_circle), 
-                  color: Colors.white,
-                  onPressed: (() {
-                    isPlaying ? pause() : 
-                    showGeneralDialog(
-                      barrierDismissible: true,
-                      barrierLabel:
-                        MaterialLocalizations.of(context).modalBarrierDismissLabel,
-                      transitionDuration: Duration(milliseconds: 100),
-                      context: context,
-                      pageBuilder: (ctx, anim1, anim2) => ChooseOption(play),
-                      transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
-                        child: FadeTransition(
-                          child: child,
-                          opacity: anim1,
-                        ),
-                      ),
-                    );
-                  })
-                ),
+                // trailing: IconButton(
+                //   icon:Icon(!isPlaying ? Icons.more_horiz : Icons.pause_circle), 
+                //   color: Colors.white,
+                //   onPressed: (() {
+                //     isPlaying ? pause() : 
+                //     showGeneralDialog(
+                //       barrierDismissible: true,
+                //       barrierLabel:
+                //         MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                //       transitionDuration: Duration(milliseconds: 100),
+                //       context: context,
+                //       pageBuilder: (ctx, anim1, anim2) => ChooseOption(play),
+                //       transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
+                //         filter: ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
+                //         child: FadeTransition(
+                //           child: child,
+                //           opacity: anim1,
+                //         ),
+                //       ),
+                //     );
+                //   })
+                // ),
                 title: Text(widget.itemName.length > 21 ? widget.itemName.substring(0, 21)+'...' : widget.itemName, 
                             style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 15)),
                 subtitle: widget.artistName != null ? Text(widget.artistName, 

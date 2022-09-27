@@ -26,11 +26,15 @@ class _MessagesPageState extends State<MessagesPage> {
   String searchQuery = "";
   NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
   List userFollowing = [];
+  double opacityLevel = 0;
 
   @override
   void initState() {
     super.initState();
     getUserFollowing();
+    Timer(Duration(milliseconds: 150), () {
+      setState(() => opacityLevel = 1);
+    });
   }
 
   @override
@@ -49,8 +53,47 @@ class _MessagesPageState extends State<MessagesPage> {
     return Scaffold(
       body: 
         Container(
-          padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
+          padding: const EdgeInsets.fromLTRB(10, 80, 10, 0),
           color: Color.fromARGB(255, 10, 10, 10),
+          width: MediaQuery.of(context).size.width,
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 250),
+            opacity: opacityLevel,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 15),
+                    width: MediaQuery.of(context).size.width*0.85,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 21, 21, 21),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.search, color: Colors.green),
+                          border: InputBorder.none
+                        ),
+                        controller: controller,
+                        style: TextStyle(color: Colors.white),
+                        onChanged: (text) {
+                          setState(() {
+                          });
+                        },
+                      ),
+                    )
+                  )
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Text('Recent chats', style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 199, 199, 199), fontSize: 22, fontWeight: FontWeight.w500))
+                )
+              ]
+            )
+          )
         ),
       );
   }

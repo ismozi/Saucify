@@ -30,6 +30,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
   double opacityLevel = 0.0;
   List tracksIdsPlaylist = [];
   List trackItemsList = [];
+  NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
 
   bool isOneMonth = true;
   bool isFourMonths = false;
@@ -232,11 +233,17 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(60),
-                          child: Image(
+                          child: FadeInImage(
                             image: NetworkImage(trackItemsList[index-1]['imageUrl']), 
                             width: 28, 
-                            height: 28
+                            height: 28,
+                            placeholder: emptyImage
                           )
+                          // Image(
+                          //   image: NetworkImage(trackItemsList[index-1]['imageUrl']), 
+                          //   width: 28, 
+                          //   height: 28
+                          // )
                         )
                       ), 
                       title: Text(trackItemsList[index-1]['track']['name'].length > 24 ? trackItemsList[index-1]['track']['name'].substring(0, 24)+'...' : trackItemsList[index-1]['track']['name'], 
