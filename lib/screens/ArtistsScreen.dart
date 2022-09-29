@@ -161,8 +161,8 @@ class ArtistsScreenState extends State<ArtistsScreen> {
                         borderRadius: BorderRadius.circular(10),
                         child: Image(
                           image: NetworkImage(artistsItemsList[index]['artist']['images'][0]['url']), 
-                          width: 45, 
-                          height: 45
+                          width: 47, 
+                          height: 47
                         )
                       ),
                       trailing: ClipRRect(

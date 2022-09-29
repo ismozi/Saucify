@@ -51,6 +51,7 @@ class _MessagesPageState extends State<MessagesPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: 
         Container(
           padding: const EdgeInsets.fromLTRB(10, 80, 10, 0),
@@ -89,7 +90,48 @@ class _MessagesPageState extends State<MessagesPage> {
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  child: Text('Recent chats', style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 199, 199, 199), fontSize: 22, fontWeight: FontWeight.w500))
+                  child: Text('Chat with friends', style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 199, 199, 199), fontSize: 22, fontWeight: FontWeight.w500))
+                ),
+                StreamBuilder(
+                  stream: dbService.getFollowingSnapshot(service.userId),
+                  builder:(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData) {
+                        return Container();
+                    }
+                    List currentUserFollowing = [];
+                    snapshot.data!.docs.forEach((element) {
+                      currentUserFollowing.add(element.id);
+                    });
+                    return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot user = snapshot.data!.docs[index];
+                        return Container(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 25),
+                          child: Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: Image(image: user['imageUrl'] != null ? NetworkImage(user['imageUrl']): emptyImage, width: 50, height: 50)
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(user['username'], style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 167, 167, 167), fontSize: 15, fontWeight: FontWeight.w500))
+                                  ]
+                                )
+                              )
+                            ]
+                          )
+                        );
+                      }
+                    );
+                  }
                 )
               ]
             )

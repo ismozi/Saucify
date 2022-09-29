@@ -203,8 +203,8 @@ class TracksScreenState extends State<TracksScreen> {
                         borderRadius: BorderRadius.circular(10),
                         child: Image(
                           image: NetworkImage(trackItemsList[index-1]['track']['album']['images'][0]['url']), 
-                          width: 45, 
-                          height: 45
+                          width: 47, 
+                          height: 47
                         )
                       ),
                       trailing: ClipRRect(

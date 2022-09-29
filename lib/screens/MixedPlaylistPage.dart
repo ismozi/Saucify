@@ -31,6 +31,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
   List tracksIdsPlaylist = [];
   List trackItemsList = [];
   NetworkImage emptyImage = NetworkImage('https://icones.pro/wp-content/uploads/2021/05/icone-point-d-interrogation-question-gris.png');
+  AssetImage placeholder = AssetImage("assets/images/user3.png");
 
   bool isOneMonth = true;
   bool isFourMonths = false;
@@ -222,8 +223,8 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                         borderRadius: BorderRadius.circular(10),
                         child: Image(
                           image: NetworkImage(trackItemsList[index-1]['track']['album']['images'][0]['url']), 
-                          width: 45, 
-                          height: 45
+                          width: 47, 
+                          height: 47
                         )
                       ),
                       trailing: Container(
@@ -237,7 +238,7 @@ class MixedPlaylistPageState extends State<MixedPlaylistPage> {
                             image: NetworkImage(trackItemsList[index-1]['imageUrl']), 
                             width: 28, 
                             height: 28,
-                            placeholder: emptyImage
+                            placeholder: placeholder
                           )
                           // Image(
                           //   image: NetworkImage(trackItemsList[index-1]['imageUrl']), 

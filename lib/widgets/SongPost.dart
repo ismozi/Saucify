@@ -282,7 +282,7 @@ class _SongPostState extends State<SongPost> {
             Container(
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 26, 26, 26),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
                     color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.03),
@@ -292,19 +292,46 @@ class _SongPostState extends State<SongPost> {
                   ),
                 ],
               ),
-              margin: widget.likedBy.isEmpty && widget.comments.isEmpty ? const EdgeInsets.fromLTRB(8, 5, 8, 20) :
-                      const EdgeInsets.fromLTRB(8, 5, 8, 10),
-              child: ListTile(
+              margin: widget.likedBy.isEmpty && widget.comments.isEmpty ? const EdgeInsets.fromLTRB(12, 5, 12, 20) :
+                      const EdgeInsets.fromLTRB(12, 5, 12, 15),
+              child: GestureDetector(
                 onTap: () async {
                   final Uri _url = Uri.parse(widget.itemUrl);
                   if (!await launchUrl(_url)) {
                     throw 'Could not launch $_url';
                   }
                 },
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image(image: NetworkImage(widget.itemImgUrl), width: 45, height: 45)
-                ),
+                child : Container(
+                  padding: EdgeInsets.all(4),
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image(image: NetworkImage(widget.itemImgUrl), width: 55, height: 55)
+                      ),
+                      widget.artistName != null ? 
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(widget.itemName.length > 21 ? widget.itemName.substring(0, 21)+'...' : widget.itemName, 
+                              style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 15)),
+                            Padding(padding: EdgeInsets.fromLTRB(0, 3, 0, 0)),
+                            Text(widget.artistName, 
+                              style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 187, 187, 187), fontSize: 13)),
+                          ]
+                        )
+                      ) : 
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                        child: Text(widget.itemName.length > 21 ? widget.itemName.substring(0, 21)+'...' : widget.itemName, 
+                            style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 15))
+                      )
+                    ],
+                  )
+                )
                 // trailing: IconButton(
                 //   icon:Icon(!isPlaying ? Icons.more_horiz : Icons.pause_circle), 
                 //   color: Colors.white,
@@ -327,10 +354,6 @@ class _SongPostState extends State<SongPost> {
                 //     );
                 //   })
                 // ),
-                title: Text(widget.itemName.length > 21 ? widget.itemName.substring(0, 21)+'...' : widget.itemName, 
-                            style: GoogleFonts.getFont('Montserrat', color: Colors.white, fontSize: 15)),
-                subtitle: widget.artistName != null ? Text(widget.artistName, 
-                            style: GoogleFonts.getFont('Montserrat', color: Color.fromARGB(255, 187, 187, 187), fontSize: 13)) : null,
               )
             ),
             Row(
